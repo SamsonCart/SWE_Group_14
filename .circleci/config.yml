@@ -1,0 +1,17 @@
+version: 2.1
+
+jobs:
+  build:
+    docker:
+      - image: circleci/python:3.7
+    steps:
+      - checkout
+      - run:
+          name: Hello World
+          command: echo "Hello, World!"
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build
