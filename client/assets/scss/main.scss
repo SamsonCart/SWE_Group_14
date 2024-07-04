@@ -1,0 +1,84 @@
+body {
+  background-color: #eaf0fc;
+  margin: 0 auto;
+  font-family: 'Rubik', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  text-decoration: none;
+  transition: 0.4s;
+
+  &:hover {
+    text-decoration: none;
+    transition: 0.4s;
+  }
+}
+#signinup {
+  #remember {
+    margin-right: 5px;
+  }
+
+  .alert::first-letter {
+    text-transform: uppercase;
+  }
+
+  #passwordColumn {
+    input {
+      float: left;
+    }
+
+    svg {
+      float: right;
+      position: absolute;
+      top: 12px;
+      right: 10px;
+      color: hsla(160, 100%, 37%, 1);
+    }
+  }
+
+  .row-pointer {
+    transition-duration: 0.5s;
+    cursor: pointer;
+    background-color: hsla(160, 100%, 37%, 1);
+    padding: 5px 10px;
+    display: inline-block;
+    margin-top: 5px;
+    color: white;
+    border-radius: 5px;
+
+    &:hover {
+      transition-duration: 0.5s;
+      background-color: #f0f0f0;
+      color: hsla(160, 100%, 37%, 1);
+    }
+  }
+}
+
+#topItems,
+#sidebarLinks {
+  text-align: center;
+
+  a {
+    font-family: 'Concert One', cursive;
+    background-color: #f0f0f0;
+    margin: 0 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    color: hsla(160, 100%, 37%, 1);
+    cursor: pointer;
+
+    &:hover {
+      background-color: hsla(160, 100%, 37%, 1);
+      color: #f0f0f0;
+      text-decoration: none;
+    }
+  }
+
+  .router-link-active,
+  .router-link-exact-active {
+    background-color: hsla(160, 100%, 37%, 1);
+    color: #f0f0f0;
+  }
+}
