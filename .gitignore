@@ -78,3 +78,5 @@ typings/
 # mac
 .DS_store
 server/public/images/posts/
+
+.vscode/
