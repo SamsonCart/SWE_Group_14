@@ -55,7 +55,12 @@ exports.updateUser = async (req, res) => {
 
       res.user.isActive = isActive
 
-      await res.user.save()
+			res.user.roles = roles;
+
+			await res.user.save();
+
+			// Fetch the updated user
+			const updatedUser = await res.user.populate('roles').execPopulate();
       response.successed(res, { _id, email, isActive, roles, username }, 'User has been successfully updated!')
     }
   } catch (err) {
