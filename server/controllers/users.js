@@ -53,9 +53,7 @@ exports.updateUser = async (req, res) => {
         res.user.password = bcrypt.hashSync(password, 8)
       }
 
-      if (isActive) {
-        res.user.isActive = isActive
-      }
+      res.user.isActive = isActive
 
       await res.user.save()
       response.successed(res, { _id, email, isActive, roles, username }, 'User has been successfully updated!')
