@@ -1,12 +1,12 @@
-const config = require('../config/auth');
-const Role = require('../models/role');
-const User = require('../models/user');
-const { response } = require('../classes');
-const { controllers: { auth: STRINGS } = {} } = require('../MAGIC_STRINGS');
-const sendMail = require('../utils/sendMail');
-const { randomInt } = require('node:crypto');
-var jwt = require('jsonwebtoken');
-var bcrypt = require('bcryptjs');
+const config = require('../config/auth')
+const Role = require('../models/role')
+const User = require('../models/user')
+const { response } = require('../classes')
+const { controllers: { auth: STRINGS } = {} } = require('../MAGIC_STRINGS')
+const sendMail = require('../utils/sendMail')
+const { randomInt } = require('node:crypto')
+var jwt = require('jsonwebtoken')
+var bcrypt = require('bcryptjs')
 
 // Signup controller function
 exports.signup = async (req, res) => {

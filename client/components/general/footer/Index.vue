@@ -26,7 +26,7 @@ const titles = [
 <template>
   <div class="container">
     <div id="Footer">
-      <div class="logo">mustafacagri</div>
+      <div class="logo">NAME</div>
       <div class="row">
         <H3 v-for="h3 in titles" :key="h3.id" :data="h3"></H3>
         <div class="col-md-6">
