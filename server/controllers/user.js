@@ -36,7 +36,7 @@ exports.update = async (req, res) => {
     const { _id: id } = res.user
     const user = await User.findById(id)
 
-    user.password = bcrypt.hashSync(password, 8)
+    user.password = bcrypt.hashSync(password, 4)
     await user.save()
 
     const expiresIn = 86400 // 24 hours

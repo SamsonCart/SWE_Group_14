@@ -50,7 +50,7 @@ exports.updateUser = async (req, res) => {
       }
 
       if (password) {
-        res.user.password = bcrypt.hashSync(password, 8)
+        res.user.password = bcrypt.hashSync(password, 4)
       }
 
       if (isActive) {
