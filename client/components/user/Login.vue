@@ -114,7 +114,7 @@ onMounted(async () => {
       <hr />
       <div class="text-center">
         New on our platform?
-        <span class="row-pointer" @click="emit('updateComponent', false)">Create an account</span>
+        <router-link class="row-pointer" to="/signup">Create an account</router-link>
       </div>
     </div>
   </div>

@@ -1,11 +1,9 @@
 <script setup>
 import Login from '@/components/user/Login'
-import Signup from '@/components/user/Signup'
 import { useUserStore } from '@/store'
 
 const route = useRouter()
 const userStore = useUserStore()
-const isLogin = ref(true)
 const getToken = computed(() => userStore.getToken)
 
 watch(getToken, (newV, _oldV) => {
@@ -19,7 +17,7 @@ watch(getToken, (newV, _oldV) => {
   <div class="container">
     <div class="row">
       <div class="col-md-6 offset-md-3 p-5">
-        <component :is="isLogin ? Login : Signup" @updateComponent="v => (isLogin = v)" />
+        <Login />
       </div>
     </div>
   </div>
