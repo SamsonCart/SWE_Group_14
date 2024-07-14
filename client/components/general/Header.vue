@@ -25,14 +25,14 @@ const getHeaderItems = computed(() => [...homepageStore.getHeaderItems, loginOrU
     </template>
   </header> -->
   <header>
-    <nav>
-      <div class="logo">LocalServices</div>
-      <ul class="nav-links">
-        <li><router-link to="/login">Login</router-link></li>
-        <li><router-link to="/register">Register</router-link></li>
-      </ul>
-    </nav>
-  </header>
+     <nav>
+       <div class="logo">PushPin</div>
+       <ul class="nav-links">
+         <li><router-link to="/signin">Sign in</router-link></li>
+         <li><router-link to="/signup">Sign up</router-link></li>
+       </ul>
+     </nav>
+   </header>
 </template>
 
 <style scoped lang="scss">
