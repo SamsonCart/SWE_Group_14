@@ -18,7 +18,7 @@ watch(getToken, (newV, _oldV) => {
 <template>
   <div class="container">
     <div class="row">
-      <div class="col-md-6 offset-md-3">
+      <div class="col-md-6 offset-md-3 p-5">
         <component :is="isLogin ? Login : Signup" @updateComponent="v => (isLogin = v)" />
       </div>
     </div>
