@@ -22,7 +22,7 @@ async function init(req, res, next) {
 
   await Role.estimatedDocumentCount((err, count) => {
     if (!err && count === 0) {
-      const roles = ['user', 'moderator', 'admin']
+      const roles = ['user', 'admin', 'business']
       roles.forEach(name => {
         new Role({ name }).save(err => {
           if (err) console.log('error', err)
