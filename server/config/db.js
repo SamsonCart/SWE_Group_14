@@ -12,14 +12,14 @@ const db = mongoose.connection;
 db.on('error', (error) => console.log(error));
 db.once('open', () => {
   console.log('Connected to database');
-  init(); // can remove this after first time executing
+  init(); // you can remove this row after first time executing
 });
 
 async function init() {
   // initialize our roles for the first time working
   Role.estimatedDocumentCount((err, count) => {
     if (!err && count === 0) {
-      const roles = ['user', 'admin', 'business'];
+      const roles = ['user', 'admin','business'];
       roles.forEach((name) => {
         new Role({ name }).save((err) => {
           if (err) console.log('error', err);
@@ -30,7 +30,6 @@ async function init() {
   });
   const customerRole = await Role.findOne({ name: 'user' });
   const adminRole = await Role.findOne({ name: 'admin' });
-
 
   // Check if admin user exists
   const adminCount = await User.countDocuments({ roles: adminRole._id });

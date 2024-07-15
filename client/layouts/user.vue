@@ -1,17 +1,17 @@
 <script setup>
 import { useUserStore } from '@/store'
 import Header from '@/components/general/Header'
-import Footer from '@/components/general/footer/Index'
+import Footer from '@/components/general/footer'
 import TopItems from '@/components/user/TopItems'
 </script>
 
 <template>
   <div>
     <Header />
-    <TopItems />
-    <div class="container">
+    <!-- <TopItems /> -->
+    <div class="container mt-4">
       <slot />
     </div>
-    <Footer />
+    <!-- <Footer /> -->
   </div>
 </template>

@@ -67,7 +67,15 @@ export const useUserStore = defineStore('user', {
 
       await request('post', 'auth/signup', payload).then(res => {
         if (res) {
-          response = true
+          this.user = { ...res }
+          localStorage.setItem('user', JSON.stringify(this.user))
+
+          if (res?.accessToken) {
+            localStorage.setItem('token', res.accessToken)
+            this.token = res.accessToken
+
+            response = true
+          }
         }
       })
 

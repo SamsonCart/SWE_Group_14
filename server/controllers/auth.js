@@ -11,6 +11,7 @@ var bcrypt = require('bcryptjs')
 
 exports.signup = async (req, res) => {
   const { email, password, roles, username } = req.body
+  const expiresIn = 86400 // 24 hours
 
   try {
     const authCode =
@@ -43,16 +44,17 @@ exports.signup = async (req, res) => {
 
             // signin(req, res) // if everything is ok, we are gonna signin automatically
             // we disabled this feature for now since the user should be active first to be loged in
-
+            const token = jwt.sign({ id: user._id }, config.secret, {
+              expiresIn
+            })
             res.status(200).send(
-              response.successed(
-                res,
-                {
-                  username,
-                  email
-                },
-                STRINGS.userCreated
-              )
+              new response.success({
+                id: user._id,
+                email,
+                roles,
+                username: user.username,
+                accessToken: token
+              })
             )
           })
         })
@@ -64,7 +66,6 @@ exports.signup = async (req, res) => {
             return response.failed(res, err)
           } else if (count === 1) {
             name = 'admin'
-            user.isActive = true
           } // if there is no user), the first one will be automatically an admin and the isActive will be true
         })
 
@@ -81,27 +82,17 @@ exports.signup = async (req, res) => {
 
             // signin(req, res) // if everything is ok, we are gonna signin automatically
             // we disabled this feature for now since the user should be active first to be loged in
-
-            const html = `Welcome to the platform!!!<br><br>You can click the link and your account will be activated.<br><br><a href="${process.env.CLIENT_URL}useractivate/?email=${email}&authCode=${authCode}">Activate</a>`
-
-            const text = `Welcome to the platform!!! You can click the link and your account will be activated. ${process.env.CLIENT_URL}useractivate/?email=${email}&authCode=${authCode}`
-
-            const payload = {
-              to: email, // list of receivers
-              subject: 'Confirmation Email', // Subject line
-              text, // plain text body
-              html // html body
-            }
-
-            sendMail(payload)
-
-            response.successed(
-              res,
-              {
-                username,
-                email
-              },
-              STRINGS.userCreated
+            const token = jwt.sign({ id: user._id }, config.secret, {
+              expiresIn
+            })
+            res.status(200).send(
+              new response.success({
+                id: user._id,
+                email,
+                roles,
+                username: user.username,
+                accessToken: token
+              })
             )
           })
         })
@@ -131,17 +122,13 @@ exports.signin = (req, res) => {
         return response.failed(res, `${STRINGS.userNotFound} or ${STRINGS.invalidPassword}`)
       }
 
-      if (!user?.isActive) {
-        return response.failed(res, STRINGS.userNotActive)
-      }
-
       const passwordIsValid = bcrypt.compareSync(req.body.password, user.password)
 
       if (!passwordIsValid) {
         return response.failed(res, `${STRINGS.userNotFound} or ${STRINGS.invalidPassword}`)
       }
 
-      const { id, isActive, email, roles, username } = user // we will send the user data except password
+      const { id, email, roles, username } = user // we will send the user data except password
       let expiresIn = 86400 // 24 hours
 
       if (req.body.remember === true) {
@@ -155,7 +142,6 @@ exports.signin = (req, res) => {
       res.status(200).send(
         new response.success({
           id,
-          isActive,
           email,
           roles,
           username,
@@ -178,11 +164,7 @@ exports.activate = async (req, res) => {
         return response.failed(res, `${STRINGS.userNotFound} / ${STRINGS.invalidAuthCode}`)
       }
 
-      if (user.isActive) {
-        return response.failed(res, STRINGS.userAlreadyActivated)
-      }
 
-      user.isActive = true
       user.authCode = null
 
       await user.save(err => {
