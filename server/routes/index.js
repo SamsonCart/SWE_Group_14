@@ -1,10 +1,23 @@
-const express = require('express')
-const router = express.Router()
+const express = require('express');
+const router = express.Router();
 
-router.use('/admin', require('./admin'))
+// Import route files
+const businessRoutes = require('./business');
+const serviceRoutes = require('./service');
+const availabilityRoutes = require('./availability');
+const adminRoutes = require('./admin');
+const authRoutes = require('./auth');
+const userRoutes = require('./user');
+const homepageRoutes = require('./homepage');
 
-router.use('/auth', require('./auth'))
-router.use('/user', require('./user'))
-router.use('/homepage', require('./homepage'))
+// Use routes
+router.use('/admin', adminRoutes);
+router.use('/auth', authRoutes);
+router.use('/user', userRoutes);
+router.use('/homepage', homepageRoutes);
 
-module.exports = router
+router.use('/business', businessRoutes);
+router.use('/service', serviceRoutes);
+router.use('/availability', availabilityRoutes);
+
+module.exports = router;

@@ -1,15 +1,20 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 const Business = mongoose.model(
   'Business',
   new mongoose.Schema({
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true
+    },
     businessName: {
       type: String,
       required: true,
       unique: true
     },
     description: String,
-    services: [String],
     address: {
       street: String,
       city: String,
@@ -28,6 +33,6 @@ const Business = mongoose.model(
       default: Date.now
     }
   })
-)
+);
 
-module.exports = Business
+module.exports = Business;

@@ -1,9 +1,9 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const AvailabilitySchema = new mongoose.Schema({
   businessId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Business',
+    ref: 'Service',
     required: true
   },
   dayOfWeek: {
@@ -19,7 +19,8 @@ const AvailabilitySchema = new mongoose.Schema({
   endTime: {
     type: String,
     required: true
-  }
-})
+  },
+  isBooked: { type: Boolean, default: false }
+});
 
-module.exports = mongoose.model('Availability', AvailabilitySchema)
+module.exports = mongoose.model('Availability', AvailabilitySchema);
