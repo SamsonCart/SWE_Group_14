@@ -1,11 +1,4 @@
 <script setup>
-import { ref, onMounted } from 'vue';
-
-definePageMeta({
-  layout: 'user',
-  middleware: 'auth',
-});
-
 const searchRadius = ref(20);
 const serviceType = ref('');
 const businesses = ref([]);
@@ -29,7 +22,6 @@ onMounted(() => {
 });
 </script>
 <template>
-  <h1 class="mb-4">Customer Dashboard</h1>
   <div class="row">
     <!-- Search for local businesses -->
     <div class="col-md-4">
@@ -38,7 +30,9 @@ onMounted(() => {
           <h5 class="card-title">Find Local Services</h5>
           <form @submit.prevent="searchBusinesses">
             <div class="mb-3">
-              <label for="searchRadius" class="form-label">Search Radius (miles)</label>
+              <label for="searchRadius" class="form-label"
+                >Search Radius (miles)</label
+              >
               <input
                 type="number"
                 class="form-control"
@@ -49,7 +43,11 @@ onMounted(() => {
             </div>
             <div class="mb-3">
               <label for="serviceType" class="form-label">Service Type</label>
-              <select class="form-select" id="serviceType" v-model="serviceType">
+              <select
+                class="form-select"
+                id="serviceType"
+                v-model="serviceType"
+              >
                 <option value="">All Services</option>
                 <option value="plumber">Plumber</option>
                 <option value="makeup">Makeup Artist</option>
@@ -137,10 +135,11 @@ onMounted(() => {
             </a>
           </div>
           <p v-else>You haven't written any reviews yet.</p>
-          <button class="btn btn-primary mt-3" @click="openWriteReviewModal">Write a Review</button>
+          <button class="btn btn-primary mt-3" @click="openWriteReviewModal">
+            Write a Review
+          </button>
         </div>
       </div>
     </div>
   </div>
 </template>
-

@@ -10,7 +10,7 @@ const { signup: signupAction } = userStore
 const messageStore = useMessageStore()
 
 const isSubmitting = ref(false)
-const initialFormData = { email: 'cagri@cagri.com', username: 'cagritest', password: 'cagritest', repassword: 'cagritest' }
+const initialFormData = { email: 'customer@example.com', username: 'customer', password: 'password', repassword: 'password' }
 const formData = ref({ ...initialFormData })
 
 const signup = () => {

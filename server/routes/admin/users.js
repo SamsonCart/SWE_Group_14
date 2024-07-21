@@ -21,7 +21,7 @@ router
 router.post(
   '/',
   [authJwt.verifyToken, authJwt.isAdmin],
-  [checkDuplicateUsernameOrEmail, checkRolesExisted],
+  [checkDuplicateUsernameOrEmail],
   controller.createUser
 );
 

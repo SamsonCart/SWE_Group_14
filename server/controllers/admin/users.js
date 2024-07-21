@@ -24,7 +24,7 @@ exports.getUser = async (req, res) => {
 };
 
 exports.createUser = async (req, res) => {
-  const { email, password, roles: roleNames, username } = req.body;
+  const { email, password, roles: roleIds, username } = req.body;
   const expiresIn = 86400; // 24 hours
 
   try {
@@ -32,7 +32,7 @@ exports.createUser = async (req, res) => {
     const user = new User({ email, password: hashedPassword, username });
 
     // Find roles by name
-    const roles = await Role.find({ name: { $in: roleNames } });
+    const roles = await Role.find({ _id: { $in: roleIds } });
     // Assign role IDs to user
     roles.map((role) => user.roles.push(mongoose.Types.ObjectId(role._id)));
     await user.save();
@@ -62,7 +62,7 @@ exports.updateUser = async (req, res) => {
       email,
       isActive,
       password,
-      roles: roleNames
+      roles: roleIds
     } = req.body;
     let anyError = [];
 
@@ -91,8 +91,8 @@ exports.updateUser = async (req, res) => {
     }
 
     // Find roles by name and convert to ObjectId array
-    if (roleNames && roleNames.length > 0) {
-      const roles = await Role.find({ name: { $in: roleNames } });
+    if (roleIds && roleIds.length > 0) {
+      const roles = await Role.find({ _id: { $in: roleIds } });
       updateData.roles = roles.map((role) => mongoose.Types.ObjectId(role._id));
     } else {
       anyError.push(STRINGS.rolesCanNotBeEmpty);

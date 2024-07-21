@@ -13,21 +13,21 @@ const router = createRouter({
 
 router.beforeEach(async (to, from) => {
   const authStore = await useAuthStore()
-  let isStuff = false
+  let isAdmin = false
 
   if (!(to.name === 'login' || to.name === 'register')) {
-    isStuff = authStore.isAdmin() || authStore.isBusiness()
+    isAdmin = authStore.isAdmin() === true
   }
 
-  console.log('isStuff => ', isStuff)
+  console.log('router => isAdmin', isAdmin)
   if (
     // make sure the user is authenticated ❗️ Avoid an infinite redirect
-    !isStuff &&
+    !isAdmin &&
     !(to.name === 'login' || to.name === 'register')
   ) {
     // redirect the user to the login page
     return { name: 'login' }
-  } else if (isStuff && (to.name === 'login' || to.name === 'register')) {
+  } else if (isAdmin && (to.name === 'login' || to.name === 'register')) {
     return { name: 'index' }
   }
 })

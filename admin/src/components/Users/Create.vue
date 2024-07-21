@@ -49,6 +49,7 @@ onMounted(() => {
     @submit.prevent="() => {}"
   >
     <VRow>
+      <h2>Create a new user</h2>
       <!-- Username -->
       <VCol cols="12">
         <VTextField
@@ -87,7 +88,7 @@ onMounted(() => {
           :rules="rules.roles"
           :items="userStore.getRoles"
           item-title="name"
-          item-value="name"
+          item-value="_id"
           label="Select Roles"
           multiple
           hint="Select the user roles"

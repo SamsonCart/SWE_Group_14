@@ -25,7 +25,6 @@ export const useAuthStore = defineStore('auth', {
       await this.initAuth()
     },
     async initAuth() {
-      console.log('initAuth...')
       if (localStorage.getItem('token')) {
         try {
           const res = await request('post', 'auth/jwtsignin')
@@ -42,7 +41,6 @@ export const useAuthStore = defineStore('auth', {
       this.user = data
     },
     isAdmin() {
-      console.log('isAdmin...')
       let isAdmin = false
       if (this.user?.roles) {
         this.user.roles.map(role => {
@@ -50,16 +48,6 @@ export const useAuthStore = defineStore('auth', {
         })
       }
       return isAdmin
-    },
-    isBusiness() {
-      console.log('isBusiness...')
-      let isBusiness = false
-      if (this.user?.roles) {
-        this.user.roles.map(role => {
-          if (role.name === 'business') isBusiness = true
-        })
-      }
-      return isBusiness
     },
     logout() {
       this.user = null

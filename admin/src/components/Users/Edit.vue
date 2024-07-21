@@ -115,7 +115,7 @@ onMounted(() => {
           :rules="rules.roles"
           :items="userStore.getRoles"
           item-title="name"
-          item-value="name"
+          item-value="_id"
           label="Select Roles"
           multiple
           hint="Select the user roles"

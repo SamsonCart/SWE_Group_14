@@ -14,7 +14,7 @@ const emit = defineEmits(['updateComponent']);
 
 const visibleEye = ref(true);
 const isSubmitting = ref(false);
-const formData = ref({ email: 'cagri@cagri.com', password: 'cagritest' });
+const formData = ref({ email: 'customer@example.com', password: 'password' });
 
 const login = () => {
   isSubmitting.value = true;
@@ -41,7 +41,7 @@ const login = () => {
 
   userStore.login({ ...formData.value }).then((res) => {
     if (res) {
-      router.push('/user');
+      router.push('/dashboard');
     } else {
       isSubmitting.value = false;
     }
@@ -55,7 +55,7 @@ onMounted(async () => {
   if (type === 'activate') {
     userStore.activate({ email, authCode }).then((res) => {
       if (res) {
-        router.push('/user');
+        router.push('/dashboard');
       }
     });
   }

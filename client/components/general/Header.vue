@@ -1,16 +1,28 @@
 <script setup>
 import { useUserStore } from '~/store/user';
-const userStore = useUserStore();
+import TopItems from '@/components/user/TopItems';
 
+const userStore = useUserStore();
+const router = useRouter();
+
+const logout = async () => {
+  await userStore.logout();
+  router.push('/signin');
+};
 </script>
 
 <template>
   <header>
     <nav>
-      <div class="logo">PushPin</div>
+      <div class="logo">Booking</div>
       <ul class="nav-links" v-if="!userStore.getToken">
         <li><router-link to="/signin">Sign in</router-link></li>
         <li><router-link to="/signup">Sign up</router-link></li>
+      </ul>
+      <!-- <TopItems /> -->
+      <ul class="nav-links" v-if="userStore.getToken">
+        <li>Hi, {{ userStore.user.username }}!</li>
+        <li style="cursor: pointer" @click="logout">Logout</li>
       </ul>
     </nav>
   </header>

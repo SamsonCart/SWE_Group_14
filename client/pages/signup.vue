@@ -8,7 +8,7 @@ const getToken = computed(() => userStore.getToken)
 
 watch(getToken, (newV, _oldV) => {
   if (newV) {
-    route.push('/user')
+    route.push('/dashboard')
   }
 })
 </script>
