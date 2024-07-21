@@ -11,8 +11,12 @@ router.use(function (req, res, next) {
 // you can test your token with these URLs for authorization
 router.get('/test/all', controller.allAccess)
 router.get('/test/user', [authJwt.verifyToken], controller.userAccess)
-router.get('/test/mod', [authJwt.verifyToken, authJwt.isModerator], controller.moderatorAccess)
+router.get('/test/business', [authJwt.verifyToken, authJwt.isBusiness], controller.businessAccess)
 router.get('/test/admin', [authJwt.verifyToken, authJwt.isAdmin], controller.adminAccess)
-router.put('/update', [authJwt.verifyToken], controller.update)
+
+// change password
+router.put('/changepassword', [authJwt.verifyToken], controller.changePassword)
+// update profile
+router.put('/update', [authJwt.verifyToken], controller.updateProfile)
 
 module.exports = router

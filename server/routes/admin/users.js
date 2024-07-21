@@ -1,25 +1,35 @@
-const express = require('express')
-const router = express.Router()
-const { getUser } = require('../../middlewares/user')
-const controller = require('../../controllers/users')
-const { getGeneric } = require('../../controllers/generic')
-const { checkDuplicateUsernameOrEmail, checkRolesExisted } = require('../../middlewares/user/verifySignUp')
-const dbQuery = require('../../middlewares/utils/dbQuery')
-const Role = require('../../models/role')
-const User = require('../../models/user')
-
-const createUserMiddleware = [getUser, checkDuplicateUsernameOrEmail, checkRolesExisted]
+const express = require('express');
+const router = express.Router();
+const Role = require('../../models/role');
+const User = require('../../models/user');
+const controller = require('../../controllers/admin/users');
+const { getGeneric } = require('../../controllers/generic');
+const {
+  checkDuplicateUsernameOrEmail,
+  checkRolesExisted
+} = require('../../middlewares/user/verifySignUp');
+const dbQuery = require('../../middlewares/utils/dbQuery');
+const authJwt = require('../../middlewares/user/authJwt');
 
 router
   .route('/')
-  .get(dbQuery(User, [{ path: 'roles', select: 'name' }], ['password']), getGeneric)
-  .post(createUserMiddleware, controller.createUser)
+  .get(
+    dbQuery(User, [{ path: 'roles', select: 'name' }], ['password']),
+    getGeneric
+  );
 
-router.route('/roles').get(dbQuery(Role), getGeneric)
+router.post(
+  '/',
+  [authJwt.verifyToken, authJwt.isAdmin],
+  [checkDuplicateUsernameOrEmail, checkRolesExisted],
+  controller.createUser
+);
+
+router.route('/roles').get(dbQuery(Role), getGeneric);
 
 router
-  .get('/:id', getUser, controller.getUser)
-  .put('/:id', getUser, controller.updateUser)
-  .delete('/:id', getUser, controller.deleteUser)
+  .get('/:id', [authJwt.verifyToken, authJwt.isAdmin], controller.getUser)
+  .put('/:id', [authJwt.verifyToken, authJwt.isAdmin], controller.updateUser)
+  .delete('/:id', [authJwt.verifyToken, authJwt.isAdmin], controller.deleteUser);
 
-module.exports = router
+module.exports = router;
