@@ -1,5 +1,6 @@
 <script setup>
 import { useMessageStore, useUserStore } from '@/store'
+import Create from '@/components/Users/Create.vue'
 import Edit from '@/components/Users/Edit.vue'
 import Delete from '@/components/Users/Delete.vue'
 
@@ -8,11 +9,24 @@ const messageStore = useMessageStore()
 
 const data = computed(() => userStore.getUsers)
 const editing = ref(false)
+const creating = ref(false)
+
 const user = ref({})
+
+onMounted(async () => {
+  await userStore.init()
+})
 
 const edit = value => {
   user.value = { ...value }
+  creating.value = false
   editing.value = true
+}
+
+const create = () => {
+  user.value = {}
+  editing.value = false
+  creating.value = true
 }
 
 const headers = ref([
@@ -57,8 +71,20 @@ const headers = ref([
     :user="user"
     @updateEditing="val => (editing = val)"
   />
+  <Create
+    v-if="creating"
+    :creating="creating"
+    @updateCreating="val => (creating = val)"
+  />
+  <VBtn
+    v-show="!creating && !editing"
+    @click="create()"
+    style="margin-bottom: 20px"
+  >
+    <VIcon icon="mdi-plus" />
+  </VBtn>
   <VDataTable
-    v-if="!editing"
+    v-if="!editing && !creating"
     items-per-page="10"
     :headers="headers"
     :items="data"

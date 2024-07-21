@@ -1,5 +1,5 @@
 <script setup>
-import { useHomepageStore } from '@/store/all'
+import { useHomepageStore } from '@/store/homepage'
 import { onMounted } from 'vue-demi'
 
 const homepageStore = useHomepageStore()

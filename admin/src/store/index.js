@@ -1,8 +1,11 @@
 import { defineStore } from 'pinia'
 import { reactive } from 'vue'
-import { useHomepageStore, usePostStore, useUserStore } from './all'
+import { useHomepageStore } from './homepage'
+import { useUserStore } from './user'
+import { useAuthStore } from './auth'
+import { useMessageStore } from './message'
 
-export * from './all' // it will be an easy way to use stores like => import { useConfig, useUser } from '@/store'
+export { useHomepageStore, useMessageStore, useUserStore, useAuthStore }
 
 export const useMainStore = defineStore('main', {
   state: () => reactive({}),
@@ -10,8 +13,7 @@ export const useMainStore = defineStore('main', {
   actions: {
     async init() {
       await useHomepageStore().init()
-      await useUserStore().init()
-      await usePostStore().init()
+      await useAuthStore().init()
     },
   },
 })

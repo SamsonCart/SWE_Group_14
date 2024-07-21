@@ -3,24 +3,24 @@ import { useUserStore } from '@/store'
 const userStore = useUserStore()
 
 const props = defineProps({
-  editing: Boolean,
+  creating: Boolean,
   user: Object,
 })
 
-const emit = defineEmits(['updateEditing'])
+const emit = defineEmits(['updateCreating'])
 
 const initialFormValues = { username: '', email: '', isActive: false, password: '', roles: [] }
 const form = ref({ ...initialFormValues })
 
 const isPasswordVisible = ref(false)
 
-const update = () => {
+const create = () => {
   if (!valid.value) {
     const error = 'Please fill the form correctly!'
     messageStore.setError({ error })
   } else {
-    userStore.updateUser({ ...form.value })
-    emit('updateEditing', false)
+    userStore.createUser({ ...form.value })
+    emit('updateCreating', false)
   }
 }
 
@@ -37,15 +37,15 @@ const rules = {
 }
 onMounted(() => {
   form.value = { ...props.user }
-  console.log('props.user :>> ', props.user);
 })
 </script>
 
 <template>
   <VForm
-    v-if="editing"
+    v-if="creating"
     v-model="valid"
     lazy-validation
+    style="margin-bottom: 20px;"
     @submit.prevent="() => {}"
   >
     <VRow>
@@ -81,34 +81,6 @@ onMounted(() => {
         />
       </VCol>
 
-      <!-- createdTime -->
-      <VCol cols="12">
-        <VTextField
-          v-model="form.createdTime"
-          label="Created Time"
-          disabled
-        />
-      </VCol>
-
-      <!-- isActive -->
-      <VCol cols="12">
-        <VRadioGroup
-          v-model="form.isActive"
-          inline
-        >
-          <VRadio :value="true">
-            <template #label>
-              <strong class="text-success">Active</strong>
-            </template>
-          </VRadio>
-          <VRadio :value="false">
-            <template #label>
-              <strong class="text-error">Passive</strong>
-            </template>
-          </VRadio>
-        </VRadioGroup>
-      </VCol>
-
       <VCol cols="12">
         <VSelect
           v-model="form.roles"
@@ -126,7 +98,7 @@ onMounted(() => {
         <VBtn
           block
           color="error"
-          @click="emit('updateEditing', false)"
+          @click="emit('updateCreating', false)"
         >
           Cancel
         </VBtn>
@@ -135,9 +107,9 @@ onMounted(() => {
       <VCol cols="6">
         <VBtn
           block
-          @click="update"
+          @click="create"
         >
-          Update
+          Create
         </VBtn>
       </VCol>
     </VRow>

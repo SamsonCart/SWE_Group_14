@@ -7,10 +7,11 @@ import logo from '@/assets/logo.svg?raw'
 import { request } from '@/utils'
 import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
 import { useTheme } from 'vuetify'
-import { useMessageStore } from '@/store'
+import { useAuthStore, useMessageStore } from '@/store'
 import router from '@/router'
 
 const messageStore = useMessageStore()
+const authStore = useAuthStore()
 
 const valid = ref()
 const rules = {
@@ -22,21 +23,25 @@ const login = async () => {
   if (!valid.value) {
     const error = 'Please fill the form!'
     messageStore.setError({ error })
-  } else {
-    await request('post', 'auth/signin', {
+    return
+  }
+  try {
+    /**
+     * Todo: move to authStore
+     */
+    const res = await request('post', 'auth/signin', {
       username: username.value,
       password: password.value,
       remember: remember.value,
     })
-      .then(res => {
-        if (res?.isSuccess === true) {
-          localStorage.setItem('token', res?.data?.accessToken)
-          router.replace('/')
-        }
-      })
-      .catch(err => {
-        messageStore.setError({ error: err.message })
-      })
+    if (res?.isSuccess === true) {
+      console.log('res.data', res.data)
+      authStore.setUser(res.data)
+      localStorage.setItem('token', res?.data?.accessToken)
+      router.replace('/dashboard')
+    }
+  } catch (error) {
+    messageStore.setError({ error: err.message })
   }
 }
 
@@ -74,11 +79,10 @@ const isPasswordVisible = ref(false)
           </div>
         </template>
 
-        <VCardTitle class="font-weight-semibold text-2xl text-uppercase"> MEVN Boilerplate </VCardTitle>
+        <VCardTitle class="font-weight-semibold text-2xl text-uppercase"> BOOKING </VCardTitle>
       </VCardItem>
 
       <VCardText class="pt-2">
-        <h5 class="text-h5 font-weight-semibold mb-1">Vue 3 - Express - Vuexy 👋🏻</h5>
         <p class="mb-0">Please sign-in to your account and start the adventure</p>
       </VCardText>
 
@@ -136,7 +140,7 @@ const isPasswordVisible = ref(false)
               </VBtn>
             </VCol>
 
-            <VCol
+            <!-- <VCol
               cols="12"
               class="text-center text-base"
             >
@@ -147,7 +151,7 @@ const isPasswordVisible = ref(false)
               >
                 Create an account
               </RouterLink>
-            </VCol>
+            </VCol> -->
 
             <VCol
               cols="12"

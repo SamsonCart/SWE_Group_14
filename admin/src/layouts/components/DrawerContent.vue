@@ -3,11 +3,14 @@ import upgradeBannerDark from '@/assets/images/pro/upgrade-banner-dark.png'
 import upgradeBannerLight from '@/assets/images/pro/upgrade-banner-light.png'
 import logo from '@/assets/logo.svg?raw'
 import router from '@/router'
+import { useAuthStore } from '@/store'
 import { VerticalNavLink, VerticalNavSectionTitle } from '@layouts'
 import { useTheme } from 'vuetify'
 
+const authStore = useAuthStore()
+
 const logout = () => {
-  localStorage.removeItem('token')
+  authStore.logout()
   router.push('logout')
 }
 
@@ -28,7 +31,7 @@ const upgradeBanner = computed(() => {
       <div v-html="logo" />
 
       <Transition name="vertical-nav-app-title">
-        <h1 class="font-weight-semibold leading-normal text-xl text-uppercase">MEVN Stack</h1>
+        <h1 class="font-weight-semibold leading-normal text-xl text-uppercase">Booking</h1>
       </Transition>
     </RouterLink>
   </div>
@@ -38,14 +41,13 @@ const upgradeBanner = computed(() => {
     <VerticalNavLink
       :item="{
         title: 'Dashboard',
-        to: 'index',
+        to: 'dashboard',
         icon: { icon: 'mdi-home-outline' },
       }"
     />
-    <!-- 👉 Pages -->
-    <VerticalNavSectionTitle :item="{ heading: 'Posts' }" />
 
     <VerticalNavLink
+      v-if="authStore.isAdmin() === true"
       :item="{
         to: 'users',
         title: 'Users',
@@ -53,32 +55,9 @@ const upgradeBanner = computed(() => {
       }"
     />
 
-    <VerticalNavLink
-      :item="{
-        to: 'tickets',
-        title: 'Tickets',
-        icon: { icon: 'mdi-folder-outline' },
-      }"
-    />
-
-    <VerticalNavLink
-      :item="{
-        to: 'posts',
-        title: 'Posts',
-        icon: { icon: 'mdi-clipboard-outline' },
-      }"
-    />
-
-    <VerticalNavLink
-      :item="{
-        to: 'postCategories',
-        title: 'Post Categories',
-        icon: { icon: 'mdi-folder-outline' },
-      }"
-    />
-
     <!-- 👉 User -->
     <VerticalNavSectionTitle :item="{ heading: 'User' }" />
+
     <VerticalNavLink
       :item="{
         to: 'login',
