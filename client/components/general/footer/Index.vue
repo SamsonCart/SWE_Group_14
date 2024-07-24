@@ -4,10 +4,10 @@ const titles = [
   {
     title: 'Platform',
     content: [
-      { url: '#', name: 'Home' },
-      { url: '#', name: 'Features' },
-      { url: '#', name: 'API' },
-      { url: '#', name: 'Pricing' },
+      { url: '#', name: 'Home2' },
+      { url: '#', name: 'Features2' },
+      { url: '#', name: 'API2' },
+      { url: '#', name: 'Pricing2' },
       { url: '#', name: "What's New" }
     ]
   },
@@ -26,7 +26,7 @@ const titles = [
 <template>
   <div class="container">
     <div id="Footer">
-      <div class="logo">mustafacagri</div>
+      <div class="logo">Change the Name</div>
       <div class="row">
         <H3 v-for="h3 in titles" :key="h3.id" :data="h3"></H3>
         <div class="col-md-6">

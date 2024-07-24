@@ -1,3 +1,14 @@
+<<<<<<< HEAD
+const config = require('../config/auth')
+const Role = require('../models/role')
+const User = require('../models/user')
+const { response } = require('../classes')
+const { controllers: { auth: STRINGS } = {} } = require('../MAGIC_STRINGS')
+const sendMail = require('../utils/sendMail')
+const { randomInt } = require('node:crypto')
+var jwt = require('jsonwebtoken')
+var bcrypt = require('bcryptjs')
+=======
 const config = require('../config/auth');
 const Role = require('../models/role');
 const User = require('../models/user');
@@ -8,7 +19,9 @@ const { randomInt } = require('node:crypto');
 
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
+>>>>>>> main
 
+// Signup controller function
 exports.signup = async (req, res) => {
   const { email, password, roles, username } = req.body;
   const expiresIn = 86400; // 24 hours
@@ -21,7 +34,7 @@ exports.signup = async (req, res) => {
     const user = new User({
       authCode,
       email,
-      password: bcrypt.hashSync(password, 8),
+      password: bcrypt.hashSync(password, 4),
       username
     });
 

@@ -5,7 +5,7 @@ import { nextTick } from 'vue';
 
 const homepageStore = useHomepageStore();
 
-const getStats = computed(() => homepageStore.getStats);
+const getStats = computed(() => homepageStore.getStats) //pulls stats from a user about their use of the website for admin viewing
 
 const services = [
   { value: '', label: 'What service do you need?' },

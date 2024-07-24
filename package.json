@@ -1,9 +1,11 @@
 {
   "name": "mevn-stack-boilerplate",
   "version": "1.0.1",
-  "scripts": {
-    "start": "(cd server; yarn dev;) & (sleep 3; cd admin; yarn dev) & (sleep 6; cd client; yarn dev)"
-  },
+  
+		"scripts": {
+			"start": "(cd server && yarn dev) & (timeout /t 3 & cd admin && yarn dev) & (timeout /t 6 & cd client && yarn dev)"
+		},
+	
   "packageManager": "yarn@1.22.18",
   "resolutions": {
     "postcss": "8",

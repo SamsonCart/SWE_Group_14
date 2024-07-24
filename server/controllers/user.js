@@ -36,8 +36,13 @@ exports.changePassword = async (req, res) => {
     const { _id: id } = res.user;
     const user = await User.findById(id);
 
+<<<<<<< HEAD
+    user.password = bcrypt.hashSync(password, 4)
+    await user.save()
+=======
     user.password = bcrypt.hashSync(password, 8);
     await user.save();
+>>>>>>> main
 
     const expiresIn = 86400; // 24 hours
     const token = jwt.sign({ id }, config.secret, {

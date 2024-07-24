@@ -4,10 +4,10 @@ export const useHomepageStore = defineStore('homepage', {
   state: () => {
     return {
       stats: {},
-      headerItems: [
-        { text: 'Homepage', to: '/', icon: 'fa-solid fa-home' },
+      headerItems: [ //change buttons on the home page here!!!
+        { text: 'Home', to: '/', icon: 'fa-solid fa-home' },
         { text: 'Categories', to: '/post-categories', icon: 'fa-solid fa-folder' },
-        { text: 'Posts', to: '/posts', icon: 'fa-solid fa-mug-hot' }
+        { text: 'Posts', to: '/posts', icon: 'fa-solid fa-mug-hot' },
       ]
     }
   },
