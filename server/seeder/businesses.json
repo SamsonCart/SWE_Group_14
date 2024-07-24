@@ -1,0 +1,39 @@
+[
+    {
+      "owner": "60f7f3e0b5e7ab001d8b4567",
+      "businessName": "Plumber Pros",
+      "description": "Professional plumbing services for all your needs.",
+      "address": {
+        "street": "123 Main St",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zipCode": "90001",
+        "coordinates": {
+          "latitude": 34.052235,
+          "longitude": -118.243683
+        }
+      },
+      "phoneNumber": "555-1234",
+      "email": "info@plumberpros.com",
+      "images": ["https://example.com/image1.jpg", "https://example.com/image2.jpg"]
+    },
+    {
+      "owner": "60f7f3e0b5e7ab001d8b4567",
+      "businessName": "Makeup Masters",
+      "description": "Expert makeup artists for all occasions.",
+      "address": {
+        "street": "456 Elm St",
+        "city": "New York",
+        "state": "NY",
+        "zipCode": "10001",
+        "coordinates": {
+          "latitude": 40.712776,
+          "longitude": -74.005974
+        }
+      },
+      "phoneNumber": "555-5678",
+      "email": "info@makeupmasters.com",
+      "images": ["https://example.com/image3.jpg", "https://example.com/image4.jpg"]
+    }
+  ]
+  

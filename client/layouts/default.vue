@@ -9,6 +9,6 @@ import Footer from '@/components/general/footer/Index'
     <div class="container">
       <slot />
     </div>
-    <Footer />
+    <!-- <Footer /> -->
   </div>
 </template>

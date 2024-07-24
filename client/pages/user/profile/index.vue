@@ -9,8 +9,6 @@ const userStore = useUserStore()
 
 const user = computed(() => userStore.getUser)
 
-const visibleEye = ref(true)
-const visibleEye2 = ref(true)
 const isSubmitting = ref(false)
 
 const formData = ref({ password: '', repassword: '' })
@@ -62,15 +60,11 @@ const updatePassword = () => {
               <div class="col-sm-8">
                 <div id="passwordColumn">
                   <input
-                    :type="visibleEye ? 'password' : 'text'"
+                    type="password"
                     class="form-control"
                     id="password"
                     placeholder="Password"
                     v-model="formData.password"
-                  />
-                  <font-awesome-icon
-                    :icon="visibleEye ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'"
-                    @click="visibleEye = !visibleEye"
                   />
                 </div>
               </div>
@@ -81,15 +75,11 @@ const updatePassword = () => {
               <div class="col-sm-8">
                 <div id="passwordColumn">
                   <input
-                    :type="visibleEye2 ? 'password' : 'text'"
+                    type="password"
                     class="form-control"
                     id="repassword"
                     placeholder="Re-Password"
                     v-model="formData.repassword"
-                  />
-                  <font-awesome-icon
-                    :icon="visibleEye2 ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'"
-                    @click="visibleEye2 = !visibleEye2"
                   />
                 </div>
               </div>

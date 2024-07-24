@@ -1,60 +1,65 @@
 <script setup>
-import { storeToRefs } from 'pinia'
-import { useHomepageStore } from '~/store/homepage'
-import { useUserStore } from '~/store/user'
-const homepageStore = useHomepageStore()
-const userStore = useUserStore()
+import { useUserStore } from '~/store/user';
+import TopItems from '@/components/user/TopItems';
 
-const initialLoginOrUser = { to: '/login', text: 'Login', icon: 'fa-solid fa-users' }
-const loginOrUser = computed(() =>
-  userStore.getToken
-    ? { text: useUserStore().getUser?.username, to: '/user', icon: 'fa-solid fa-user' }
-    : { ...initialLoginOrUser }
-)
+const userStore = useUserStore();
+const router = useRouter();
 
-const getHeaderItems = computed(() => [...homepageStore.getHeaderItems, loginOrUser.value])
+const logout = async () => {
+  await userStore.logout();
+  router.push('/signin');
+};
 </script>
 
 <template>
   <header>
-    <template v-for="(item, index) in getHeaderItems" :key="index">
-      <router-link v-if="item?.to" :to="item.to">
-        <span><Icon :icon="item.icon" class="mr-2" /></span>
-        {{ item.text }}
-      </router-link>
-    </template>
+    <nav>
+      <div class="logo">Booking</div>
+      <ul class="nav-links" v-if="!userStore.getToken">
+        <li><router-link to="/signin">Sign in</router-link></li>
+        <li><router-link to="/signup">Sign up</router-link></li>
+      </ul>
+      <!-- <TopItems /> -->
+      <ul class="nav-links" v-if="userStore.getToken">
+        <li>Hi, {{ userStore.user.username }}!</li>
+        <li style="cursor: pointer" @click="logout">Logout</li>
+      </ul>
+    </nav>
   </header>
 </template>
 
 <style scoped lang="scss">
 header {
-  width: 90%;
-  border-radius: 0.5rem;
+  background-color: #f4f4f4;
   padding: 1rem;
-  margin: 0 auto;
-  margin-bottom: 1rem;
-  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+nav {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
 
-  a {
-    font-family: 'Concert One', cursive;
-    background-color: white;
-    margin: 0 0.5rem;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    color: hsla(160, 100%, 37%, 1);
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
 
-    &:hover {
-      background-color: hsla(160, 100%, 37%, 1);
-      color: white;
-      text-decoration: none;
-    }
-  }
+.nav-links {
+  display: flex;
+  list-style: none;
+  margin: 0;
+}
 
-  .router-link-active,
-  .router-link-exact-active {
-    background-color: hsla(160, 100%, 37%, 1);
-    color: white;
-  }
+.nav-links li {
+  margin-left: 1rem;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #333;
 }
 </style>

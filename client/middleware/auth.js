@@ -1,8 +1,8 @@
-import { useUserStore } from '@/store'
-const userStore = useUserStore()
+import { useUserStore } from '@/store';
 
-export default defineNuxtRouteMiddleware(async (to, from) => {
+export default defineNuxtRouteMiddleware((to, from) => {
+  const userStore = useUserStore();
   if (!userStore.getToken) {
-    return navigateTo('/login')
+    return navigateTo('/signin');
   }
-})
+});

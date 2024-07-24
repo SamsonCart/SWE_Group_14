@@ -9,12 +9,12 @@ export default {
 
   app: {
     head: {
-      title: 'MEVN Stack Boilerplate - Client (Nuxt 3 with pinia)',
+      title: 'Booking - Client',
       link: [
-        {
-          rel: 'stylesheet',
-          href: 'https://fonts.googleapis.com/css2?family=Concert+One&family=Rubik:wght@300;400;600;800&display=swap'
-        },
+        // {
+        //   rel: 'stylesheet',
+        //   href: 'https://fonts.googleapis.com/css2?family=Concert+One&family=Rubik:wght@300;400;600;800&display=swap'
+        // },
         {
           rel: 'stylesheet',
           href: 'https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css'

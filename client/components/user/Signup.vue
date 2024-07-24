@@ -9,10 +9,8 @@ const userStore = useUserStore()
 const { signup: signupAction } = userStore
 const messageStore = useMessageStore()
 
-const visibleEye = ref(true)
-const visibleEye2 = ref(true)
 const isSubmitting = ref(false)
-const initialFormData = { email: 'cagri@cagri.com', username: 'cagritest', password: 'cagritest', repassword: 'cagritest' }
+const initialFormData = { email: 'customer@example.com', username: 'customer', password: 'password', repassword: 'password' }
 const formData = ref({ ...initialFormData })
 
 const signup = () => {
@@ -88,18 +86,12 @@ const signup = () => {
         <div class="col-sm-8">
           <div id="passwordColumn">
             <input
-              :type="visibleEye ? 'password' : 'text'"
+              type="password"
               class="form-control"
               id="password"
               placeholder="Password"
               v-model="formData.password"
             />
-            <ClientOnly>
-              <font-awesome-icon
-                :icon="visibleEye ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'"
-                @click="visibleEye = !visibleEye"
-              />
-            </ClientOnly>
           </div>
         </div>
       </div>
@@ -109,31 +101,25 @@ const signup = () => {
         <div class="col-sm-8">
           <div id="passwordColumn">
             <input
-              :type="visibleEye2 ? 'password' : 'text'"
+              type="password"
               class="form-control"
               id="repassword"
               placeholder="Re-Password"
               v-model="formData.repassword"
             />
-            <ClientOnly>
-              <font-awesome-icon
-                :icon="visibleEye2 ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'"
-                @click="visibleEye2 = !visibleEye2"
-              />
-            </ClientOnly>
           </div>
         </div>
       </div>
 
       <div class="form-group row">
-        <div class="col-sm-12">
+        <div class="col-sm-12 d-flex justify-content-end">
           <button @click="signup()" :disabled="isSubmitting" class="btn btn-primary">Sign Up</button>
         </div>
       </div>
       <hr />
       <div class="text-center">
         Already have an account?
-        <span class="row-pointer" @click="$emit('updateComponent', true)">Sign in instead</span>
+        <router-link class="row-pointer" to="/signin">Sign in instead</router-link>
       </div>
     </div>
   </div>

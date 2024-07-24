@@ -32,7 +32,7 @@ module.exports = {
       publicContent: 'Public Content',
       userContent: 'User Content',
       adminContent: 'Admin Content',
-      moderatorContent: 'Moderator Content',
+      businessContent: 'Business Content',
       userUpdated: 'User info has been updated successfully!',
       passwordAndRepasswordMustBeTheSame: 'Password and Repeat Password must be the same!'
     },

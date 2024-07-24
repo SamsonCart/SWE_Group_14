@@ -37,6 +37,7 @@ const rules = {
 }
 onMounted(() => {
   form.value = { ...props.user }
+  console.log('props.user :>> ', props.user);
 })
 </script>
 

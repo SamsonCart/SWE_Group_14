@@ -1,0 +1,32 @@
+[
+  {
+    "title": "Leak Repair",
+    "description": "Fix leaks in your pipes and faucets.",
+    "price": 100
+  },
+  {
+    "title": "Pipe Installation",
+    "description": "Install new pipes in your home.",
+    "price": 200
+  },
+  {
+    "title": "Drain Cleaning",
+    "description": "Clean out clogged drains.",
+    "price": 150
+  },
+  {
+    "title": "Bridal Makeup",
+    "description": "Makeup for the bride on her wedding day.",
+    "price": 300
+  },
+  {
+    "title": "Photoshoot Makeup",
+    "description": "Makeup for photoshoots.",
+    "price": 250
+  },
+  {
+    "title": "Event Makeup",
+    "description": "Makeup for special events.",
+    "price": 200
+  }
+]
