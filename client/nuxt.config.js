@@ -1,12 +1,6 @@
+import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify';
+
 export default {
-  imports: {
-    dirs: ['stores']
-  },
-
-  plugins: [
-    { src: '~/plugins/init.server.js' } // must be the first server plugin
-  ],
-
   app: {
     head: {
       title: 'Booking - Client',
@@ -22,15 +16,36 @@ export default {
       ]
     }
   },
-
   css: [
     '~/assets/scss/mixins.scss',
     '~/assets/css/main.css',
     '~/assets/scss/main.scss',
     '@fortawesome/fontawesome-svg-core/styles.css'
   ],
+  imports: {
+    dirs: ['stores']
+  },
+  plugins: [
+    { src: '~/plugins/init.server.js' } // must be the first server plugin
+  ],
+  build: {
+    transpile: ['vuetify']
+  },
+  vite: {
+    vue: {
+      template: {
+        transformAssetUrls
+      }
+    }
+  },
 
   modules: [
+    (_options, nuxt) => {
+      nuxt.hooks.hook('vite:extendConfig', (config) => {
+        // @ts-expect-error
+        config.plugins.push(vuetify({ autoImport: true }));
+      });
+    },
     [
       '@pinia/nuxt',
       {
@@ -42,7 +57,5 @@ export default {
         ]
       }
     ]
-  ],
-
-  compatibilityDate: '2024-07-02'
+  ]
 };

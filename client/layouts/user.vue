@@ -1,16 +1,29 @@
 <script setup>
-import { useUserStore } from '@/store'
-import Header from '@/components/general/Header'
-import Footer from '@/components/general/footer/Index'
+import Header from '@/components/general/Header';
+import { useNotificationStore } from '@/store/notificationStore';
 
+const notificationStore = useNotificationStore();
 </script>
 
 <template>
-  <div>
+  <v-app>
     <Header />
-    <div class="container mt-4">
-      <slot />
-    </div>
-    <!-- <Footer /> -->
-  </div>
+    <v-main>
+      <v-container fluid>
+        <slot />
+      </v-container>
+    </v-main>
+    <v-snackbar
+      v-model="notificationStore.snackbar.show"
+      :color="notificationStore.snackbar.color"
+      top
+    >
+      {{ notificationStore.snackbar.message }}
+      <template #actions>
+        <v-btn color="white" text @click="notificationStore.closeSnackbar"
+          >Close</v-btn
+        >
+      </template>
+    </v-snackbar>
+  </v-app>
 </template>

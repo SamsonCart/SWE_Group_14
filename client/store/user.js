@@ -1,13 +1,13 @@
+import { defineStore } from 'pinia';
 import { request } from '@/utils/request';
-import { useMessageStore } from './message';
+import { useNotificationStore } from '@/store/notificationStore';
 
 export const useUserStore = defineStore('user', {
-  state: () =>
-    reactive({
-      user: {},
-      isBusiness: false,
-      token: ''
-    }),
+  state: () => ({
+    user: {},
+    isBusiness: false,
+    token: ''
+  }),
   getters: {
     getUser: (state) => state.user,
     getUserId: (state) => state.user?._id || '',
@@ -18,119 +18,121 @@ export const useUserStore = defineStore('user', {
       await this.checkLocalToken();
     },
     async checkLocalToken() {
-      const { token } = localStorage;
+      const token = localStorage.getItem('token');
       if (token) {
-        await request('post', 'auth/jwtsignin').then((res) => {
+        try {
+          const res = await this.validateToken(token);
           if (res) {
-            this.user = { ...res };
-            if (this.user?.roles) {
-              this.user.roles.map((role) => {
-                if (role.name === 'business') {
-                  this.isBusiness = true;
-                }
-              });
-            }
-            this.token = token;
-            localStorage.setItem('user', JSON.stringify(this.user));
+            this.setUser(res, token);
           } else {
             this.logout();
           }
-        });
+        } catch (error) {
+          console.error('Error checking local token:', error);
+          this.logout();
+        }
       }
     },
     async login(payload) {
-      let response = false;
-      await request('post', 'auth/signin', payload).then((res) => {
+      const notificationStore = useNotificationStore();
+      try {
+        const res = await request('post', 'auth/signin', payload);
         if (res) {
-          this.user = { ...res };
-
-          if (this.user?.roles) {
-            this.user.roles.map((role) => {
-              if (role.name === 'business') {
-                this.isBusiness = true;
-              }
-            });
-          }
-          localStorage.setItem('user', JSON.stringify(this.user));
-
-          if (res?.accessToken) {
-            localStorage.setItem('token', res.accessToken);
-            this.token = res.accessToken;
-
-            response = true;
-          }
+          this.setUser(res, res.accessToken);
+          this.redirectUser();
+          notificationStore.showSuccess('Logged in successfully');
+          return true;
         }
-      });
-
-      return response;
+      } catch (error) {
+        notificationStore.showError('Error logging in');
+        console.error('Error logging in:', error);
+      }
+      return false;
     },
-
-    async logout() {
+    setUser(user, token) {
+      this.user = user;
+      this.token = token;
+      this.isBusiness =
+        user.roles?.some((role) => role.name === 'business') || false;
+      localStorage.setItem('user', JSON.stringify(this.user));
+      localStorage.setItem('token', this.token);
+    },
+    redirectUser() {
+      const router = useRouter();
+      if (this.isBusiness) {
+        router.push('/business/dashboard');
+      } else {
+        router.push('/dashboard');
+      }
+    },
+    async validateToken(token) {
+      return await request('post', 'auth/jwtsignin', { token });
+    },
+    logout() {
+      const notificationStore = useNotificationStore();
       this.token = '';
       this.user = {};
-
+      this.isBusiness = false;
       localStorage.removeItem('token');
       localStorage.removeItem('user');
+      notificationStore.showSuccess('Logged out successfully');
     },
-
     async signup(payload) {
-      let response = false;
-
-      await request('post', 'auth/signup', payload).then((res) => {
+      const notificationStore = useNotificationStore();
+      try {
+        const res = await request('post', 'auth/signup', payload);
         if (res) {
-          this.user = { ...res };
-          localStorage.setItem('user', JSON.stringify(this.user));
-
-          if (res?.accessToken) {
-            localStorage.setItem('token', res.accessToken);
-            this.token = res.accessToken;
-
-            response = true;
-          }
+          this.setUser(res, res.accessToken);
+          this.redirectUser();
+          notificationStore.showSuccess('Signed up successfully');
+          return true;
         }
-      });
-
-      return response;
+      } catch (error) {
+        notificationStore.showError('Error signing up');
+        console.error('Error signing up:', error);
+      }
+      return false;
     },
-
     async updatePassword(payload) {
-      let response = false;
+      const notificationStore = useNotificationStore();
       let error = '';
-
       if (payload?.password !== payload?.repassword) {
         error = 'Password and Re-password must be the same!';
       } else if (payload?.password.length < 5) {
         error = 'Password must be at least 5 characters!';
       }
-
       if (error) {
-        useMessageStore().setError({ error });
-
-        return;
+        notificationStore.showError(error);
+        return false;
       }
-
-      await request('put', 'user/update', payload).then((res) => {
+      try {
+        const res = await request('put', 'user/update', payload);
         if (res) {
-          response = true;
           this.token = res;
           localStorage.setItem('token', res);
+          notificationStore.showSuccess('Password updated successfully');
+          return true;
         }
-      });
-
-      return response;
+      } catch (error) {
+        notificationStore.showError('Error updating password');
+        console.error('Error updating password:', error);
+      }
+      return false;
     },
-
     async activate(payload) {
-      const { email, authCode } = payload;
-      let response = false;
-
-      await request('post', 'auth/activate', payload, 30_000).then((res) => {
+      const notificationStore = useNotificationStore();
+      try {
+        const res = await request('post', 'auth/activate', payload, 30000);
         if (res) {
-          response = true;
+          this.redirectUser();
+          notificationStore.showSuccess('Account activated successfully');
+          return true;
         }
-      });
-
-      return response;
+      } catch (error) {
+        notificationStore.showError('Error activating account');
+        console.error('Error activating account:', error);
+      }
+      return false;
     }
   }
 });

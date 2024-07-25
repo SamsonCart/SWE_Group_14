@@ -1,11 +1,9 @@
 <script setup>
-import { storeToRefs } from 'pinia';
-import { useHomepageStore } from '~/store/homepage';
+// import { useDashboardStore, useUserStore } from '@/store';
 import { nextTick } from 'vue';
 
-const homepageStore = useHomepageStore();
-
-const getStats = computed(() => homepageStore.getStats) //pulls stats from a user about their use of the website for admin viewing
+// const dashboardStore = useDashboardStore();
+// const userStore = useUserStore();
 
 const services = [
   { value: '', label: 'What service do you need?' },
@@ -28,7 +26,7 @@ const services = [
   { value: 'massage', label: 'Massage Therapy' },
   { value: 'photography', label: 'Photography' },
   { value: 'catering', label: 'Catering' },
-  { value: 'computer-repair', label: 'Computer Repair' },
+  { value: 'computer-repair', label: 'Computer Repair' }
 ];
 
 const selectedService = ref('');
@@ -39,8 +37,9 @@ const searchServices = () => {
   console.log('Searching for:', selectedService.value, 'in', location.value);
 };
 onMounted(async () => {
-  await nextTick(); // https://stackoverflow.com/questions/76527094/nuxt-3-and-vue-3-onmounted-call-function-usefetch-function-not-getting-data-form
-  homepageStore.init();
+  // await nextTick(); // https://stackoverflow.com/questions/76527094/nuxt-3-and-vue-3-onmounted-call-function-usefetch-function-not-getting-data-form
+  // dashboardStore.init();
+  // userStore.init();
 });
 </script>
 
@@ -51,11 +50,19 @@ onMounted(async () => {
       <p>Connect with trusted professionals for all your needs</p>
       <div class="search-bar">
         <select v-model="selectedService">
-          <option v-for="service in services" :key="service.value" :value="service.value">
+          <option
+            v-for="service in services"
+            :key="service.value"
+            :value="service.value"
+          >
             {{ service.label }}
           </option>
         </select>
-        <input v-model="location" type="text" placeholder="Enter your location" />
+        <input
+          v-model="location"
+          type="text"
+          placeholder="Enter your location"
+        />
         <button @click="searchServices">Search</button>
       </div>
     </section>

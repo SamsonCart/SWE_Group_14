@@ -66,7 +66,7 @@ const serviceCreateSchema = Joi.object({
   description: Joi.string().required(),
   price: Joi.number().required(),
   businessId: Joi.string().required(),
-  availableSlots: Joi.array().items(Joi.string()).optional()
+  availability: Joi.array().items().optional()
 });
 
 // Service Update Schema for PUT
@@ -75,7 +75,7 @@ const servicePutSchema = Joi.object({
   description: Joi.string().required(),
   price: Joi.number().required(),
   businessId: Joi.string().required(),
-  availableSlots: Joi.array().items(Joi.string()).optional()
+  availability: Joi.array().items().optional()
 });
 
 // Service Update Schema for PATCH
@@ -84,7 +84,7 @@ const servicePatchSchema = Joi.object({
   description: Joi.string().optional(),
   price: Joi.number().optional(),
   businessId: Joi.string().optional(),
-  availableSlots: Joi.array().items(Joi.string()).optional()
+  availability: Joi.array().items().optional()
 });
 
 // Availability Create Schema

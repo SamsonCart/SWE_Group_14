@@ -1,18 +1,3 @@
-<script setup>
-import Login from '@/components/user/Login'
-import { useUserStore } from '@/store'
-
-const route = useRouter()
-const userStore = useUserStore()
-const getToken = computed(() => userStore.getToken)
-
-watch(getToken, (newV, _oldV) => {
-  if (newV) {
-    route.push('/dashboard')
-  }
-})
-</script>
-
 <template>
   <div class="container">
     <div class="row">
@@ -22,5 +7,21 @@ watch(getToken, (newV, _oldV) => {
     </div>
   </div>
 </template>
+
+<script setup>
+import { useUserStore } from '@/store/user';
+import Login from '@/components/user/Login';
+import { onMounted } from 'vue';
+
+definePageMeta({
+  layout: 'user'
+});
+
+const userStore = useUserStore();
+
+onMounted(() => {
+  userStore.init();
+});
+</script>
 
 <style scoped lang="scss"></style>
