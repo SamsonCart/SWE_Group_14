@@ -3,6 +3,7 @@ const router = express.Router();
 const businessController = require('../controllers/business');
 const { validateBusinessCreate, validateBusinessPut, validateBusinessPatch } = require('../middlewares/validators');
 
+
 router.post('/', validateBusinessCreate, businessController.createBusiness);
 router.get('/', businessController.getBusinesses);
 router.get('/:id', businessController.getBusinessById);

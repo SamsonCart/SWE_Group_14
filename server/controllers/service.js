@@ -12,7 +12,9 @@ exports.createService = async (req, res) => {
 
 exports.getServices = async (req, res) => {
   try {
-    const services = await Service.find().populate('availableSlots');
+    const { businessId } = req.query;
+    const filter = businessId ? { businessId } : {};
+    const services = await Service.find(filter).populate('availableSlots');
     res.status(200).send(services);
   } catch (error) {
     res.status(500).send(error);

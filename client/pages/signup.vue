@@ -1,16 +1,20 @@
 <script setup>
-import Signup from '@/components/user/Signup'
-import { useUserStore } from '@/store'
+import Signup from '@/components/user/Signup';
+import { useUserStore } from '@/store';
 
-const route = useRouter()
-const userStore = useUserStore()
-const getToken = computed(() => userStore.getToken)
+definePageMeta({
+  layout: 'user'
+});
 
-watch(getToken, (newV, _oldV) => {
-  if (newV) {
-    route.push('/dashboard')
-  }
-})
+const route = useRouter();
+const userStore = useUserStore();
+const getToken = computed(() => userStore.getToken);
+
+// watch(getToken, (newV, _oldV) => {
+//   if (newV) {
+//     route.push('/dashboard');
+//   }
+// });
 </script>
 
 <template>

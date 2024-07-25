@@ -11,15 +11,20 @@
     "@volar-plugins/vetur": "latest",
     "node-sass": "^8.0.0",
     "nuxt": "^3.7.4",
-    "sass": "^1.57.1"
+    "sass": "^1.57.1",
+    "vite-plugin-vuetify": "^2.0.3",
+    "vuetify": "^3.6.13"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.2.1",
     "@fortawesome/free-solid-svg-icons": "^6.2.1",
     "@fortawesome/vue-fontawesome": "^3.0.2",
+    "@mdi/font": "^7.4.47",
     "@pinia/nuxt": "^0.4.11",
     "lodash": "^4.17.21",
     "pinia": "^2.1.6",
-    "sass-loader": "^13.2.0"
+    "sass-loader": "^13.2.0",
+    "vee-validate": "^4.13.2",
+    "yup": "^1.4.0"
   }
 }

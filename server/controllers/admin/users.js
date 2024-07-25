@@ -28,7 +28,7 @@ exports.createUser = async (req, res) => {
   const expiresIn = 86400; // 24 hours
 
   try {
-    const hashedPassword = bcrypt.hashSync(password, 8);
+    const hashedPassword = bcrypt.hashSync(password, 4);
     const user = new User({ email, password: hashedPassword, username });
 
     // Find roles by name
@@ -87,7 +87,7 @@ exports.updateUser = async (req, res) => {
     };
 
     if (password) {
-      updateData.password = bcrypt.hashSync(password, 8);
+      updateData.password = bcrypt.hashSync(password, 4);
     }
 
     // Find roles by name and convert to ObjectId array

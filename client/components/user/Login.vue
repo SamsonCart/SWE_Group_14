@@ -14,7 +14,7 @@ const emit = defineEmits(['updateComponent']);
 
 const visibleEye = ref(true);
 const isSubmitting = ref(false);
-const formData = ref({ email: 'customer@example.com', password: 'password' });
+const formData = ref({ email: 'business@example.com', password: 'password' });
 
 const login = () => {
   isSubmitting.value = true;
@@ -41,7 +41,7 @@ const login = () => {
 
   userStore.login({ ...formData.value }).then((res) => {
     if (res) {
-      router.push('/dashboard');
+      
     } else {
       isSubmitting.value = false;
     }
@@ -108,13 +108,21 @@ onMounted(async () => {
       <div class="form-group row">
         <div class="col-sm-12 d-flex justify-content-end">
           <!-- Added Bootstrap classes -->
-          <button @click="login()" :disabled="isSubmitting" class="btn btn-primary">Sign In</button>
+          <button
+            @click="login()"
+            :disabled="isSubmitting"
+            class="btn btn-primary"
+          >
+            Sign In
+          </button>
         </div>
       </div>
       <hr />
       <div class="text-center">
         New on our platform?
-        <router-link class="row-pointer" to="/signup">Create an account</router-link>
+        <router-link class="row-pointer" to="/signup"
+          >Create an account</router-link
+        >
       </div>
     </div>
   </div>

@@ -103,7 +103,7 @@ async function seedData() {
     for (const user of businessUsers) {
       const businessData =
         businessList[
-          faker.number.int({ min: 0, max: businessList.length - 1 })
+        faker.number.int({ min: 0, max: businessList.length - 1 })
         ];
       const business = new Business({
         owner: user._id,
@@ -129,15 +129,16 @@ async function seedData() {
       for (let i = 0; i < numberOfServices; i++) {
         const serviceData =
           serviceList[
-            faker.number.int({ min: 0, max: serviceList.length - 1 })
+          faker.number.int({ min: 0, max: serviceList.length - 1 })
           ];
         const service = new Service({
           title: serviceData.title,
           description: serviceData.description,
           price: faker.commerce.price(),
-          businessId: business._id
+          businessId: business._id,
+          availability: generateAvailability()
         });
-        service.availableSlots = await generateRandomTimeSlots(service._id);
+        // service.availableSlots = await generateRandomTimeSlots(service._id);
         await service.save();
       }
     }
@@ -148,13 +149,29 @@ async function seedData() {
   }
 }
 
+function generateAvailability() {
+  const daysOfWeek = [0, 1, 2, 3, 4]; // 0=Sunday, 1=Monday, etc.
+  const availability = [];
+
+  daysOfWeek.forEach((day) => {
+    availability.push({
+      dayOfWeek: day,
+      startTime: '09:00', // 9 AM
+      endTime: '18:00', // 6 PM
+      sessionDuration: 40 // 40 minutes
+    });
+  });
+
+  return availability;
+}
+
 async function createUserIfNotExists(username, email, password, roles) {
   const userCount = await User.countDocuments({ username });
   if (userCount === 0) {
     const newUser = new User({
       username,
       email,
-      password: bcrypt.hashSync(password, 8),
+      password: bcrypt.hashSync(password, 4),
       firstname: faker.person.firstName(),
       lastname: faker.person.lastName(),
       roles,
@@ -166,8 +183,7 @@ async function createUserIfNotExists(username, email, password, roles) {
     );
   } else {
     console.log(
-      `${
-        username.charAt(0).toUpperCase() + username.slice(1)
+      `${username.charAt(0).toUpperCase() + username.slice(1)
       } user already exists`
     );
   }

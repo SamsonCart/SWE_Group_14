@@ -1,4 +1,4 @@
-import { useHomepageStore, useUserStore } from './index';
+import { useUserStore } from './index';
 
 export const useGlobalStateStore = defineStore('globalState', {
   actions: {

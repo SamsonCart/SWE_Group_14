@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-const config = require('../config/auth')
-const Role = require('../models/role')
-const User = require('../models/user')
-const { response } = require('../classes')
-const { controllers: { auth: STRINGS } = {} } = require('../MAGIC_STRINGS')
-const sendMail = require('../utils/sendMail')
-const { randomInt } = require('node:crypto')
-var jwt = require('jsonwebtoken')
-var bcrypt = require('bcryptjs')
-=======
 const config = require('../config/auth');
 const Role = require('../models/role');
 const User = require('../models/user');
@@ -19,9 +8,7 @@ const { randomInt } = require('node:crypto');
 
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
->>>>>>> main
 
-// Signup controller function
 exports.signup = async (req, res) => {
   const { email, password, roles, username } = req.body;
   const expiresIn = 86400; // 24 hours
@@ -178,14 +165,40 @@ exports.signin = (req, res) => {
 
 exports.jwtSignin = async (req, res) => {
   if (req.userId) {
-    const user = await User.findById(req.userId)
-      .populate('roles')
-      .select('-password');
+    try {
+      const user = await User.findById(req.userId)
+        .populate('roles', '-__v')
+        .select('-password');
 
-    res.status(200).send(new response.success(user));
+      if (!user) {
+        return response.failed(res, STRINGS.userNotFound);
+      }
+
+      const { id, email, roles, username, firstname, lastname } = user;
+      let expiresIn = 86400; // 24 hours
+
+      const token = jwt.sign({ id }, config.secret, {
+        expiresIn
+      });
+
+      res.status(200).send(
+        new response.success({
+          id,
+          email,
+          roles,
+          username,
+          firstname,
+          lastname,
+          accessToken: token
+        })
+      );
+    } catch (err) {
+      return res.status(500).send(new response.fail(err.message));
+    }
+  } else {
+    return response.failed(res, STRINGS.userNotFound);
   }
 };
-
 exports.activate = async (req, res) => {
   const { email, authCode } = req.body;
 
