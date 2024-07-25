@@ -4,7 +4,7 @@ const {
   checkDuplicateUsernameOrEmail,
   checkRolesExisted
 } = require('../middlewares/user/verifySignUp');
-const controller = require('../controllers/auth');
+const controller = require('../controllers/authController');
 const authJwt = require('../middlewares/user/authJwt');
 
 router.use(function (req, res, next) {

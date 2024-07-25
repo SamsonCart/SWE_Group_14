@@ -93,12 +93,28 @@ export const useUserStore = defineStore('user', {
       }
       return false;
     },
+    async updateProfile(payload) {
+      const notificationStore = useNotificationStore();
+      try {
+        const res = await request('put', 'user/update', payload);
+        if (res) {
+          this.user = res;
+          localStorage.setItem('user', JSON.stringify(this.user));
+          notificationStore.showSuccess('Profile updated successfully');
+          return true;
+        }
+      } catch (error) {
+        notificationStore.showError('Error updating profile');
+        console.error('Error updating profile:', error);
+        return false;
+      }
+    },
     async updatePassword(payload) {
       const notificationStore = useNotificationStore();
       let error = '';
-      if (payload?.password !== payload?.repassword) {
+      if (payload.password !== payload.repassword) {
         error = 'Password and Re-password must be the same!';
-      } else if (payload?.password.length < 5) {
+      } else if (payload.password.length < 5) {
         error = 'Password must be at least 5 characters!';
       }
       if (error) {
@@ -106,7 +122,7 @@ export const useUserStore = defineStore('user', {
         return false;
       }
       try {
-        const res = await request('put', 'user/update', payload);
+        const res = await request('put', 'user/changepassword', payload);
         if (res) {
           this.token = res;
           localStorage.setItem('token', res);

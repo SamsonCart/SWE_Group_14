@@ -25,6 +25,16 @@ const User = mongoose.model(
         ref: 'Role'
       }
     ],
+    address: {
+      street: String,
+      city: String,
+      state: String,
+      zipCode: String,
+      coordinates: {
+        latitude: Number,
+        longitude: Number
+      }
+    },
     isActive: {
       type: Boolean,
       default: true
