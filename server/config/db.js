@@ -1,7 +1,10 @@
 const mongoose = require('mongoose');
 const Role = require('../models/role');
 const Business = require('../models/business');
-const { seedData, createUserIfNotExists } = require('../seeder/seeder');
+const seedDatabase = require('../seeder');
+const User = require('../models/user');
+const bcrypt = require('bcryptjs');
+
 require('dotenv').config();
 
 // Connect to MongoDB using the connection URL from environment variables
@@ -10,12 +13,36 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
     serverSelectionTimeoutMS: 30000
+    // bufferCommands: false
   })
   .then(() => {
     console.log('Connected to database');
     init();
   })
   .catch((error) => console.error('Connection error', error));
+
+async function createUserIfNotExists(username, email, password, roles) {
+  const userCount = await User.countDocuments({ username });
+  if (userCount === 0) {
+    const newUser = new User({
+      username,
+      email,
+      password: bcrypt.hashSync(password, 4),
+      roles,
+      isActive: true
+    });
+    await newUser.save();
+    console.log(
+      `${username.charAt(0).toUpperCase() + username.slice(1)} user created`
+    );
+  } else {
+    console.log(
+      `${
+        username.charAt(0).toUpperCase() + username.slice(1)
+      } user already exists`
+    );
+  }
+}
 
 async function init() {
   try {
@@ -31,8 +58,11 @@ async function init() {
     }
 
     const adminRole = await Role.findOne({ name: 'admin' });
+    const customerRole = await Role.findOne({ name: 'customer' });
+    const businessRole = await Role.findOne({ name: 'business' });
 
-    if (!adminRole) throw new Error('Admin role not found');
+    if (!adminRole || !customerRole || !businessRole)
+      throw new Error('One or more roles not found');
 
     // Create admin user if not exists
     await createUserIfNotExists('admin', 'admin@example.com', 'password', [
@@ -42,7 +72,7 @@ async function init() {
     // Check if there are any existing businesses before running seedData
     const businessCount = await Business.estimatedDocumentCount();
     if (businessCount === 0) {
-      await seedData();
+      await seedDatabase();
     } else {
       console.log('Businesses already exist, skipping seeding.');
     }

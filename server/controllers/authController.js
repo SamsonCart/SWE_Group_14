@@ -30,74 +30,34 @@ exports.signup = async (req, res) => {
         return res.status(200).send(new response.fail(err));
       }
 
-      if (roles) {
-        Role.find({ name: { $in: roles } }, async (err) => {
-          // this part should be updated if the user roles should not be chosen from users
+      Role.findOne({ name: 'customer' }, async (err, role) => {
+        // this part should be updated if the user roles should not be chosen from users
+        if (err) {
+          return res.status(200).send(new response.fail(err));
+        }
+
+        user.roles = [role];
+        await user.save((err, user) => {
           if (err) {
             return res.status(200).send(new response.fail(err));
           }
 
-          user.roles = roles.map((role) => role._id);
-          await user.save((err, user) => {
-            if (err) {
-              return res.status(200).send(new response.fail(err));
-            }
-
-            // signin(req, res) // if everything is ok, we are gonna signin automatically
-            // we disabled this feature for now since the user should be active first to be loged in
-            const token = jwt.sign({ id: user._id }, config.secret, {
-              expiresIn
-            });
-            res.status(200).send(
-              new response.success({
-                id: user._id,
-                email,
-                roles,
-                username: user.username,
-                accessToken: token
-              })
-            );
+          // signin(req, res) // if everything is ok, we are gonna signin automatically
+          // we disabled this feature for now since the user should be active first to be loged in
+          const token = jwt.sign({ id: user._id }, config.secret, {
+            expiresIn
           });
+          res.status(200).send(
+            new response.success({
+              id: user._id,
+              email,
+              roles: user.roles,
+              username: user.username,
+              accessToken: token
+            })
+          );
         });
-      } else {
-        let name = 'user';
-
-        await User.countDocuments({}, (err, count) => {
-          if (err) {
-            return response.failed(res, err);
-          } else if (count === 1) {
-            name = 'admin';
-          } // if there is no user), the first one will be automatically an admin and the isActive will be true
-        });
-
-        Role.findOne({ name }, async (err, role) => {
-          if (err) {
-            return res.status(200).send(new response.fail(err));
-          }
-
-          user.roles = [role._id];
-          await user.save((err) => {
-            if (err) {
-              return res.status(200).send(new response.fail(err));
-            }
-
-            // signin(req, res) // if everything is ok, we are gonna signin automatically
-            // we disabled this feature for now since the user should be active first to be loged in
-            const token = jwt.sign({ id: user._id }, config.secret, {
-              expiresIn
-            });
-            res.status(200).send(
-              new response.success({
-                id: user._id,
-                email,
-                roles,
-                username: user.username,
-                accessToken: token
-              })
-            );
-          });
-        });
-      }
+      });
     });
   } catch (error) {
     console.log(error.message);

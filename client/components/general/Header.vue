@@ -1,6 +1,7 @@
 <script setup>
 import { useUserStore } from '@/store/user';
 import { computed } from 'vue';
+import { useRouter } from 'vue-router';
 
 const userStore = useUserStore();
 const router = useRouter();
@@ -29,10 +30,29 @@ const logout = async () => {
       <nuxt-link to="/signup">Sign up</nuxt-link>
     </v-btn>
 
-    <template v-else>
-      <v-btn text disabled> Hi, {{ userStore.user.username }}! </v-btn>
-      <v-btn text @click="logout">Logout</v-btn>
-    </template>
+    <v-menu v-else offset-y>
+      <!-- <template v-slot:activator="{ on, attrs }">
+        <v-btn text v-bind="attrs" v-on="on">
+          Hi, {{ userStore.user.username }}!
+        </v-btn>
+      </template> -->
+      <template v-slot:activator="{ props }">
+        <v-btn color="primary" v-bind="props">
+          Hi, {{ userStore.user.username }}!</v-btn
+        >
+      </template>
+      <v-list>
+        <v-list-item>
+          <v-list-item-title>
+            <nuxt-link to="/profile">Profile</nuxt-link>
+          </v-list-item-title>
+        </v-list-item>
+        <v-divider></v-divider>
+        <v-list-item @click="logout">
+          <v-list-item-title>Logout</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
   </v-app-bar>
 </template>
 

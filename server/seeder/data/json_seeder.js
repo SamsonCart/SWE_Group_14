@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
-const Business = require('../models/business');
-const Availability = require('../models/availability');
-const User = require('../models/user');
+const Business = require('../../models/business');
+const Availability = require('../../models/availability');
+const User = require('../../models/user');
 const businesses = require('./businesses.json');
 const services = require('./services.json');
-const Service = require('../models/Service');
+const Service = require('../../models/service');
 
 // Connect to MongoDB
 mongoose

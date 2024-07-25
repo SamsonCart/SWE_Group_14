@@ -62,11 +62,6 @@ exports.updateProfile = async (req, res) => {
     if (email && !UserClass.mail.validateEmail(email)) {
       anyError.push('Email address should be a valid email.');
     }
-    if (!roles || roles.length === 0) {
-      anyError.push(STRINGS.rolesCanNotBeEmpty);
-    } else {
-      res.user.roles = roles.map((role) => mongoose.Types.ObjectId(role._id));
-    }
     if (anyError.length > 0) {
       return response.failed(res, anyError);
     }
@@ -77,7 +72,6 @@ exports.updateProfile = async (req, res) => {
     if (email && email !== res.user.email) {
       res.user.email = email;
     }
-    res.user.roles = roles;
 
     await res.user.save();
     await res.user.populate('roles');
