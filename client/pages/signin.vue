@@ -9,18 +9,10 @@
 </template>
 
 <script setup>
-import { useUserStore } from '@/store/user';
 import Login from '@/components/user/Login';
-import { onMounted } from 'vue';
 
 definePageMeta({
   layout: 'user'
-});
-
-const userStore = useUserStore();
-
-onMounted(() => {
-  userStore.init();
 });
 </script>
 

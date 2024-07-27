@@ -23,21 +23,14 @@ const logout = async () => {
   <v-app-bar app>
     <v-toolbar-title><Logo /></v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-btn text v-if="isAuthenticated" :to="{ path: '/dashboard' }" link
-      >Home</v-btn
-    >
-    <v-btn text v-if="isAuthenticated" :to="{ path: '/business' }" link
-      >Business</v-btn
-    >
-    <v-btn text v-if="isAuthenticated" :to="{ path: '/service' }" link
-      >Service</v-btn
-    >
-    <v-btn text v-if="!isAuthenticated" :to="{ path: '/signin' }" link
-      >Sign in</v-btn
-    >
-    <v-btn text v-if="!isAuthenticated" :to="{ path: '/signup' }" link
-      >Sign up</v-btn
-    >
+
+    <v-btn text v-if="!isAuthenticated">
+      <nuxt-link to="/signin">Sign in</nuxt-link>
+    </v-btn>
+    <v-btn text v-if="!isAuthenticated">
+      <nuxt-link to="/signup">Sign up</nuxt-link>
+    </v-btn>
+
     <v-menu v-else offset-y>
       <template v-slot:activator="{ props }">
         <v-btn color="primary" v-bind="props">
@@ -45,15 +38,8 @@ const logout = async () => {
         >
       </template>
       <v-list>
-        <v-list-item :to="{ path: '/profile' }" link>
+        <v-list-item :to="{ path: '/bz/profile' }" link>
           <v-list-item-title>Profile</v-list-item-title>
-        </v-list-item>
-        <v-list-item
-          v-if="!userStore.isBusiness"
-          :to="{ path: '/bookings' }"
-          link
-        >
-          <v-list-item-title>My Booking</v-list-item-title>
         </v-list-item>
         <v-divider></v-divider>
         <v-list-item @click="logout">

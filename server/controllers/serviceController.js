@@ -4,7 +4,7 @@ exports.createService = async (req, res) => {
   try {
     const service = new Service(req.body);
     await service.save();
-    res.status(201).send(service);
+    res.status(201).send({ isSuccess: true, data: service });
   } catch (error) {
     res.status(400).send(error);
   }
@@ -15,7 +15,7 @@ exports.getServices = async (req, res) => {
     const { businessId } = req.query;
     const filter = businessId ? { businessId } : {};
     const services = await Service.find(filter).populate('availableSlots');
-    res.status(200).send(services);
+    res.status(200).send({ isSuccess: true, data: services });
   } catch (error) {
     res.status(500).send(error);
   }
@@ -29,7 +29,7 @@ exports.getServiceById = async (req, res) => {
     if (!service) {
       return res.status(404).send();
     }
-    res.status(200).send(service);
+    res.status(200).send({ isSuccess: true, data: service });
   } catch (error) {
     res.status(500).send(error);
   }
@@ -44,7 +44,7 @@ exports.updateService = async (req, res) => {
     if (!service) {
       return res.status(404).send();
     }
-    res.status(200).send(service);
+    res.status(200).send({ isSuccess: true, data: service });
   } catch (error) {
     res.status(400).send(error);
   }
@@ -59,7 +59,7 @@ exports.partialUpdateService = async (req, res) => {
     if (!service) {
       return res.status(404).send();
     }
-    res.status(200).send(service);
+    res.status(200).send({ isSuccess: true, data: service });
   } catch (error) {
     res.status(400).send(error);
   }
@@ -71,7 +71,7 @@ exports.deleteService = async (req, res) => {
     if (!service) {
       return res.status(404).send();
     }
-    res.status(200).send(service);
+    res.status(204);
   } catch (error) {
     res.status(500).send(error);
   }

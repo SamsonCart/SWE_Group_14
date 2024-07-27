@@ -1,6 +1,7 @@
 <script setup>
-import Header from '@/components/general/Header';
-import { useNotificationStore } from '@/store/notificationStore';
+// Layout for customer
+import { useNotificationStore } from '~/store/notification';
+import Header from '~/components/general/Header.vue';
 
 const notificationStore = useNotificationStore();
 </script>
@@ -14,14 +15,15 @@ const notificationStore = useNotificationStore();
       </v-container>
     </v-main>
     <v-snackbar
+      class="text-lg"
       v-model="notificationStore.snackbar.show"
       :color="notificationStore.snackbar.color"
-      top
+      location="top right"
     >
       {{ notificationStore.snackbar.message }}
       <template #actions>
-        <v-btn color="white" text @click="notificationStore.closeSnackbar"
-          >Close</v-btn
+        <v-icon @click="notificationStore.closeSnackbar" class="mr-2"
+          >mdi-close</v-icon
         >
       </template>
     </v-snackbar>

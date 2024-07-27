@@ -22,7 +22,7 @@ const user = computed(() => userStore.getUser);
           {{ user.username }}
         </div>
       </div>
-      <div class="form-group row mb-4 mt-3">
+      <!-- <div class="form-group row mb-4 mt-3">
         <label for="isActive" class="col-sm-4 text-end">Active:</label>
         <div class="col-sm-8">
           <v-chip
@@ -32,7 +32,7 @@ const user = computed(() => userStore.getUser);
             {{ user.isActive ? 'Yes' : 'No' }}
           </v-chip>
         </div>
-      </div>
+      </div> -->
     </v-card-text>
   </v-card>
 </template>

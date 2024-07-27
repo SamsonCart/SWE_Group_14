@@ -6,17 +6,17 @@ exports.getStats = async (req, res) => {
   try {
     const userCount = await User.countDocuments();
     const data = { count: { user: userCount } };
-    response.successed(res, data);
+    res.status(200).send({ isSuccess: true, data });
   } catch (err) {
-    response.failed(res, err.message);
+    res.status(500).send(err);
   }
 };
 
 exports.getUserBusiness = async (req, res) => {
   try {
     const business = await Business.findOne({ owner: req.userId });
-    response.successed(res, business);
+    res.status(200).send({ isSuccess: true, data: business });
   } catch (err) {
-    response.failed(res, err.message);
+    res.status(500).send(err);
   }
 };

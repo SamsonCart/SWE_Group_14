@@ -8,18 +8,8 @@ const isSubmitting = ref(false);
 
 const updatePassword = async () => {
   isSubmitting.value = true;
-  try {
-    const res = await userStore.updatePassword({ ...formData.value });
-    if (res) {
-      formData.value = { password: '', repassword: '' };
-      showNotification('Password updated successfully', 'success');
-    }
-  } catch (error) {
-    console.error('Error updating password:', error);
-    showNotification('Error updating password', 'error');
-  } finally {
-    isSubmitting.value = false;
-  }
+  await userStore.updatePassword({ ...formData.value });
+  isSubmitting.value = false;
 };
 
 const snackbar = ref(false);

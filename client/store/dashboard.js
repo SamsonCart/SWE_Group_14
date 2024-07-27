@@ -23,8 +23,8 @@ export const useDashboardStore = defineStore('dashboard', {
     },
     async fetchStats() {
       try {
-        const res = await request('get', 'dashboard/stats');
-        this.setData('stats', res.count);
+        const { data } = await request('get', 'dashboard/stats');
+        this.setData('stats', data.count);
       } catch (error) {
         console.error('Error fetching stats:', error);
       }

@@ -2,43 +2,47 @@ import { useMessageStore } from '@/store/message';
 
 async function request(type, pureUrl, params = {}, time = null) {
   const baseUrl = import.meta.env.VITE_API_ENDPOINT;
-  const url = baseUrl + pureUrl;
+  let url = baseUrl + pureUrl;
   const { token } = localStorage;
 
   const headers = {
-    'x-access-token': token,
-    'content-type': 'application/json'
+    'x-access-token': token
   };
 
   let options = {
-    params,
     headers,
     method: type?.toUpperCase() || 'GET'
   };
 
-  if (['post', 'put', 'patch'].includes(type)) {
-    options.body = params;
+  if (type.toLowerCase() === 'get' && params) {
+    // Append query parameters to URL for GET requests
+    const urlParams = new URLSearchParams(params).toString();
+    url += `?${urlParams}`;
+  } else if (['post', 'put', 'patch'].includes(type.toLowerCase())) {
+    if (params instanceof FormData) {
+      // If params is FormData, do not set content-type (it will be automatically set by the browser)
+      options.body = params;
+    } else {
+      headers['content-type'] = 'application/json';
+      options.body = JSON.stringify(params);
+    }
   }
 
-  // const { data } = await useAsyncData('data', () => $fetch(url))
-  const { data, error } = await useFetch(url, { ...options });
+  try {
+    const { data, error } = await useFetch(url, options);
 
-  if (!data?.value) {
-    useMessageStore().setError({
-      error: 'Something has been happened?!',
-      time
-    });
-  } else {
-    console.log('request :>> ', data.value);
     const message = data.value?.message || '';
 
     if (!data.value?.isSuccess) {
       useMessageStore().setError({ error: message, time });
+      throw new Error(message);
     } else {
       useMessageStore().setIsSuccess({ message, time });
-
-      return data?.value?.data;
+      return data.value;
     }
+  } catch (err) {
+    useMessageStore().setError({ error: err.message, time });
+    throw err;
   }
 }
 

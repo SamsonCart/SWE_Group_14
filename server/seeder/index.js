@@ -16,10 +16,10 @@ async function connectDB() {
 async function seedDatabase() {
   try {
     // await connectDB();
-    const businessUserCount = 3;
+    const businessUserCount = 10;
     const maxServicesPerBusiness = 3;
-    const customerCount = 10;
-    const bookingCount = 100;
+    const customerCount = 1000;
+    const bookingCount = 1000;
 
     await seedUsers(customerCount, businessUserCount);
     await seedBusinesses(businessUserCount);

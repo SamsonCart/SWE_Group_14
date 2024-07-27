@@ -3,36 +3,48 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 const { controllers: { users: STRINGS } = {} } = require('../MAGIC_STRINGS');
-const { response, user: UserClass } = require('../classes');
 const mongoose = require('mongoose');
 
 exports.allAccess = (req, res) => {
-  response.successed(res, null, STRINGS.publicContent);
+  res.status(200).json({
+    isSuccess: true,
+    message: STRINGS.publicContent
+  });
 };
 
 exports.userAccess = (req, res) => {
-  response.successed(res, res.user, 'User Content.');
+  res.status(200).json({
+    isSuccess: true,
+    user: res.user,
+    message: 'User Content.'
+  });
 };
 
 exports.adminAccess = (req, res) => {
-  response.successed(res, null, STRINGS.adminContent);
+  res.status(200).json({
+    isSuccess: true,
+    message: STRINGS.adminContent
+  });
 };
 
 exports.businessAccess = (req, res) => {
-  response.successed(res, null, STRINGS.businessContent);
+  res.status(200).json({
+    isSuccess: true,
+    message: STRINGS.businessContent
+  });
 };
 
 exports.changePassword = async (req, res) => {
   const { password, repassword } = req.body;
-  let error;
 
   if (password !== repassword) {
-    error = STRINGS.passwordAndRepasswordMustBeTheSame;
+    return res.status(400).json({
+      isSuccess: false,
+      message: STRINGS.passwordAndRepasswordMustBeTheSame
+    });
   }
 
-  if (error) {
-    response.failed(res, error);
-  } else {
+  try {
     const { _id: id } = res.user;
     const user = await User.findById(id);
 
@@ -44,26 +56,39 @@ exports.changePassword = async (req, res) => {
       expiresIn
     });
 
-    response.successed(res, token, STRINGS.userUpdated);
+    res.status(200).json({
+      isSuccess: true,
+      data: token,
+      message: STRINGS.userUpdated
+    });
+  } catch (error) {
+    res.status(500).json({
+      isSuccess: false,
+      message: error.message
+    });
   }
 };
 
 exports.updateProfile = async (req, res) => {
   try {
     const { username, email, roles } = req.body;
-    let anyError = [];
+    let errors = [];
 
     /**
      * Todo: Integrate yup for validation
      */
     if (username && username.length < 4) {
-      anyError.push('Username should be more than 4 characters.');
+      errors.push('Username should be more than 4 characters.');
     }
-    if (email && !UserClass.mail.validateEmail(email)) {
-      anyError.push('Email address should be a valid email.');
+    if (email && !validateEmail(email)) {
+      // Assuming validateEmail is defined elsewhere
+      errors.push('Email address should be a valid email.');
     }
-    if (anyError.length > 0) {
-      return response.failed(res, anyError);
+    if (errors.length > 0) {
+      return res.status(400).json({
+        isSuccess: false,
+        errors: errors
+      });
     }
 
     if (username && username !== res.user.username) {
@@ -76,12 +101,22 @@ exports.updateProfile = async (req, res) => {
     await res.user.save();
     await res.user.populate('roles');
 
-    response.successed(
-      res,
-      { _id: res.user._id, email, username, roles },
-      'User has been successfully updated!'
-    );
+    res.status(200).json({
+      isSuccess: true,
+      data: { _id: res.user._id, email, username, roles },
+      message: 'User has been successfully updated!'
+    });
   } catch (error) {
-    response.failed(res, error.message);
+    res.status(500).json({
+      isSuccess: false,
+      message: error.message
+    });
   }
+};
+
+// Helper function to validate email
+const validateEmail = (email) => {
+  const re =
+    /^(([^<>()\[\]\.,;:\s@"]+(\.[^<>()\[\]\.,;:\s@"]+)*)|(".+"))@(([^<>()[\]\.,;:\s@"]+\.)+[^<>()[\]\.,;:\s@"]{2,})$/i;
+  return re.test(String(email).toLowerCase());
 };

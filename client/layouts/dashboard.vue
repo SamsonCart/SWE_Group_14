@@ -1,25 +1,17 @@
 <script setup>
-import Header from '@/components/general/Header';
-import { useNotificationStore } from '@/store/notificationStore';
+import { useNotificationStore } from '~/store/notification';
+import DashHeader from '@/components/general/DashHeader.vue';
 
 const notificationStore = useNotificationStore();
 </script>
 <template>
   <v-app>
-    <Header />
+    <DashHeader />
     <v-navigation-drawer app>
       <v-list>
-        <v-list-item to="/business/dashboard" link> Dashboard </v-list-item>
-        <v-list-item to="/business/services" link> Services </v-list-item>
-        <!-- <v-list-item link>
-          <nuxt-link to="/bookings"> Bookings </nuxt-link>
-        </v-list-item>
-        <v-list-item link>
-          <nuxt-link to="/reviews"> Reviews </nuxt-link>
-        </v-list-item>
-        <v-list-item link>
-          <nuxt-link to="/inquiries"> Inquiries </nuxt-link>
-        </v-list-item> -->
+        <v-list-item to="/bz/dashboard" link> Dashboard </v-list-item>
+        <v-list-item to="/bz/services" link> Services </v-list-item>
+        <v-list-item to="/bz/bookings" link> Bookings </v-list-item>
       </v-list>
     </v-navigation-drawer>
     <v-main class="w-100">
@@ -28,14 +20,15 @@ const notificationStore = useNotificationStore();
       </v-container>
     </v-main>
     <v-snackbar
+      class="text-lg"
       v-model="notificationStore.snackbar.show"
       :color="notificationStore.snackbar.color"
-      top
+      location="top right"
     >
       {{ notificationStore.snackbar.message }}
       <template #actions>
-        <v-btn color="white" text @click="notificationStore.closeSnackbar"
-          >Close</v-btn
+        <v-icon @click="notificationStore.closeSnackbar" class="mr-2"
+          >mdi-close</v-icon
         >
       </template>
     </v-snackbar>

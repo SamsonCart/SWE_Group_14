@@ -14,17 +14,8 @@ const isSubmitting = ref(false);
 
 const updateProfile = async () => {
   isSubmitting.value = true;
-  try {
-    const res = await userStore.updateProfile({ ...formData.value });
-    if (res) {
-      showNotification('Profile updated successfully', 'success');
-    }
-  } catch (error) {
-    console.error('Error updating profile:', error);
-    showNotification('Error updating profile', 'error');
-  } finally {
-    isSubmitting.value = false;
-  }
+  await userStore.updateProfile({ ...formData.value });
+  isSubmitting.value = false;
 };
 </script>
 

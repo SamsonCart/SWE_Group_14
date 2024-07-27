@@ -4,20 +4,8 @@ const Business = require('../models/business');
 const User = require('../models/user');
 const Role = require('../models/role');
 
-const businessList = [
-  {
-    businessName: 'Plumber Pros',
-    description: 'Professional plumbing services for all your needs.'
-  },
-  {
-    businessName: 'Makeup Masters',
-    description: 'Expert makeup artists for all occasions.'
-  },
-  {
-    businessName: 'AC Repair Experts',
-    description: 'Reliable air conditioning repair and maintenance services.'
-  }
-];
+const businessList = require('./data/businesses.json');
+const locationList = require('./data/locations.json');
 
 async function seedBusinesses(businessUserCount) {
   try {
@@ -28,31 +16,27 @@ async function seedBusinesses(businessUserCount) {
     const businessUsers = await User.find({ roles: businessRole._id }).limit(
       businessUserCount
     );
-    let i = 0;
-    for (const user of businessUsers) {
-      //   const businessData =
-      //     businessList[
-      //       faker.number.int({ min: 0, max: businessList.length - 1 })
-      //     ];
-      const businessData = businessList[i];
-      i++;
+
+    for (const [index, user] of businessUsers.entries()) {
+      const businessData = businessList[index % businessList.length];
+      const locationData = locationList[index % locationList.length];
       const business = new Business({
         owner: user._id,
         businessName: businessData.businessName,
         description: businessData.description,
         address: {
-          street: faker.location.streetAddress(),
-          city: faker.location.city(),
-          state: faker.location.state(),
-          zipCode: faker.location.zipCode(),
+          street: locationData.street,
+          city: 'Los Angeles',
+          state: 'California',
+          zipCode: locationData.zipCode,
           coordinates: {
-            latitude: faker.location.latitude(),
-            longitude: faker.location.longitude()
+            latitude: locationData.coordinates.latitude,
+            longitude: locationData.coordinates.longitude
           }
         },
-        phoneNumber: faker.phone.number(),
-        email: faker.internet.email(),
-        images: [faker.image.url(), faker.image.url()]
+        phoneNumber: businessData.phoneNumber,
+        email: businessData.email,
+        images: []
       });
       await business.save();
     }
