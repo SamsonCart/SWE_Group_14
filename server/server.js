@@ -3,6 +3,7 @@ const express = require('express')
 const app = express()
 const errorHandler = require('./middlewares/error')
 const cors = require('cors')
+const path = require('path');
 
 // cors settings if you need
 const corsOptions = {
@@ -22,6 +23,9 @@ app.use(express.static('public'))
 
 // db config
 require('./config/db')
+
+// Serve static files from the 'uploads' directory
+app.use('/api/v1.0.0/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // reponses jsons correctly
 app.use(express.urlencoded({ extended: true }))

@@ -3,14 +3,14 @@ import { defineStore } from 'pinia'
 import { reactive } from 'vue'
 
 export const useHomepageStore = defineStore('homepage', {
-  state: () => reactive({
-    stats: {},
-  }),
+  state: () =>
+    reactive({
+      stats: {},
+    }),
   getters: {},
   actions: {
     async init() {
-
-      await request('get', 'homepage/stats').then(res => {
+      await request('get', 'dashboard/stats').then(res => {
         if (res?.data?.count) {
           this.stats = { ...res.data.count }
         }
@@ -18,6 +18,3 @@ export const useHomepageStore = defineStore('homepage', {
     },
   },
 })
-
-
-

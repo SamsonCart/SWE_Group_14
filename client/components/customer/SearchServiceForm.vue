@@ -29,7 +29,7 @@ const onSubmit = () => {
                 ></v-text-field>
               </v-col>
               <v-col cols="6">
-                <v-select
+                <!-- <v-select
                   v-model="props.serviceType"
                   :items="[
                     'All Services',
@@ -38,7 +38,7 @@ const onSubmit = () => {
                     'AC Repair'
                   ]"
                   label="Service Type"
-                ></v-select>
+                ></v-select> -->
                 <!-- <v-select
                   v-model="props.serviceType"
                   :items="[

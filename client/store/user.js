@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { request } from '@/utils/request';
-import { useNotificationStore } from '@/store/notificationStore';
+import { useNotificationStore } from '@/store/notification';
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -21,9 +21,10 @@ export const useUserStore = defineStore('user', {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          const res = await this.validateToken(token);
-          if (res) {
-            this.setUser(res, token);
+          const { data } = await this.validateToken(token);
+          if (data) {
+            this.setUser(data, token);
+            await this.redirectUser();
           } else {
             this.logout();
           }
@@ -36,10 +37,10 @@ export const useUserStore = defineStore('user', {
     async login(payload) {
       const notificationStore = useNotificationStore();
       try {
-        const res = await request('post', 'auth/signin', payload);
-        if (res) {
-          this.setUser(res, res.accessToken);
-          this.redirectUser();
+        const { data } = await request('post', 'auth/signin', payload);
+        if (data) {
+          this.setUser(data, data.accessToken);
+          await this.redirectUser();
           notificationStore.showSuccess('Logged in successfully');
           return true;
         }
@@ -57,12 +58,12 @@ export const useUserStore = defineStore('user', {
       localStorage.setItem('user', JSON.stringify(this.user));
       localStorage.setItem('token', this.token);
     },
-    redirectUser() {
+    async redirectUser() {
       const router = useRouter();
       if (this.isBusiness) {
-        router.push('/business/dashboard');
+        await router.push('/bz/dashboard');
       } else {
-        router.push('/dashboard');
+        await router.push('/dashboard');
       }
     },
     async validateToken(token) {
@@ -80,9 +81,9 @@ export const useUserStore = defineStore('user', {
     async signup(payload) {
       const notificationStore = useNotificationStore();
       try {
-        const res = await request('post', 'auth/signup', payload);
-        if (res) {
-          this.setUser(res, res.accessToken);
+        const { data } = await request('post', 'auth/signup', payload);
+        if (data) {
+          this.setUser(data, data.accessToken);
           this.redirectUser();
           notificationStore.showSuccess('Signed up successfully');
           return true;
@@ -96,9 +97,9 @@ export const useUserStore = defineStore('user', {
     async updateProfile(payload) {
       const notificationStore = useNotificationStore();
       try {
-        const res = await request('put', 'user/update', payload);
-        if (res) {
-          this.user = res;
+        const { data } = await request('put', 'user/update', payload);
+        if (data) {
+          this.user = data;
           localStorage.setItem('user', JSON.stringify(this.user));
           notificationStore.showSuccess('Profile updated successfully');
           return true;
@@ -122,31 +123,16 @@ export const useUserStore = defineStore('user', {
         return false;
       }
       try {
-        const res = await request('put', 'user/changepassword', payload);
-        if (res) {
-          this.token = res;
-          localStorage.setItem('token', res);
+        const { data } = await request('put', 'user/changepassword', payload);
+        if (data) {
+          this.token = data;
+          localStorage.setItem('token', data);
           notificationStore.showSuccess('Password updated successfully');
           return true;
         }
       } catch (error) {
         notificationStore.showError('Error updating password');
         console.error('Error updating password:', error);
-      }
-      return false;
-    },
-    async activate(payload) {
-      const notificationStore = useNotificationStore();
-      try {
-        const res = await request('post', 'auth/activate', payload, 30000);
-        if (res) {
-          this.redirectUser();
-          notificationStore.showSuccess('Account activated successfully');
-          return true;
-        }
-      } catch (error) {
-        notificationStore.showError('Error activating account');
-        console.error('Error activating account:', error);
       }
       return false;
     }

@@ -1,4 +1,3 @@
-const { response, user: UserClass } = require('../../classes');
 const Role = require('../../models/role');
 const User = require('../../models/user');
 const bcrypt = require('bcryptjs');
@@ -7,25 +6,37 @@ const jwt = require('jsonwebtoken');
 const config = require('../../config/auth');
 const { controllers: { users: STRINGS } = {} } = require('../../MAGIC_STRINGS');
 
+// Helper function to validate email
+const validateEmail = (email) => {
+  const re =
+    /^(([^<>()\[\]\.,;:\s@"]+(\.[^<>()\[\]\.,;:\s@"]+)*)|(".+"))@(([^<>()[\]\.,;:\s@"]+\.)+[^<>()[\]\.,;:\s@"]{2,})$/i;
+  return re.test(String(email).toLowerCase());
+};
+
 exports.getUser = async (req, res) => {
   try {
     const { _id, createdTime, email, isActive, roles, username } = res.user;
-    response.successed(res, {
-      _id,
-      createdTime,
-      email,
-      isActive,
-      roles,
-      username
+    res.status(200).json({
+      isSuccess: true,
+      data: {
+        _id,
+        createdTime,
+        email,
+        isActive,
+        roles,
+        username
+      }
     });
   } catch (error) {
-    res.status(200).json(new response.fail(error.message));
+    res.status(500).json({
+      isSuccess: false,
+      message: error.message
+    });
   }
 };
 
 exports.createUser = async (req, res) => {
   const { email, password, roles: roleIds, username } = req.body;
-  const expiresIn = 86400; // 24 hours
 
   try {
     const hashedPassword = bcrypt.hashSync(password, 4);
@@ -37,9 +48,9 @@ exports.createUser = async (req, res) => {
     roles.map((role) => user.roles.push(mongoose.Types.ObjectId(role._id)));
     await user.save();
 
-    response.successed(
-      res,
-      {
+    res.status(201).json({
+      isSuccess: true,
+      data: {
         _id: user._id,
         email,
         roles,
@@ -47,10 +58,13 @@ exports.createUser = async (req, res) => {
         isActive: user.isActive,
         createdTime: user.createdTime
       },
-      'User has been successfully created!'
-    );
+      message: 'User has been successfully created!'
+    });
   } catch (error) {
-    response.failed(res, error.message);
+    res.status(500).json({
+      isSuccess: false,
+      message: error.message
+    });
   }
 };
 
@@ -64,20 +78,23 @@ exports.updateUser = async (req, res) => {
       password,
       roles: roleIds
     } = req.body;
-    let anyError = [];
+    let errors = [];
 
     if (username && username.length < 4) {
-      anyError.push('Username should be more than 4 characters.');
+      errors.push('Username should be more than 4 characters.');
     }
-    if (email && !UserClass.mail.validateEmail(email)) {
-      anyError.push('Email address should be a valid email.');
+    if (email && !validateEmail(email)) {
+      errors.push('Email address should be a valid email.');
     }
     if (password && password.length < 8) {
-      anyError.push('Password should be more than 7 characters.');
+      errors.push('Password should be more than 7 characters.');
     }
 
-    if (anyError.length > 0) {
-      return response.failed(res, anyError);
+    if (errors.length > 0) {
+      return res.status(400).json({
+        isSuccess: false,
+        errors: errors
+      });
     }
 
     const updateData = {
@@ -95,20 +112,23 @@ exports.updateUser = async (req, res) => {
       const roles = await Role.find({ _id: { $in: roleIds } });
       updateData.roles = roles.map((role) => mongoose.Types.ObjectId(role._id));
     } else {
-      anyError.push(STRINGS.rolesCanNotBeEmpty);
+      errors.push(STRINGS.rolesCanNotBeEmpty);
     }
 
-    if (anyError.length > 0) {
-      return response.failed(res, anyError);
+    if (errors.length > 0) {
+      return res.status(400).json({
+        isSuccess: false,
+        errors: errors
+      });
     }
 
     const user = await User.findOneAndUpdate({ _id }, updateData, { new: true })
       .populate('roles')
       .select('-password');
 
-    response.successed(
-      res,
-      {
+    res.status(200).json({
+      isSuccess: true,
+      data: {
         _id: user._id,
         email: user.email,
         roles: user.roles,
@@ -116,19 +136,28 @@ exports.updateUser = async (req, res) => {
         isActive: user.isActive,
         createdTime: user.createdTime
       },
-      'User has been successfully updated!'
-    );
+      message: 'User has been successfully updated!'
+    });
   } catch (error) {
-    response.failed(res, error.message);
+    res.status(500).json({
+      isSuccess: false,
+      message: error.message
+    });
   }
 };
 
 exports.deleteUser = async (req, res) => {
   try {
-    const { _id } = req.body;
-    await User.deleteOne({ _id });
-    response.successed(res, { _id }, STRINGS.userDeleted);
+    await User.deleteOne({ _id: req.params.id });
+    res.status(200).json({
+      isSuccess: true,
+      data: { _id: req.params.id },
+      message: STRINGS.userDeleted
+    });
   } catch (error) {
-    res.status(500).json(new response.fail(error.message));
+    res.status(500).json({
+      isSuccess: false,
+      message: error.message
+    });
   }
 };

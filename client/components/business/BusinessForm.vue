@@ -1,5 +1,6 @@
 <template>
   <v-form @submit.prevent="handleSubmit">
+    <!-- Existing Fields -->
     <v-text-field
       v-model="form.businessName"
       label="Business Name"
@@ -18,19 +19,34 @@
       label="Phone Number"
     ></v-text-field>
     <v-text-field v-model="form.email" label="Email" required></v-text-field>
-    <v-btn type="submit" :disabled="!isChanged" color="primary"> Save </v-btn>
-    <!-- <v-btn type="button" @click="resetForm" color="secondary"> Reset </v-btn> -->
+    <v-file-input
+      v-model="tempFiles"
+      label="Upload Images"
+      multiple
+      show-size
+      @change="handleFileUpload"
+    ></v-file-input>
+    <div class="image-preview">
+      <div v-for="(img, index) in images" :key="index" class="preview-item">
+        <img :src="getImageUrl(img)" alt="preview" />
+        <v-btn icon @click="removeImage(index)">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+      </div>
+    </div>
+    <v-btn type="submit" :disabled="!isChanged" color="primary">Save</v-btn>
   </v-form>
 </template>
 
 <script setup>
-import { ref, reactive, computed, watch, onMounted } from 'vue';
+import { ref, reactive, onMounted, watch, defineProps } from 'vue';
 import { useBusinessStore, useUserStore } from '@/store';
+const baseUrl = import.meta.env.VITE_API_ENDPOINT;
 
 const props = defineProps({
   business: {
     type: Object,
-    default: () => ({})
+    default: () => null
   }
 });
 
@@ -47,48 +63,74 @@ const initialForm = reactive({
     zipCode: ''
   },
   phoneNumber: '',
-  email: ''
+  email: '',
+  images: []
 });
 
 const form = reactive({ ...initialForm });
+const tempFiles = ref([]);
+const images = ref([]);
+const isChanged = ref(false);
 
-const isEditing = ref(false);
+// On mount, load existing business data
+onMounted(() => {
+  if (props.business) {
+    Object.assign(form, props.business);
+    if (Array.isArray(props.business.images)) {
+      images.value = [...props.business.images];
+    }
+  } else {
+    watch(
+      () => businessStore.business,
+      (newBusiness) => {
+        if (newBusiness && newBusiness._id) {
+          Object.assign(form, newBusiness);
+          if (Array.isArray(newBusiness.images)) {
+            images.value = [...newBusiness.images];
+          }
+        }
+      },
+      { immediate: true }
+    );
+  }
+});
 
-const resetForm = () => {
-  Object.assign(form, initialForm);
-  if (isEditing.value) {
-    Object.assign(form, businessStore.business);
+const handleFileUpload = async () => {
+  const formData = new FormData();
+  tempFiles.value.forEach((file) => {
+    formData.append('images', file);
+  });
+
+  const { data, error } = await useFetch(`${baseUrl}/upload`, {
+    method: 'POST',
+    body: formData
+  });
+
+  if (data.value && data.value.filenames) {
+    data.value.filenames.forEach((filename) => {
+      images.value.push('temp/' + filename);
+    });
+    isChanged.value = true;
+  }
+
+  if (error.value) {
+    console.error(error.value);
   }
 };
 
-const isChanged = computed(() => {
-  return (
-    JSON.stringify(form) !==
-    JSON.stringify(isEditing.value ? businessStore.business : initialForm)
-  );
-});
+const removeImage = (index) => {
+  images.value.splice(index, 1);
+  isChanged.value = true;
+};
 
-watch(
-  () => businessStore.business,
-  (newVal) => {
-    if (newVal && Object.keys(newVal).length > 0) {
-      Object.assign(form, newVal);
-      Object.assign(initialForm, newVal); // Keep initial form updated
-      isEditing.value = true;
-    } else {
-      resetForm();
-      isEditing.value = false;
-    }
-  },
-  { immediate: true }
-);
-
-onMounted(async () => {
-  await businessStore.getUserBusiness();
-});
+const getImageUrl = (img) => {
+  return img.startsWith('temp/')
+    ? `${baseUrl}uploads/temp/${img.replace('temp/', '')}`
+    : `${baseUrl}uploads/images/${img}`;
+};
 
 const handleSubmit = async () => {
-  if (isEditing.value) {
+  if (props.business) {
     const businessId = form._id;
     const businessData = {
       businessName: form.businessName,
@@ -101,14 +143,34 @@ const handleSubmit = async () => {
       },
       phoneNumber: form.phoneNumber,
       email: form.email,
-      owner: form.owner
+      owner: form.owner,
+      images: images.value
     };
-    await businessStore.updateBusiness(businessId, businessData);
+    await businessStore.updateBusiness(props.business._id, businessData);
   } else {
     form.owner = userStore.user.id;
+    form.images = images.value;
     await businessStore.createBusiness(form);
   }
-  // Reset the initial form after submit
-  Object.assign(initialForm, form);
 };
 </script>
+<style scoped>
+.image-preview {
+  display: flex;
+  flex-wrap: wrap;
+}
+.preview-item {
+  position: relative;
+  margin: 10px;
+}
+.preview-item img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+}
+.preview-item v-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+</style>

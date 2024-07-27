@@ -5,16 +5,6 @@ import { useUserStore } from '@/store';
 definePageMeta({
   layout: 'user'
 });
-
-const route = useRouter();
-const userStore = useUserStore();
-const getToken = computed(() => userStore.getToken);
-
-// watch(getToken, (newV, _oldV) => {
-//   if (newV) {
-//     route.push('/dashboard');
-//   }
-// });
 </script>
 
 <template>

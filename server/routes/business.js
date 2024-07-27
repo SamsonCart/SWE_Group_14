@@ -6,11 +6,23 @@ const {
   validateBusinessPut,
   validateBusinessPatch
 } = require('../middlewares/validators');
+const upload = require('../middlewares/upload');
 
-router.post('/', validateBusinessCreate, businessController.createBusiness);
+router.post(
+  '/',
+  upload.array('images', 5),
+  validateBusinessCreate,
+  businessController.createBusiness
+);
+router.put(
+  '/:id',
+  upload.array('images', 5),
+  validateBusinessPut,
+  businessController.updateBusiness
+);
+
 router.get('/', businessController.getBusinesses);
 router.get('/:id', businessController.getBusinessById);
-router.put('/:id', validateBusinessPut, businessController.updateBusiness);
 router.patch(
   '/:id',
   validateBusinessPatch,

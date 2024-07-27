@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const multer = require('multer');
 
 // Business Create Schema
 const businessCreateSchema = Joi.object({
@@ -87,36 +88,40 @@ const servicePatchSchema = Joi.object({
   availability: Joi.array().items().optional()
 });
 
-// Availability Create Schema
-const availabilityCreateSchema = Joi.object({
-  businessId: Joi.string().required(),
-  dayOfWeek: Joi.number().min(0).max(6).required(),
+// Booking Create Schema
+const bookingCreateSchema = Joi.object({
+  serviceId: Joi.string().required(),
+  customerId: Joi.string().required(),
+  date: Joi.date().required(),
   startTime: Joi.string().required(),
   endTime: Joi.string().required(),
-  isBooked: Joi.boolean().optional()
+  status: Joi.string()
+    .valid('pending', 'confirmed', 'cancelled')
+    .default('pending')
 });
 
-// Availability Update Schema for PUT
-const availabilityPutSchema = Joi.object({
-  businessId: Joi.string().required(),
-  dayOfWeek: Joi.number().min(0).max(6).required(),
-  startTime: Joi.string().required(),
-  endTime: Joi.string().required(),
-  isBooked: Joi.boolean().optional()
-});
-
-// Availability Update Schema for PATCH
-const availabilityPatchSchema = Joi.object({
-  businessId: Joi.string().optional(),
-  dayOfWeek: Joi.number().min(0).max(6).optional(),
+// Booking Update Schema
+const bookingUpdateSchema = Joi.object({
+  serviceId: Joi.string().optional(),
+  customerId: Joi.string().optional(),
+  date: Joi.date().optional(),
   startTime: Joi.string().optional(),
   endTime: Joi.string().optional(),
-  isBooked: Joi.boolean().optional()
+  status: Joi.string().valid('pending', 'confirmed', 'cancelled').optional()
 });
 
 // Middleware for validation
 const validate = (schema) => (req, res, next) => {
-  const { error } = schema.validate(req.body);
+  let data = req.body;
+
+  if (req.is('multipart/form-data')) {
+    data = { ...req.body };
+    if (req.files && req.files.length > 0) {
+      data.images = req.files.map((file) => file.filename);
+    }
+  }
+
+  const { error } = schema.validate(data);
   if (error) {
     return res.status(400).json({ errors: error.details });
   }
@@ -130,7 +135,6 @@ module.exports = {
   validateServiceCreate: validate(serviceCreateSchema),
   validateServicePut: validate(servicePutSchema),
   validateServicePatch: validate(servicePatchSchema),
-  validateAvailabilityCreate: validate(availabilityCreateSchema),
-  validateAvailabilityPut: validate(availabilityPutSchema),
-  validateAvailabilityPatch: validate(availabilityPatchSchema)
+  validateBookingCreate: validate(bookingCreateSchema),
+  validateBookingUpdate: validate(bookingUpdateSchema)
 };

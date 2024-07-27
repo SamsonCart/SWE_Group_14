@@ -20,7 +20,7 @@ async function seedBookings(bookingCount) {
       const customer =
         customers[faker.number.int({ min: 0, max: customers.length - 1 })];
 
-      const date = faker.date.future();
+      const date = faker.date.soon({ days: 7 });
       const startHour = faker.number.int({ min: 9, max: 16 });
       const endHour = startHour + 1;
 

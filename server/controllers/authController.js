@@ -181,8 +181,7 @@ exports.activate = async (req, res) => {
         if (err) {
           return res.status(200).send(new response.fail(err));
         }
-
-        return response.successed(res, null, STRINGS.userActivated);
+        return res.status(200).send(STRINGS.userActivated);
       });
     });
   } catch (error) {

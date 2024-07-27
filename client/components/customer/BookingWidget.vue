@@ -1,14 +1,22 @@
 <script setup>
-import { defineProps, defineEmits, ref, watch } from 'vue';
-import { VCalendar } from 'vuetify/labs/VCalendar';
+import { useUserStore } from '@/store';
+import { useNotificationStore } from '@/store/notification';
 
 const props = defineProps({
   service: Object
 });
 const emit = defineEmits(['close']);
 
-const selectedDate = ref(new Date().toISOString().substr(0, 10));
+const notificationStore = useNotificationStore();
+
+const selectedDate = ref(new Date());
+
 const availableSessions = ref([]);
+const bookedSessions = ref([]);
+const baseUrl = import.meta.env.VITE_API_ENDPOINT;
+const userStore = useUserStore();
+const customerId = userStore.getUser.id;
+const serviceId = props.service._id;
 
 const generateAvailableSessions = (date) => {
   const sessions = [];
@@ -18,10 +26,13 @@ const generateAvailableSessions = (date) => {
 
   let currentHour = startHour;
   while (currentHour + sessionDuration <= endHour) {
+    const sessionId = `${date}-${currentHour}`;
     sessions.push({
-      id: `${date}-${currentHour}`,
+      id: sessionId,
       startTime: `${currentHour}:00`,
-      hours: sessionDuration
+      endTime: `${currentHour + 1}:00`,
+      hours: sessionDuration,
+      booked: bookedSessions.value.includes(sessionId)
     });
     currentHour += sessionDuration;
   }
@@ -29,16 +40,47 @@ const generateAvailableSessions = (date) => {
   return sessions;
 };
 
+const fetchBookedSessions = async (date) => {
+  try {
+    const response = await $fetch(`${baseUrl}/booking`, {
+      method: 'get',
+      query: { serviceId, date, customerId }
+    });
+    if (response?.data) {
+      bookedSessions.value = response.data.map((booking) => booking.sessionId);
+      availableSessions.value = generateAvailableSessions(date);
+    }
+  } catch (error) {
+    console.error('Error fetching booked sessions:', error);
+  }
+};
+
 watch(selectedDate, (newDate) => {
-  availableSessions.value = generateAvailableSessions(newDate);
+  fetchBookedSessions(newDate);
 });
 
-// Generate sessions for the initial date
-availableSessions.value = generateAvailableSessions(selectedDate.value);
+// Initial fetch for the selected date
+fetchBookedSessions(selectedDate.value);
 
-const bookSession = (sessionId) => {
-  // Implement booking logic here
-  console.log('Booking session:', sessionId);
+const bookSession = async (startTime, endTime) => {
+  try {
+    console.log('bookSession :>> ', startTime, endTime);
+    await $fetch(`${baseUrl}/booking`, {
+      method: 'post',
+      body: {
+        serviceId,
+        customerId,
+        date: selectedDate.value,
+        startTime,
+        endTime
+      }
+    });
+    notificationStore.showSuccess('Booked a session successfully');
+    await fetchBookedSessions(selectedDate.value); // Refresh sessions
+  } catch (error) {
+    notificationStore.showError('Error creating a booking!');
+    console.error('Error booking session:', error);
+  }
 };
 
 const closeModal = () => {
@@ -58,26 +100,32 @@ const closeModal = () => {
       <v-container>
         <v-row>
           <v-col cols="6">
-            <VCalendar
-              v-model:focus="selectedDate"
+            <v-date-picker
+              v-model="selectedDate"
               :min="new Date().toISOString().substr(0, 10)"
-              is-expanded
+              color="primary"
+              selected-color="blue darken-3"
             />
           </v-col>
           <v-col cols="3">
             <v-list>
               <v-list-item
                 v-for="session in availableSessions.slice(0, 4)"
-                :key="session.id"
+                :key="service._id"
               >
                 <v-list-item-content>
-                  <v-list-item-title>{{ session.startTime }}</v-list-item-title>
+                  <v-list-item-title
+                    :class="{ 'text-decoration-line-through': session.booked }"
+                    >{{ session.startTime }}</v-list-item-title
+                  >
                   <v-list-item-subtitle>
                     Duration: {{ session.hours }} hours
                   </v-list-item-subtitle>
                 </v-list-item-content>
-                <v-list-item-action>
-                  <v-btn color="primary" @click="bookSession(session.id)"
+                <v-list-item-action v-if="!session.booked">
+                  <v-btn
+                    color="primary"
+                    @click="bookSession(session.startTime, session.endTime)"
                     >Book</v-btn
                   >
                 </v-list-item-action>
@@ -88,16 +136,21 @@ const closeModal = () => {
             <v-list>
               <v-list-item
                 v-for="session in availableSessions.slice(4)"
-                :key="session.id"
+                :key="service._id"
               >
                 <v-list-item-content>
-                  <v-list-item-title>{{ session.startTime }}</v-list-item-title>
+                  <v-list-item-title
+                    :class="{ 'text-decoration-line-through': session.booked }"
+                    >{{ session.startTime }}</v-list-item-title
+                  >
                   <v-list-item-subtitle>
                     Duration: {{ session.hours }} hours
                   </v-list-item-subtitle>
                 </v-list-item-content>
-                <v-list-item-action>
-                  <v-btn color="primary" @click="bookSession(session.id)"
+                <v-list-item-action v-if="!session.booked">
+                  <v-btn
+                    color="primary"
+                    @click="bookSession(session.startTime, session.endTime)"
                     >Book</v-btn
                   >
                 </v-list-item-action>
@@ -111,7 +164,7 @@ const closeModal = () => {
 </template>
 
 <style scoped>
-.v-calendar-month__days > .v-calendar-month__day {
-  min-height: 70px !important;
+.text-decoration-line-through {
+  text-decoration: line-through;
 }
 </style>

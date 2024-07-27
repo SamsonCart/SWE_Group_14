@@ -6,12 +6,6 @@
     <v-card-subtitle>{{ service.description }}</v-card-subtitle>
     <v-card-text>
       <strong>Price:</strong> ${{ service.price }} <br />
-
-      <!-- <strong>Available Slots:</strong>
-      <div v-for="slot in service.availability" :key="slot.dayOfWeek">
-        {{ dayOfWeek[slot.dayOfWeek] }}: {{ slot.startTime }} ~
-        {{ slot.endTime }}
-      </div> -->
       <v-btn color="primary" @click="openBookingModal">Book</v-btn>
     </v-card-text>
   </v-card>
@@ -22,13 +16,11 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
 import BookingWidget from './BookingWidget.vue';
 
 const props = defineProps({
   service: Object
 });
-
 const showModal = ref(false);
 
 const openBookingModal = () => {

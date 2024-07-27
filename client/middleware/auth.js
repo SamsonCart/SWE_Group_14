@@ -8,7 +8,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
   const publicRoutes = ['/', '/signin', '/signup'];
 
   // Routes that require business user access
-  const businessRoutes = to.path.startsWith('/business');
+  const businessRoutes = to.path.startsWith('/bz');
 
   // Routes that require user access
   const userRoutes = to.path.startsWith('/dashboard');
@@ -21,7 +21,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
   // Redirect authenticated users from auth pages to their respective dashboard
   if (token && publicRoutes.includes(to.path)) {
     if (userStore.isBusiness) {
-      return navigateTo('/business/dashboard');
+      return navigateTo('/bz/dashboard');
     } else {
       return navigateTo('/dashboard');
     }
