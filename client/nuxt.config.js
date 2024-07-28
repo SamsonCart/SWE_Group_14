@@ -3,7 +3,7 @@ import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify';
 export default {
   app: {
     head: {
-      title: 'Booking - Client',
+      title: 'PushPin - Client',
       link: [
         {
           rel: 'stylesheet',
@@ -57,6 +57,7 @@ export default {
           ['defineStore', 'definePiniaStore'] // import { defineStore as definePiniaStore } from 'pinia'
         ]
       }
-    ]
+    ],
+    '@nuxtjs/leaflet'
   ]
 };

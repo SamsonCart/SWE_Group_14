@@ -4,43 +4,46 @@ import { useNotificationStore } from '@/store/notification';
 
 export const useUserStore = defineStore('user', {
   state: () => ({
-    user: {},
-    isBusiness: false,
-    token: ''
+    user: {}, // Stores user information
+    isBusiness: false, // Indicates if the user is a business
+    token: '' // Stores authentication token
   }),
   getters: {
-    getUser: (state) => state.user,
-    getUserId: (state) => state.user?._id || '',
-    getToken: (state) => state.token || ''
+    getUser: (state) => state.user, // Getter for user information
+    getUserId: (state) => state.user?._id || '', // Getter for user ID
+    getToken: (state) => state.token || '' // Getter for authentication token
   },
   actions: {
+    // Initializes the store by checking local token
     async init() {
       await this.checkLocalToken();
     },
+    // Checks if there is a valid token in local storage
     async checkLocalToken() {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          const { data } = await this.validateToken(token);
+          const { data } = await this.validateToken(token); // Validates the token
           if (data) {
-            this.setUser(data, token);
-            await this.redirectUser();
+            this.setUser(data, token); // Sets user and token if valid
+            await this.redirectUser(); // Redirects user based on role
           } else {
-            this.logout();
+            this.logout(); // Logs out if token is invalid
           }
         } catch (error) {
           console.error('Error checking local token:', error);
-          this.logout();
+          this.logout(); // Logs out in case of error
         }
       }
     },
+    // Logs in the user
     async login(payload) {
       const notificationStore = useNotificationStore();
       try {
-        const { data } = await request('post', 'auth/signin', payload);
+        const { data } = await request('post', 'auth/signin', payload); // Sends login request
         if (data) {
-          this.setUser(data, data.accessToken);
-          await this.redirectUser();
+          this.setUser(data, data.accessToken); // Sets user and token on successful login
+          await this.redirectUser(); // Redirects user based on role
           notificationStore.showSuccess('Logged in successfully');
           return true;
         }
@@ -50,41 +53,46 @@ export const useUserStore = defineStore('user', {
       }
       return false;
     },
+    // Sets user information and token
     setUser(user, token) {
       this.user = user;
       this.token = token;
       this.isBusiness =
-        user.roles?.some((role) => role.name === 'business') || false;
-      localStorage.setItem('user', JSON.stringify(this.user));
-      localStorage.setItem('token', this.token);
+        user.roles?.some((role) => role.name === 'business') || false; // Checks if user is a business
+      localStorage.setItem('user', JSON.stringify(this.user)); // Saves user to local storage
+      localStorage.setItem('token', this.token); // Saves token to local storage
     },
+    // Redirects user based on role
     async redirectUser() {
       const router = useRouter();
       if (this.isBusiness) {
-        await router.push('/bz/dashboard');
+        await router.push('/bz/dashboard'); // Redirects to business dashboard
       } else {
-        await router.push('/dashboard');
+        await router.push('/dashboard'); // Redirects to user dashboard
       }
     },
+    // Validates the token
     async validateToken(token) {
       return await request('post', 'auth/jwtsignin', { token });
     },
+    // Logs out the user
     logout() {
       const notificationStore = useNotificationStore();
       this.token = '';
       this.user = {};
       this.isBusiness = false;
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
+      localStorage.removeItem('token'); // Removes token from local storage
+      localStorage.removeItem('user'); // Removes user from local storage
       notificationStore.showSuccess('Logged out successfully');
     },
+    // Signs up a new user
     async signup(payload) {
       const notificationStore = useNotificationStore();
       try {
-        const { data } = await request('post', 'auth/signup', payload);
+        const { data } = await request('post', 'auth/signup', payload); // Sends signup request
         if (data) {
-          this.setUser(data, data.accessToken);
-          this.redirectUser();
+          this.setUser(data, data.accessToken); // Sets user and token on successful signup
+          this.redirectUser(); // Redirects user based on role
           notificationStore.showSuccess('Signed up successfully');
           return true;
         }
@@ -94,13 +102,15 @@ export const useUserStore = defineStore('user', {
       }
       return false;
     },
+    // Updates the user's profile
     async updateProfile(payload) {
       const notificationStore = useNotificationStore();
       try {
-        const { data } = await request('put', 'user/update', payload);
+        console.log('payload :>> ', payload); // Debugging statement
+        const { data } = await request('put', 'account/update', payload); // Sends profile update request
         if (data) {
-          this.user = data;
-          localStorage.setItem('user', JSON.stringify(this.user));
+          this.user = data; // Updates user information
+          localStorage.setItem('user', JSON.stringify(this.user)); // Updates user in local storage
           notificationStore.showSuccess('Profile updated successfully');
           return true;
         }
@@ -110,6 +120,7 @@ export const useUserStore = defineStore('user', {
         return false;
       }
     },
+    // Updates the user's password
     async updatePassword(payload) {
       const notificationStore = useNotificationStore();
       let error = '';
@@ -123,10 +134,14 @@ export const useUserStore = defineStore('user', {
         return false;
       }
       try {
-        const { data } = await request('put', 'user/changepassword', payload);
+        const { data } = await request(
+          'put',
+          'account/changepassword',
+          payload
+        ); // Sends password update request
         if (data) {
-          this.token = data;
-          localStorage.setItem('token', data);
+          this.token = data; // Updates token on successful password change
+          localStorage.setItem('token', data); // Updates token in local storage
           notificationStore.showSuccess('Password updated successfully');
           return true;
         }

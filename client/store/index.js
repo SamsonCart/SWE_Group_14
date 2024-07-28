@@ -4,6 +4,7 @@ import { useBusinessStore } from './business';
 import { useNotificationStore } from './notification';
 import { useUserStore } from './user';
 
+// Exporting various store instances for use in the application
 export {
   useDashboardStore,
   useMessageStore,

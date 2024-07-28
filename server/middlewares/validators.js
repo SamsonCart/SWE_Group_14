@@ -1,5 +1,23 @@
 const Joi = require('joi');
-const multer = require('multer');
+
+// Profile Update Schema
+const profileUpdateSchema = Joi.object({
+  username: Joi.string().required(),
+  email: Joi.string().email().required(),
+  firstname: Joi.string().allow('').optional(),
+  lastname: Joi.string().allow('').optional(),
+  roles: Joi.array().optional(),
+  address: Joi.object({
+    street: Joi.string().optional(),
+    city: Joi.string().optional(),
+    state: Joi.string().optional(),
+    zipCode: Joi.string().optional(),
+    coordinates: Joi.object({
+      latitude: Joi.number().optional(),
+      longitude: Joi.number().optional()
+    }).optional()
+  }).optional()
+});
 
 // Business Create Schema
 const businessCreateSchema = Joi.object({
@@ -129,6 +147,7 @@ const validate = (schema) => (req, res, next) => {
 };
 
 module.exports = {
+  validateProfileUpdate: validate(profileUpdateSchema),
   validateBusinessCreate: validate(businessCreateSchema),
   validateBusinessPut: validate(businessPutSchema),
   validateBusinessPatch: validate(businessPatchSchema),

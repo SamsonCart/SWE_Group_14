@@ -4,8 +4,13 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 const Role = require('../models/role');
 
+const businessList = require('./data/businesses.json');
+const locationList = require('./data/locations.json');
+
+// Function to seed users into the database
 async function seedUsers(customerCount, businessCount) {
   try {
+    // Retrieve roles from the database
     const roles = await Role.find();
     const customerRole = roles.find((role) => role.name === 'customer');
     const businessRole = roles.find((role) => role.name === 'business');
@@ -13,6 +18,7 @@ async function seedUsers(customerCount, businessCount) {
     if (!customerRole) throw new Error('Customer role not found');
     if (!businessRole) throw new Error('Business role not found');
 
+    // Create example users if they do not already exist
     await createUserIfNotExists(
       'business',
       'business@example.com',
@@ -26,6 +32,7 @@ async function seedUsers(customerCount, businessCount) {
       [customerRole._id]
     );
 
+    // Create business users
     for (let i = 0; i < businessCount; i++) {
       await createUserIfNotExists(
         `business${i}`,
@@ -35,6 +42,7 @@ async function seedUsers(customerCount, businessCount) {
       );
     }
 
+    // Create customer users
     for (let i = 0; i < customerCount; i++) {
       await createUserIfNotExists(
         `customer${i}`,
@@ -50,15 +58,30 @@ async function seedUsers(customerCount, businessCount) {
   }
 }
 
+// Helper function to create a user if it does not already exist
 async function createUserIfNotExists(username, email, password, roles) {
   const userCount = await User.countDocuments({ username });
   if (userCount === 0) {
+    const businessData =
+      businessList[faker.number.int({ min: 0, max: businessList.length - 1 })];
+    const locationData =
+      locationList[faker.number.int({ min: 0, max: locationList.length - 1 })];
     const newUser = new User({
       username,
       email,
       password: bcrypt.hashSync(password, 4),
       firstname: faker.person.firstName(),
       lastname: faker.person.lastName(),
+      address: {
+        street: locationData.street,
+        city: 'Los Angeles',
+        state: 'California',
+        zipCode: locationData.zipCode,
+        coordinates: {
+          latitude: locationData.coordinates.latitude,
+          longitude: locationData.coordinates.longitude
+        }
+      },
       roles,
       isActive: true
     });

@@ -1,14 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
-const config = require('../../config/auth');
-const Role = require('../../models/role');
-const User = require('../../models/user');
-const { response } = require('../../classes');
+const config = require('../../config/auth'); // Configuration for JWT secret
+const Role = require('../../models/role'); // Role model
+const User = require('../../models/user'); // User model
+const { response } = require('../../classes'); // Custom response class
 const {
   middlewares: { user: { authJWT: STRINGS } } = {}
-} = require('../../MAGIC_STRINGS');
+} = require('../../MAGIC_STRINGS'); // Constants for string messages
 
+// Middleware to set headers for CORS
 router.use(function (req, res, next) {
   res.header(
     'Access-Control-Allow-Headers',
@@ -17,6 +18,7 @@ router.use(function (req, res, next) {
   next();
 });
 
+// Middleware to verify JWT token
 verifyToken = async (req, res, next) => {
   const token = req.headers['x-access-token'];
 
@@ -30,76 +32,66 @@ verifyToken = async (req, res, next) => {
     }
 
     req.userId = decoded.id;
-    const user = await User.findById(decoded.id);
-
-    if (user) {
-      res.user = user;
-      // const { _id, createdTime, email, isActive, roles, username } = user;
-      // res.user = { _id, createdTime, email, isActive, roles, username }
+    try {
+      const user = await User.findById(decoded.id);
+      if (user) {
+        res.user = user; // Store user in response for later use
+      }
+    } catch (error) {
+      return res.status(500).send(new response.fail(error.message));
     }
 
     next();
   });
 };
 
+// Middleware to check if user has an 'admin' role
 isAdmin = (req, res, next) => {
   User.findById(req.userId).exec((err, user) => {
     if (err) {
-      res.status(500).send(new response.fail(err));
+      res.status(500).send(new response.fail(err.message));
       return;
     }
 
     if (user?.roles) {
-      Role.find(
-        {
-          _id: { $in: user.roles }
-        },
-        (err, roles) => {
-          if (err) {
-            res.status(500).send(new response.fail(err));
-            return;
-          }
-
-          for (let i = 0; i < roles.length; i++) {
-            if (roles[i].name === 'admin') {
-              next();
-              return;
-            }
-          }
-
-          response.failed(res, STRINGS.requireAdmin);
+      Role.find({ _id: { $in: user.roles } }, (err, roles) => {
+        if (err) {
+          res.status(500).send(new response.fail(err.message));
           return;
         }
-      );
+
+        if (roles.some((role) => role.name === 'admin')) {
+          next();
+        } else {
+          response.failed(res, STRINGS.requireAdmin);
+        }
+      });
+    } else {
+      res.status(403).send(new response.fail(STRINGS.requireAdmin));
     }
   });
 };
 
+// Middleware to check if user has a 'business' role
 isBusiness = (req, res, next) => {
   User.findById(req.userId).exec((err, user) => {
     if (err) {
-      res.status(500).send(new response.fail(err));
+      res.status(500).send(new response.fail(err.message));
       return;
     }
-    Role.find(
-      {
-        _id: { $in: user.roles }
-      },
-      (err, roles) => {
-        if (err) {
-          res.status(500).send(new response.fail(err));
-          return;
-        }
-        for (let i = 0; i < roles.length; i++) {
-          if (roles[i].name === 'business') {
-            next();
-            return;
-          }
-        }
-        res.status(403).send(new response.fail('Require Business Role!'));
+
+    Role.find({ _id: { $in: user.roles } }, (err, roles) => {
+      if (err) {
+        res.status(500).send(new response.fail(err.message));
         return;
       }
-    );
+
+      if (roles.some((role) => role.name === 'business')) {
+        next();
+      } else {
+        res.status(403).send(new response.fail('Require Business Role!'));
+      }
+    });
   });
 };
 
@@ -108,4 +100,5 @@ const authJwt = {
   isAdmin,
   isBusiness
 };
+
 module.exports = authJwt;

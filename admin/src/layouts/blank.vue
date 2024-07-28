@@ -1,12 +1,8 @@
 <script setup>
 import { useMainStore } from '@/store'
-import DrawerContent from '@/layouts/components/DrawerContent.vue'
-import { VerticalNavLayout } from '@layouts'
 
 // Components
 import Footer from '@/layouts/components/Footer.vue'
-import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue'
-import UserProfile from '@/layouts/components/UserProfile.vue'
 
 onBeforeMount(() => {
   useMainStore().init()

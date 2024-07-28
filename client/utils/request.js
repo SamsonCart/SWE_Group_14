@@ -2,7 +2,7 @@ import { useMessageStore } from '@/store/message';
 
 async function request(type, pureUrl, params = {}, time = null) {
   const baseUrl = import.meta.env.VITE_API_ENDPOINT;
-  let url = baseUrl + pureUrl;
+  let url = baseUrl + '/' + pureUrl;
   const { token } = localStorage;
 
   const headers = {

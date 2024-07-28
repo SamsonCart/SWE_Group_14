@@ -98,7 +98,7 @@ const signup = async () => {
           </div>
         </template>
 
-        <VCardTitle class="font-weight-semibold text-2xl text-uppercase"> BOOKING </VCardTitle>
+        <VCardTitle class="font-weight-semibold text-2xl text-uppercase"> PushPin </VCardTitle>
       </VCardItem>
 
       <VCardText class="pt-2">

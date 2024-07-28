@@ -1,5 +1,5 @@
 <script setup>
-import { useNotificationStore } from '~/store/notification';
+import { useNotificationStore } from '@/store/notification';
 import DashHeader from '@/components/general/DashHeader.vue';
 
 const notificationStore = useNotificationStore();

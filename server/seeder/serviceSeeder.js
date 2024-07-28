@@ -5,31 +5,22 @@ const Business = require('../models/business');
 
 const serviceList = [
   { title: 'Leak Repair', description: 'Fix leaks in your pipes and faucets.' },
-  {
-    title: 'Pipe Installation',
-    description: 'Install new pipes in your home.'
-  },
+  { title: 'Pipe Installation', description: 'Install new pipes in your home.' },
   { title: 'Drain Cleaning', description: 'Clean out clogged drains.' },
-  {
-    title: 'Bridal Makeup',
-    description: 'Makeup for the bride on her wedding day.'
-  },
+  { title: 'Bridal Makeup', description: 'Makeup for the bride on her wedding day.' },
   { title: 'Photoshoot Makeup', description: 'Makeup for photoshoots.' },
   { title: 'Event Makeup', description: 'Makeup for special events.' },
-  {
-    title: 'AC Maintenance',
-    description: 'Regular maintenance to keep your AC running smoothly.'
-  },
-  {
-    title: 'AC Installation',
-    description: 'Install new air conditioning units.'
-  }
+  { title: 'AC Maintenance', description: 'Regular maintenance to keep your AC running smoothly.' },
+  { title: 'AC Installation', description: 'Install new air conditioning units.' }
 ];
 
+// Function to seed services into the database
 async function seedServices(maxServicesPerBusiness) {
   try {
+    // Retrieve all businesses from the database
     const businesses = await Business.find();
 
+    // Create services for each business
     for (const business of businesses) {
       const numberOfServices = faker.number.int({
         min: 1,
@@ -57,6 +48,7 @@ async function seedServices(maxServicesPerBusiness) {
   }
 }
 
+// Function to generate availability for services
 function generateAvailability() {
   const daysOfWeek = [0, 1, 2, 3, 4]; // 0=Sunday, 1=Monday, etc.
   const availability = [];

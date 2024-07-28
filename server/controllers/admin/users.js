@@ -1,18 +1,19 @@
-const Role = require('../../models/role');
-const User = require('../../models/user');
-const bcrypt = require('bcryptjs');
-const mongoose = require('mongoose');
-const jwt = require('jsonwebtoken');
-const config = require('../../config/auth');
-const { controllers: { users: STRINGS } = {} } = require('../../MAGIC_STRINGS');
+const Role = require('../../models/role'); // Model for user roles
+const User = require('../../models/user'); // Model for user data
+const bcrypt = require('bcryptjs'); // Library for hashing passwords
+const mongoose = require('mongoose'); // MongoDB object modeling tool
+const { controllers: { users: STRINGS } = {} } = require('../../MAGIC_STRINGS'); // Magic strings for user-related messages
 
-// Helper function to validate email
+// Helper function to validate email format
+// Uses a regular expression to check if the email is valid
 const validateEmail = (email) => {
   const re =
     /^(([^<>()\[\]\.,;:\s@"]+(\.[^<>()\[\]\.,;:\s@"]+)*)|(".+"))@(([^<>()[\]\.,;:\s@"]+\.)+[^<>()[\]\.,;:\s@"]{2,})$/i;
   return re.test(String(email).toLowerCase());
 };
 
+// Get user details by ID
+// Responds with user data including _id, createdTime, email, isActive, roles, and username
 exports.getUser = async (req, res) => {
   try {
     const { _id, createdTime, email, isActive, roles, username } = res.user;
@@ -35,16 +36,18 @@ exports.getUser = async (req, res) => {
   }
 };
 
+// Create a new user
+// Hashes the password, assigns roles, and saves the user to the database
 exports.createUser = async (req, res) => {
   const { email, password, roles: roleIds, username } = req.body;
 
   try {
+    // Hash the password with bcrypt
     const hashedPassword = bcrypt.hashSync(password, 4);
     const user = new User({ email, password: hashedPassword, username });
 
-    // Find roles by name
+    // Find roles by their IDs and assign them to the user
     const roles = await Role.find({ _id: { $in: roleIds } });
-    // Assign role IDs to user
     roles.map((role) => user.roles.push(mongoose.Types.ObjectId(role._id)));
     await user.save();
 
@@ -65,9 +68,11 @@ exports.createUser = async (req, res) => {
       isSuccess: false,
       message: error.message
     });
-  }
+  }    
 };
 
+// Update user details
+// Validates input, hashes password if provided, and updates user in the database
 exports.updateUser = async (req, res) => {
   try {
     const {
@@ -80,6 +85,7 @@ exports.updateUser = async (req, res) => {
     } = req.body;
     let errors = [];
 
+    // Validate input fields
     if (username && username.length < 4) {
       errors.push('Username should be more than 4 characters.');
     }
@@ -90,6 +96,7 @@ exports.updateUser = async (req, res) => {
       errors.push('Password should be more than 7 characters.');
     }
 
+    // Return validation errors if any
     if (errors.length > 0) {
       return res.status(400).json({
         isSuccess: false,
@@ -103,11 +110,12 @@ exports.updateUser = async (req, res) => {
       isActive
     };
 
+    // Hash the password if provided
     if (password) {
       updateData.password = bcrypt.hashSync(password, 4);
     }
 
-    // Find roles by name and convert to ObjectId array
+    // Find roles by IDs and update the user's roles
     if (roleIds && roleIds.length > 0) {
       const roles = await Role.find({ _id: { $in: roleIds } });
       updateData.roles = roles.map((role) => mongoose.Types.ObjectId(role._id));
@@ -115,6 +123,7 @@ exports.updateUser = async (req, res) => {
       errors.push(STRINGS.rolesCanNotBeEmpty);
     }
 
+    // Return errors if any
     if (errors.length > 0) {
       return res.status(400).json({
         isSuccess: false,
@@ -122,9 +131,10 @@ exports.updateUser = async (req, res) => {
       });
     }
 
+    // Update the user and respond with the updated data
     const user = await User.findOneAndUpdate({ _id }, updateData, { new: true })
-      .populate('roles')
-      .select('-password');
+      .populate('roles') // Populate roles with their details
+      .select('-password'); // Exclude password from response
 
     res.status(200).json({
       isSuccess: true,
@@ -146,6 +156,8 @@ exports.updateUser = async (req, res) => {
   }
 };
 
+// Delete a user by ID
+// Removes the user from the database
 exports.deleteUser = async (req, res) => {
   try {
     await User.deleteOne({ _id: req.params.id });

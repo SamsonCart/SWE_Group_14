@@ -1,7 +1,7 @@
 <template>
   <nuxt-link to="/" class="logo-link">
     <v-icon>mdi-vuetify</v-icon>
-    <span class="ml-2">Vuetify App</span>
+    <span class="ml-2">PushPin</span>
   </nuxt-link>
 </template>
 

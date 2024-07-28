@@ -1,11 +1,11 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose'); // [Mongoose Documentation](https://mongoosejs.com/)
 const Role = require('../models/role');
 const Business = require('../models/business');
 const seedDatabase = require('../seeder');
 const User = require('../models/user');
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcryptjs'); // [bcryptjs Documentation](https://www.npmjs.com/package/bcryptjs)
 
-require('dotenv').config();
+require('dotenv').config(); // [dotenv Documentation](https://www.npmjs.com/package/dotenv)
 
 // Connect to MongoDB using the connection URL from environment variables
 mongoose
@@ -21,6 +21,7 @@ mongoose
   })
   .catch((error) => console.error('Connection error', error));
 
+// Function to create a user if it does not already exist
 async function createUserIfNotExists(username, email, password, roles) {
   const userCount = await User.countDocuments({ username });
   if (userCount === 0) {
@@ -44,6 +45,7 @@ async function createUserIfNotExists(username, email, password, roles) {
   }
 }
 
+// Initialization function to set up roles and seed database
 async function init() {
   try {
     const roles = ['customer', 'admin', 'business'];
