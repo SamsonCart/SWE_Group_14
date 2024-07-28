@@ -12,7 +12,7 @@ const Business = mongoose.model(
     businessName: {
       type: String,
       required: true,
-      unique: true
+      // unique: true
     },
     description: String,
     address: {

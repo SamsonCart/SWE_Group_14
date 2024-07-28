@@ -1,32 +1,36 @@
 import { defineStore } from 'pinia';
 import { useNotificationStore } from '@/store/notification';
 import { request } from '@/utils/request';
+import { useUserStore } from './user';
 
 export const useBusinessStore = defineStore('business', {
   state: () => ({
     business: null,
     services: [],
-    bookings: [],
+    bookings: []
   }),
   getters: {
     getBusiness: (state) => state.business,
     getServices: (state) => state.services,
-    getBookings: (state) => state.bookings,
+    getBookings: (state) => state.bookings
   },
   actions: {
+    // Fetches the business associated with the current user
     async getUserBusiness() {
       const notificationStore = useNotificationStore();
       try {
-        const response = await request('get', '/dashboard/business');
-        console.log('rrrr :>> ', response);
+        const userStore = useUserStore();
+        const owner = userStore.getUser.id;
+        const response = await request('get', '/business', { owner });
         if (response?.data) {
-          this.business = response.data;
+          this.business = response.data[0];
         }
       } catch (error) {
         notificationStore.showError('Error fetching business details');
         console.error('Error fetching business:', error);
       }
     },
+    // Creates a new business
     async createBusiness(businessData) {
       const notificationStore = useNotificationStore();
       try {
@@ -40,6 +44,7 @@ export const useBusinessStore = defineStore('business', {
         console.error('Error creating business:', error);
       }
     },
+    // Updates an existing business
     async updateBusiness(businessId, businessData) {
       const notificationStore = useNotificationStore();
       try {
@@ -57,12 +62,12 @@ export const useBusinessStore = defineStore('business', {
         console.error('Error updating business:', error);
       }
     },
+    // Fetches services for the current business
     async getBusinessServices() {
       const notificationStore = useNotificationStore();
       try {
         const businessId = this.business._id;
         const response = await request('get', `/service`, { businessId });
-        console.log('response :>> ', response);
         if (response?.data) {
           this.services = response.data;
         }
@@ -71,6 +76,7 @@ export const useBusinessStore = defineStore('business', {
         console.error('Error fetching services:', error);
       }
     },
+    // Creates a new service
     async createService(serviceData) {
       const notificationStore = useNotificationStore();
       try {
@@ -84,6 +90,7 @@ export const useBusinessStore = defineStore('business', {
         console.error('Error creating service:', error);
       }
     },
+    // Updates an existing service
     async updateService(serviceId, serviceData) {
       const notificationStore = useNotificationStore();
       try {
@@ -103,6 +110,7 @@ export const useBusinessStore = defineStore('business', {
         console.error('Error updating service:', error);
       }
     },
+    // Deletes a service
     async deleteService(serviceId) {
       const notificationStore = useNotificationStore();
       try {
@@ -118,6 +126,7 @@ export const useBusinessStore = defineStore('business', {
         console.error('Error deleting service:', error);
       }
     },
+    // Fetches bookings for the current business
     async getServiceBookings() {
       const notificationStore = useNotificationStore();
       try {
@@ -131,6 +140,7 @@ export const useBusinessStore = defineStore('business', {
         console.error('Error fetching bookings:', error);
       }
     },
+    // Creates a new booking
     async createBooking(bookingData) {
       const notificationStore = useNotificationStore();
       try {
@@ -144,6 +154,7 @@ export const useBusinessStore = defineStore('business', {
         console.error('Error creating booking:', error);
       }
     },
+    // Updates an existing booking
     async updateBooking(bookingId, bookingData) {
       const notificationStore = useNotificationStore();
       try {
@@ -166,6 +177,7 @@ export const useBusinessStore = defineStore('business', {
         console.error('Error updating booking:', error);
       }
     },
+    // Deletes a booking
     async deleteBooking(bookingId) {
       const notificationStore = useNotificationStore();
       try {
@@ -181,6 +193,5 @@ export const useBusinessStore = defineStore('business', {
         console.error('Error deleting booking:', error);
       }
     },
-
   }
 });

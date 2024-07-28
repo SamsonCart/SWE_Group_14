@@ -1,24 +1,25 @@
 const express = require('express');
 const router = express.Router();
-const bookingController = require('../controllers/bookingController');
+const bookingController = require('../controllers/bookingController'); // Controller for booking actions
 const {
   validateBookingCreate,
   validateBookingUpdate
-} = require('../middlewares/validators');
+} = require('../middlewares/validators'); // Middleware for booking validation
 
-// Create a new booking
+// Route to create a new booking
 router.post('/', validateBookingCreate, bookingController.createBooking);
 
-// Get all bookings with optional filters
+// Route to get all bookings with optional filters
 router.get('/', bookingController.getBookings);
 
-// Get a single booking by ID
+// Route to get a single booking by ID
 router.get('/:id', bookingController.getBookingById);
 
-// Update a booking by ID
+// Route to update a booking by ID
 router.put('/:id', validateBookingUpdate, bookingController.updateBooking);
 
-// Delete a booking by ID
+// Route to delete a booking by ID
 router.delete('/:id', bookingController.deleteBooking);
 
+// Export the router for use in the main router file
 module.exports = router;

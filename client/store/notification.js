@@ -9,6 +9,7 @@ export const useNotificationStore = defineStore('notification', {
     }
   }),
   actions: {
+    // Adds a success notification
     showSuccess(message) {
       this.snackbar = {
         show: true,
@@ -16,6 +17,7 @@ export const useNotificationStore = defineStore('notification', {
         color: 'success'
       };
     },
+    // Adds an error notification
     showError(message) {
       this.snackbar = {
         show: true,

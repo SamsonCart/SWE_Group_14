@@ -1,66 +1,59 @@
-const { response } = require('../../classes')
-const ROLES = require('../../models/role')
-const User = require('../../models/user')
+const { response } = require('../../classes'); // Custom response class
+const ROLES = require('../../models/role'); // Role model
+const User = require('../../models/user'); // User model
 
+// Middleware to check for duplicate usernames or emails
 checkDuplicateUsernameOrEmail = async (req, res, next) => {
-  const { email, username } = req.body
-  // Username
-  User.findOne({
-    username
-  }).exec((err, user) => {
-    if (err) {
-      return res.status(200).send({ message: err })
+  const { email, username } = req.body;
+
+  try {
+    // Check for existing username
+    const userByUsername = await User.findOne({ username }).exec();
+    if (userByUsername) {
+      return res
+        .status(200)
+        .send(new response.fail('Failed! Username is already in use!'));
     }
 
-    if (user) {
-      return res.status(200).send(new response.fail('Failed! Username is already in use!'))
+    // Check for existing email
+    const userByEmail = await User.findOne({ email }).exec();
+    if (userByEmail) {
+      return res
+        .status(200)
+        .send(new response.fail('Failed! Email is already in use!'));
     }
 
-    // Email
-    User.findOne({
-      email
-    }).exec((err, user) => {
-      if (err) {
-        return res.status(200).send({ message: err })
-      }
+    next();
+  } catch (err) {
+    return res.status(200).send({ message: err.message });
+  }
+};
 
-      if (user) {
-        return res.status(200).send(new response.fail('Failed! Email is already in use!'))
-      }
-
-      next()
-    })
-  })
-}
-
-checkRolesExisted = (req, res, next) => {
-  const { roles } = req.body
-  //
-  //    needs to be refactored => for loop
-  //
+// Middleware to check if provided roles exist
+checkRolesExisted = async (req, res, next) => {
+  const { roles } = req.body;
 
   if (roles) {
-    // for (let i = 0; i < req.body.roles.length; i++) {
     for (const item of roles) {
-      ROLES.findOne({
-        name: item
-      }).exec((err, role) => {
-        if (err) {
-          return res.status(200).send({ message: err })
-        }
-
+      try {
+        const role = await ROLES.findOne({ name: item }).exec();
         if (!role) {
-          return res.status(400).send({ message: 'Failed! Role ${roles[i]} does not exist!' })
+          return res
+            .status(400)
+            .send({ message: `Failed! Role ${item} does not exist!` });
         }
-      })
+      } catch (err) {
+        return res.status(500).send({ message: err.message });
+      }
     }
   }
-  next()
-}
+
+  next();
+};
 
 const verifySignUp = {
   checkDuplicateUsernameOrEmail,
   checkRolesExisted
-}
+};
 
-module.exports = verifySignUp
+module.exports = verifySignUp;

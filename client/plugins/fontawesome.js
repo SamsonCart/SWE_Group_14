@@ -1,14 +1,14 @@
-import { library, config } from '@fortawesome/fontawesome-svg-core'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { fas } from '@fortawesome/free-solid-svg-icons'
+import { library, config } from '@fortawesome/fontawesome-svg-core'; // Import FontAwesome core functions
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'; // Import the FontAwesomeIcon component
+import { fas } from '@fortawesome/free-solid-svg-icons'; // Import solid icons
 
-// This is important, we are going to let Nuxt worry about the CSS
-config.autoAddCss = false
+// Prevent Nuxt from automatically adding FontAwesome CSS
+config.autoAddCss = false;
 
-// You can add your icons directly in this plugin. See other examples for how you
-// can add other styles or just individual icons.
-library.add(fas)
+// Add all solid icons to the library
+library.add(fas);
 
 export default defineNuxtPlugin(nuxtApp => {
-  nuxtApp.vueApp.component('font-awesome-icon', FontAwesomeIcon, {})
-})
+  // Register FontAwesomeIcon component globally
+  nuxtApp.vueApp.component('font-awesome-icon', FontAwesomeIcon, {});
+});

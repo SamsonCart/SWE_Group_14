@@ -1,13 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const dashboardController = require('../controllers/dashboardController');
-const authJwt = require('../middlewares/user/authJwt');
+const dashboardController = require('../controllers/dashboardController'); // Controller for dashboard actions
 
+// Route to get dashboard statistics
 router.get('/stats', dashboardController.getStats);
-router.get(
-  '/business',
-  authJwt.verifyToken,
-  dashboardController.getUserBusiness
-);
 
+// Export the router for use in the main router file
 module.exports = router;

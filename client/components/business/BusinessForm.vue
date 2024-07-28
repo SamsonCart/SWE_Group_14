@@ -1,6 +1,10 @@
+<!-- 
+Form component for business information input
+External library: Vuetify (https://vuetifyjs.com/)
+-->
 <template>
   <v-form @submit.prevent="handleSubmit">
-    <!-- Existing Fields -->
+    <!-- Text fields for business information -->
     <v-text-field
       v-model="form.businessName"
       label="Business Name"
@@ -19,13 +23,16 @@
       label="Phone Number"
     ></v-text-field>
     <v-text-field v-model="form.email" label="Email" required></v-text-field>
+    <!-- File input for uploading images with validation rules -->
     <v-file-input
       v-model="tempFiles"
       label="Upload Images"
+      :rules="[fileCountRule, fileSizeRule]"
       multiple
       show-size
       @change="handleFileUpload"
     ></v-file-input>
+    <!-- Preview uploaded images -->
     <div class="image-preview">
       <div v-for="(img, index) in images" :key="index" class="preview-item">
         <img :src="getImageUrl(img)" alt="preview" />
@@ -34,15 +41,17 @@
         </v-btn>
       </div>
     </div>
+    <!-- Submit button for the form -->
     <v-btn type="submit" :disabled="!isChanged" color="primary">Save</v-btn>
   </v-form>
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, watch, defineProps } from 'vue';
-import { useBusinessStore, useUserStore } from '@/store';
-const baseUrl = import.meta.env.VITE_API_ENDPOINT;
+import { useBusinessStore, useUserStore, useNotificationStore } from '@/store'; // Importing stores
 
+const baseUrl = import.meta.env.VITE_API_ENDPOINT; // API endpoint from environment variable
+
+// Props for the component
 const props = defineProps({
   business: {
     type: Object,
@@ -50,10 +59,14 @@ const props = defineProps({
   }
 });
 
+// Defining stores
 const businessStore = useBusinessStore();
 const userStore = useUserStore();
+const notificationStore = useNotificationStore();
 
+// Initial form data structure
 const initialForm = reactive({
+  owner: null,
   businessName: '',
   description: '',
   address: {
@@ -67,12 +80,17 @@ const initialForm = reactive({
   images: []
 });
 
-const form = reactive({ ...initialForm });
-const tempFiles = ref([]);
-const images = ref([]);
-const isChanged = ref(false);
+const form = reactive({ ...initialForm }); // Reactive form data
+const tempFiles = ref([]); // Temporary files for upload
+const images = ref([]); // Uploaded images
+const isChanged = ref(false); // Flag to indicate form changes
 
-// On mount, load existing business data
+const user = computed(() => userStore.getUser); // Get current user from store
+
+const maxFileCount = 10; // Maximum number of files
+const maxFileSize = 5 * 1024 * 1024; // Maximum file size (5MB)
+
+// On component mount, initialize form data
 onMounted(() => {
   if (props.business) {
     Object.assign(form, props.business);
@@ -95,6 +113,27 @@ onMounted(() => {
   }
 });
 
+// Validation rule for file count
+const fileCountRule = (files) => {
+  if (files.length > maxFileCount) {
+    return `You can only upload up to ${maxFileCount} files.`;
+  }
+  return true;
+};
+
+// Validation rule for file size
+const fileSizeRule = (files) => {
+  for (const file of files) {
+    if (file.size > maxFileSize) {
+      return `File ${file.name} is too large. Maximum size is ${
+        maxFileSize / (1024 * 1024)
+      }MB.`;
+    }
+  }
+  return true;
+};
+
+// Handle file upload
 const handleFileUpload = async () => {
   const formData = new FormData();
   tempFiles.value.forEach((file) => {
@@ -118,43 +157,87 @@ const handleFileUpload = async () => {
   }
 };
 
+// Remove image from preview
 const removeImage = (index) => {
   images.value.splice(index, 1);
   isChanged.value = true;
 };
 
+// Get image URL for preview
 const getImageUrl = (img) => {
   return img.startsWith('temp/')
-    ? `${baseUrl}uploads/temp/${img.replace('temp/', '')}`
-    : `${baseUrl}uploads/images/${img}`;
+    ? `${baseUrl}/uploads/temp/${img.replace('temp/', '')}`
+    : `${baseUrl}/uploads/images/${img}`;
+};
+
+// Get coordinates from address using Nominatim API
+const getCoordinates = async (address) => {
+  const response = await fetch(
+    `https://nominatim.openstreetmap.org/search?street=${address.street}&city=${address.city}&state=${address.state}&format=json`
+  );
+
+  const data = await response.json();
+
+  if (data.length > 0) {
+    return {
+      latitude: parseFloat(data[0].lat),
+      longitude: parseFloat(data[0].lon)
+    };
+  }
+  return null;
 };
 
 const handleSubmit = async () => {
+    const coordinates = await getCoordinates(form.address);
+
+  if (!coordinates) {
+    notificationStore.showError(
+      'Unable to find coordinates for the provided address.'
+    );
+    return;
+  }
+
+  const businessData = {
+    businessName: form.businessName,
+    description: form.description,
+    address: {
+      street: form.address.street,
+      city: form.address.city,
+      state: form.address.state,
+      zipCode: form.address.zipCode,
+      coordinates
+    },
+    phoneNumber: form.phoneNumber,
+    email: form.email,
+    owner: form.owner,
+    images: images.value
+  };
+
   if (props.business) {
-    const businessId = form._id;
-    const businessData = {
-      businessName: form.businessName,
-      description: form.description,
-      address: {
-        street: form.address.street,
-        city: form.address.city,
-        state: form.address.state,
-        zipCode: form.address.zipCode
-      },
-      phoneNumber: form.phoneNumber,
-      email: form.email,
-      owner: form.owner,
-      images: images.value
-    };
     await businessStore.updateBusiness(props.business._id, businessData);
-  } else {
-    form.owner = userStore.user.id;
-    form.images = images.value;
-    await businessStore.createBusiness(form);
+    } else {
+    form.owner = user.id;
+    await businessStore.createBusiness(businessData);
   }
 };
+
+// Deep watch for changes in form data to set isChanged to true
+watch(
+  () => ({ ...form }),
+  () => {
+    isChanged.value = true;
+  },
+  { deep: true }
+);
+
+// Watch for changes in file input to set isChanged to true
+watch(tempFiles, () => {
+  isChanged.value = true;
+});
 </script>
+
 <style scoped>
+/* Scoped styles for the component */
 .image-preview {
   display: flex;
   flex-wrap: wrap;

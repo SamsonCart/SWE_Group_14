@@ -4,6 +4,7 @@ import { useUserStore } from '@/store/user';
 
 const userStore = useUserStore();
 const user = computed(() => userStore.getUser);
+const address = computed(() => user.value.address || {});
 </script>
 
 <template>
@@ -22,17 +23,30 @@ const user = computed(() => userStore.getUser);
           {{ user.username }}
         </div>
       </div>
-      <!-- <div class="form-group row mb-4 mt-3">
-        <label for="isActive" class="col-sm-4 text-end">Active:</label>
+      <div v-if="address.street" class="form-group row mb-2">
+        <label for="street" class="col-sm-4 text-end">Street:</label>
         <div class="col-sm-8">
-          <v-chip
-            :color="user.isActive ? 'success' : 'error'"
-            class="white--text"
-          >
-            {{ user.isActive ? 'Yes' : 'No' }}
-          </v-chip>
+          {{ address.street }}
         </div>
-      </div> -->
+      </div>
+      <div v-if="address.city" class="form-group row mb-2">
+        <label for="city" class="col-sm-4 text-end">City:</label>
+        <div class="col-sm-8">
+          {{ address.city }}
+        </div>
+      </div>
+      <div v-if="address.state" class="form-group row mb-2">
+        <label for="state" class="col-sm-4 text-end">State:</label>
+        <div class="col-sm-8">
+          {{ address.state }}
+        </div>
+      </div>
+      <div v-if="address.zipCode" class="form-group row mb-2">
+        <label for="zipCode" class="col-sm-4 text-end">Zip Code:</label>
+        <div class="col-sm-8">
+          {{ address.zipCode }}
+        </div>
+      </div>
     </v-card-text>
   </v-card>
 </template>

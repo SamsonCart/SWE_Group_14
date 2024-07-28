@@ -1,30 +1,33 @@
 <script setup>
+// Import necessary modules and utilities
 import { useUserStore } from '@/store/user';
 import { useMessageStore } from '@/store/message';
 import { regexEmail } from '@/utils/regex';
 import { nextTick } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
-const route = useRoute();
-const router = useRouter();
-
+// Initialize stores
 const userStore = useUserStore();
 const messageStore = useMessageStore();
 
-const emit = defineEmits(['updateComponent']);
+const emit = defineEmits(['updateComponent']); // Define emit for event handling
 
+// Define reactive variables for the component's state
 const visibleEye = ref(true);
 const isSubmitting = ref(false);
 const formData = ref({ email: 'business@example.com', password: 'password' });
 
+// Function to handle login
 const login = () => {
   isSubmitting.value = true;
 
+  // Validate form data
   for (const [key, value] of Object.entries(formData.value)) {
     let error;
 
     if (!value) {
       error = `${key} is a mandatory field!`;
-    } else if (!regexEmail(formData.value?.email)) {
+    } else if (key === 'email' && !regexEmail(value)) {
       error = 'You must enter a valid email address';
     }
 
@@ -33,29 +36,31 @@ const login = () => {
 
       setTimeout(() => {
         isSubmitting.value = false;
-      }, 2000); // prevent serial clicks
+      }, 2000); // Prevent serial clicks
 
       return;
     }
   }
 
+  // Attempt login
   userStore.login({ ...formData.value }).then((res) => {
     if (res) {
-      
+      // Handle successful login (e.g., redirect to dashboard)
     } else {
       isSubmitting.value = false;
     }
   });
 };
 
+// On component mount, handle account activation if necessary
 onMounted(async () => {
-  await nextTick(); // https://stackoverflow.com/questions/76527094/nuxt-3-and-vue-3-onmounted-call-function-usefetch-function-not-getting-data-form
-  const { type, email, authCode } = route.query;
+  await nextTick();
+  const { type, email, authCode } = useRoute().query;
 
   if (type === 'activate') {
     userStore.activate({ email, authCode }).then((res) => {
       if (res) {
-        router.push('/dashboard');
+        useRouter().push('/dashboard');
       }
     });
   }
@@ -63,10 +68,12 @@ onMounted(async () => {
 </script>
 
 <template>
+  <!-- Display error or success messages -->
   <utilsGetErrorSuccess />
 
   <div id="signinup" class="card">
     <div class="card-body">
+      <!-- Email Input Field -->
       <div class="form-group row mb-2">
         <label for="email" class="col-sm-4 col-form-label">Email</label>
         <div class="col-sm-8">
@@ -81,6 +88,7 @@ onMounted(async () => {
         </div>
       </div>
 
+      <!-- Password Input Field -->
       <div class="form-group row mb-2">
         <label for="password" class="col-sm-4 col-form-label">Password</label>
         <div class="col-sm-8">
@@ -96,6 +104,7 @@ onMounted(async () => {
         </div>
       </div>
 
+      <!-- Remember Me Checkbox -->
       <div class="form-group row mb-2">
         <div class="col-sm-4"></div>
         <div class="col-sm-8">
@@ -105,9 +114,10 @@ onMounted(async () => {
           </div>
         </div>
       </div>
+
+      <!-- Sign In Button -->
       <div class="form-group row">
         <div class="col-sm-12 d-flex justify-content-end">
-          <!-- Added Bootstrap classes -->
           <button
             @click="login()"
             :disabled="isSubmitting"
@@ -118,6 +128,7 @@ onMounted(async () => {
         </div>
       </div>
       <hr />
+      <!-- Link to Signup Page -->
       <div class="text-center">
         New on our platform?
         <router-link class="row-pointer" to="/signup"

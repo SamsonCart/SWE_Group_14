@@ -1,23 +1,25 @@
+<!-- This script sets up the component with necessary imports and initializations -->
 <script setup>
-import { useUserStore } from '@/store';
-import { useNotificationStore } from '@/store/notification';
+import { useUserStore } from '@/store'; // Importing the user store
+import { useNotificationStore } from '@/store/notification'; // Importing the notification store
 
 const props = defineProps({
-  service: Object
+  service: Object // Defining props with service as an object
 });
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close']); // Defining emits with 'close' event
 
-const notificationStore = useNotificationStore();
+const notificationStore = useNotificationStore(); // Using the notification store
 
-const selectedDate = ref(new Date());
+const selectedDate = ref(new Date()); // Reactive reference for selected date
 
-const availableSessions = ref([]);
-const bookedSessions = ref([]);
-const baseUrl = import.meta.env.VITE_API_ENDPOINT;
-const userStore = useUserStore();
-const customerId = userStore.getUser.id;
-const serviceId = props.service._id;
+const availableSessions = ref([]); // Reactive reference for available sessions
+const bookedSessions = ref([]); // Reactive reference for booked sessions
+const baseUrl = import.meta.env.VITE_API_ENDPOINT; // Base URL for API endpoint from environment variables
+const userStore = useUserStore(); // Using the user store
+const customerId = userStore.getUser.id; // Getting customer ID from user store
+const serviceId = props.service._id; // Getting service ID from props
 
+// Function to generate available sessions for a given date
 const generateAvailableSessions = (date) => {
   const sessions = [];
   const startHour = 9; // Assuming service is available from 9 AM
@@ -32,7 +34,7 @@ const generateAvailableSessions = (date) => {
       startTime: `${currentHour}:00`,
       endTime: `${currentHour + 1}:00`,
       hours: sessionDuration,
-      booked: bookedSessions.value.includes(sessionId)
+      booked: bookedSessions.value.includes(sessionId) // Checking if session is already booked
     });
     currentHour += sessionDuration;
   }
@@ -40,21 +42,23 @@ const generateAvailableSessions = (date) => {
   return sessions;
 };
 
+// Async function to fetch booked sessions for a given date
 const fetchBookedSessions = async (date) => {
   try {
     const response = await $fetch(`${baseUrl}/booking`, {
       method: 'get',
-      query: { serviceId, date, customerId }
+      query: { serviceId, date, customerId } // Query parameters for API request
     });
     if (response?.data) {
-      bookedSessions.value = response.data.map((booking) => booking.sessionId);
-      availableSessions.value = generateAvailableSessions(date);
+      bookedSessions.value = response.data.map((booking) => booking.sessionId); // Mapping booked sessions
+      availableSessions.value = generateAvailableSessions(date); // Generating available sessions
     }
   } catch (error) {
-    console.error('Error fetching booked sessions:', error);
+    console.error('Error fetching booked sessions:', error); // Logging error
   }
 };
 
+// Watcher to refetch booked sessions when selected date changes
 watch(selectedDate, (newDate) => {
   fetchBookedSessions(newDate);
 });
@@ -62,9 +66,10 @@ watch(selectedDate, (newDate) => {
 // Initial fetch for the selected date
 fetchBookedSessions(selectedDate.value);
 
+// Async function to book a session
 const bookSession = async (startTime, endTime) => {
   try {
-    console.log('bookSession :>> ', startTime, endTime);
+    console.log('bookSession :>> ', startTime, endTime); // Logging session details
     await $fetch(`${baseUrl}/booking`, {
       method: 'post',
       body: {
@@ -75,20 +80,22 @@ const bookSession = async (startTime, endTime) => {
         endTime
       }
     });
-    notificationStore.showSuccess('Booked a session successfully');
+    notificationStore.showSuccess('Booked a session successfully'); // Showing success notification
     await fetchBookedSessions(selectedDate.value); // Refresh sessions
   } catch (error) {
-    notificationStore.showError('Error creating a booking!');
-    console.error('Error booking session:', error);
+    notificationStore.showError('Error creating a booking!'); // Showing error notification
+    console.error('Error booking session:', error); // Logging error
   }
 };
 
+// Function to emit close event and close the modal
 const closeModal = () => {
   emit('close');
 };
 </script>
 
 <template>
+  <!-- Template for the component UI -->
   <v-card>
     <v-card-title class="d-flex justify-space-between">
       <span class="text-h5 px-5 py-5">Book a Session</span>
@@ -165,6 +172,6 @@ const closeModal = () => {
 
 <style scoped>
 .text-decoration-line-through {
-  text-decoration: line-through;
+  text-decoration: line-through; /* Styling for booked sessions */
 }
 </style>

@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const authJwt = require('../middlewares/user/authJwt');
-const accountController = require('../controllers/accountController');
+const authJwt = require('../middlewares/user/authJwt'); // JWT authentication middleware
+const accountController = require('../controllers/accountController'); // Controller for account-related actions
+const { validateProfileUpdate } = require('../middlewares/validators'); // Validator middleware for profile updates
 
-// Middleware for setting headers
+// Middleware to set CORS headers
 router.use((req, res, next) => {
   res.header(
     'Access-Control-Allow-Headers',
@@ -12,7 +13,7 @@ router.use((req, res, next) => {
   next();
 });
 
-// Test routes for authorization
+// Authorization test routes
 router.get('/test/all', accountController.allAccess);
 router.get('/test/user', [authJwt.verifyToken], accountController.userAccess);
 router.get(
@@ -26,12 +27,18 @@ router.get(
   accountController.adminAccess
 );
 
-// User routes
+// User-related routes
 router.put(
   '/changepassword',
   [authJwt.verifyToken],
   accountController.changePassword
 );
-router.put('/update', [authJwt.verifyToken], accountController.updateProfile);
+router.put(
+  '/update',
+  [authJwt.verifyToken],
+  validateProfileUpdate, // Validate profile update data
+  accountController.updateProfile
+);
 
+// Export the router for use in the main router file
 module.exports = router;

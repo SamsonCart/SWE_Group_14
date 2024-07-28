@@ -1,7 +1,7 @@
 <script setup>
 // Layout for customer
-import { useNotificationStore } from '~/store/notification';
-import Header from '~/components/general/Header.vue';
+import { useNotificationStore } from '@/store/notification';
+import Header from '@/components/general/Header.vue';
 
 const notificationStore = useNotificationStore();
 </script>

@@ -28,20 +28,6 @@ const statisticsData = [
     color: 'success',
     id: 'user',
   },
-  {
-    title: 'Post Category',
-    stats: '',
-    icon: 'mdi-cellphone-link',
-    color: 'warning',
-    id: 'postCategory',
-  },
-  {
-    title: 'Post',
-    stats: '',
-    icon: 'mdi-currency-usd',
-    color: 'info',
-    id: 'post',
-  },
 ]
 </script>
 

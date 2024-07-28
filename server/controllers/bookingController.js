@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
-const Booking = require('../models/booking');
-const Service = require('../models/service'); // Adjust the path as necessary
-const User = require('../models/user'); // Adjust the path as necessary
+const Booking = require('../models/booking'); // Model for booking data
+const Service = require('../models/service'); // Model for service data
+const User = require('../models/user'); // Model for user data
 
 // Create a new booking
 exports.createBooking = async (req, res) => {
@@ -10,10 +10,11 @@ exports.createBooking = async (req, res) => {
     await newBooking.save();
     return res.status(201).json({ isSuccess: true, data: newBooking });
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: error.message }); // Handle errors
   }
 };
 
+// Get bookings with optional filters
 exports.getBookings = async (req, res) => {
   try {
     const { businessId, customerId, serviceId, status, startDate, endDate } =
@@ -71,7 +72,7 @@ exports.getBookings = async (req, res) => {
 
     return res.status(200).json({ isSuccess: true, data: bookings });
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: error.message }); // Handle errors
   }
 };
 
@@ -82,11 +83,11 @@ exports.getBookingById = async (req, res) => {
     if (!booking) return res.status(404).json({ error: 'Booking not found' });
     return res.status(200).json({ isSuccess: true, data: booking });
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: error.message }); // Handle errors
   }
 };
 
-// Update a booking by ID
+// Update a booking
 exports.updateBooking = async (req, res) => {
   try {
     const updatedBooking = await Booking.findByIdAndUpdate(
@@ -98,18 +99,18 @@ exports.updateBooking = async (req, res) => {
       return res.status(404).json({ error: 'Booking not found' });
     return res.status(200).json({ isSuccess: true, data: updatedBooking });
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: error.message }); // Handle errors
   }
 };
 
-// Delete a booking by ID
+// Delete a booking
 exports.deleteBooking = async (req, res) => {
   try {
     const deletedBooking = await Booking.findByIdAndDelete(req.params.id);
     if (!deletedBooking)
       return res.status(404).json({ error: 'Booking not found' });
-    return res.status(204).send();
+    return res.status(200).json({ isSuccess: true, message: 'Booking deleted' });
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: error.message }); // Handle errors
   }
 };
