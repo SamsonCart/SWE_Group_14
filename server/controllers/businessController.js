@@ -32,9 +32,10 @@ exports.createBusiness = async (req, res) => {
           image.replace('temp/', '')
         );
         fs.renameSync(tempPath, livePath); // Move the file
-        return image;
+        return image.replace('temp/', '');
       });
     }
+    console.log('createBusiness :>> businessData', businessData);
 
     const business = new Business(businessData); // Create a new Business instance
     await business.save(); // Save the business to the database
@@ -130,11 +131,13 @@ exports.updateBusiness = async (req, res) => {
     const originalImages = business.images || [];
     const newImages = req.body.images || [];
 
+    console.log('updateBusiness :>> originalImages', originalImages);
     // Determine which images have been removed
     const removedImages = originalImages.filter(
       (img) => !newImages.includes(img)
     );
 
+    console.log('updateBusiness :>> removedImages', removedImages);
     // Delete removed images from the live directory
     removedImages.forEach((img) => {
       const imgPath = path.join(__dirname, '..', LIVE_DIR, img);

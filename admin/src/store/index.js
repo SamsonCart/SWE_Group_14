@@ -12,6 +12,7 @@ export const useMainStore = defineStore('main', {
   getters: {},
   actions: {
     async init() {
+      // init stores
       await useHomepageStore().init()
       await useAuthStore().init()
     },

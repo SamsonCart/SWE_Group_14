@@ -18,6 +18,7 @@ const formData = ref({
   email: user.value.email,
   firstname: user.value.firstname || '',
   lastname: user.value.lastname || '',
+  phonenumber: user.value.phonenumber || '',
   street: address.street || '',
   city: address.city || '',
   state: address.state || '',
@@ -113,6 +114,11 @@ const updateProfile = async () => {
         <v-text-field
           v-model="formData.lastname"
           label="Lastname"
+        ></v-text-field>
+        <!-- Phone number input field -->
+        <v-text-field
+          v-model="formData.phonenumber"
+          label="Phone number"
         ></v-text-field>
         <!-- Street input field -->
         <v-text-field v-model="formData.street" label="Street"></v-text-field>

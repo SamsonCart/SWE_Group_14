@@ -1,9 +1,4 @@
 <script setup>
-definePageMeta({
-  // Define middleware for this page to require authentication
-  middleware: 'auth'
-});
-
 // Import necessary modules and components
 import { useUserStore } from '@/store/user'; // Import the user store for accessing user data
 import ProfileInfo from '@/components/user/ProfileInfo.vue'; // Import component for displaying profile info

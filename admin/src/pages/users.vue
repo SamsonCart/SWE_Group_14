@@ -1,54 +1,94 @@
 <script setup>
-// Importing necessary modules and components
-import { computed, ref, onMounted } from 'vue'
-import { useMessageStore, useUserStore } from '@/store'
+import { ref, onMounted, watch } from 'vue'
+import { VDataTableServer } from 'vuetify/lib/labs/components.mjs'
 import Create from '@/components/users/Create.vue'
 import Edit from '@/components/users/Edit.vue'
 import Delete from '@/components/users/Delete.vue'
+import { useMessageStore, useUserStore } from '@/store'
+import { debounce } from 'lodash-es'
 
-// Initialize user and message stores
+// Initialize the user store and message store from Pinia
 const userStore = useUserStore()
 const messageStore = useMessageStore()
 
-// Computed property to get the list of users from the user store
-const data = computed(() => userStore.getUsers)
+// State variables for component behavior
+const editing = ref(false) // Indicates if a user is being edited
+const creating = ref(false) // Indicates if a user is being created
+const loading = ref(false) // Indicates if data is being loaded
+const user = ref({}) // Holds the user data for editing/creating
 
-// Reactive references to manage the state of editing and creating
-const editing = ref(false)
-const creating = ref(false)
+// Filter state variables
+const search = ref('') // Used for triggering data reload
+const name = ref('') // Filter by username
+const email = ref('') // Filter by email
+const selectedRoles = ref([]) // Filter by selected roles
+const isActive = ref(null) // Filter by active status
 
-// Reactive reference to store the user data for editing
-const user = ref({})
-
-// Fetch initial data when the component is mounted
+// Load initial data when the component is mounted
 onMounted(async () => {
-  await userStore.init()
+  await userStore.init() // Initialize the user store
 })
 
-// Function to handle edit action
+// Function to load items from the store with filters, sorting, and pagination
+const loadItems = async ({ page, itemsPerPage, sortBy }) => {
+  try {
+    loading.value = true // Set loading state to true
+    const filter = {
+      username: name.value, // Username filter
+      email: email.value, // Email filter
+      roles: selectedRoles.value, // Roles filter
+      isActive: isActive.value, // Active status filter
+    }
+    // Set users in the store with the current filters, pagination, and sorting
+    await userStore.setUsers(page, itemsPerPage, sortBy, filter)
+    loading.value = false // Set loading state to false after loading
+  } catch (error) {
+    loading.value = false // Set loading state to false if an error occurs
+    console.error('loadItems :>> error', error) // Log the error
+  }
+}
+
+// Function to set up editing mode with the selected user data
 const edit = value => {
-  user.value = { ...value }
-  creating.value = false
-  editing.value = true
+  user.value = { ...value } // Copy the selected user data to the user ref
+  creating.value = false // Disable creating mode
+  editing.value = true // Enable editing mode
 }
 
-// Function to handle create action
+// Function to set up creating mode
 const create = () => {
-  user.value = {}
-  editing.value = false
-  creating.value = true
+  user.value = {} // Clear the user data
+  editing.value = false // Disable editing mode
+  creating.value = true // Enable creating mode
 }
 
-// Table headers definition
+// Headers for the data table
 const headers = ref([
-  { title: 'Id', key: '_id', align: ' d-none' },
-  { title: 'Username', key: 'username' },
-  { title: 'E-Mail', key: 'email' },
-  { title: 'Roles', key: 'roles' },
-  { title: 'isActive', key: 'isActive' },
-  { title: 'Created Time', key: 'createdTime' },
-  { title: 'Action', key: 'action', width: '180px' },
+  { title: 'Id', key: '_id', align: ' d-none' }, // ID column
+  { title: 'Username', key: 'username' }, // Username column
+  { title: 'E-Mail', key: 'email' }, // Email column
+  { title: 'Roles', key: 'roles' }, // Roles column
+  { title: 'isActive', key: 'isActive' }, // Active status column
+  { title: 'Created Time', key: 'createdTime' }, // Created time column
+  { title: 'Action', key: 'action', width: '180px' }, // Action column
 ])
+
+// Function to clear all filters
+const clearFilters = () => {
+  name.value = '' // Clear username filter
+  email.value = '' // Clear email filter
+  selectedRoles.value = [] // Clear roles filter
+  isActive.value = null // Clear active status filter
+  search.value = String(Date.now()) // Trigger data reload
+}
+
+// Debounced search function to reduce the number of queries
+const debouncedSearch = debounce(() => {
+  search.value = String(Date.now()) // Trigger data reload with debounce
+}, 300)
+
+// Watch for changes in filter variables and trigger the debounced search
+watch([name, email, selectedRoles, isActive], debouncedSearch)
 </script>
 
 <template>
@@ -79,7 +119,7 @@ const headers = ref([
     </VRow>
   </VContainer>
 
-  <!-- Edit user component -->
+  <!-- Edit component -->
   <Edit
     v-if="editing"
     :editing="editing"
@@ -87,14 +127,14 @@ const headers = ref([
     @updateEditing="val => (editing = val)"
   />
 
-  <!-- Create user component -->
+  <!-- Create component -->
   <Create
     v-if="creating"
     :creating="creating"
     @updateCreating="val => (creating = val)"
   />
 
-  <!-- Button to trigger create action -->
+  <!-- Button to create a new user -->
   <VBtn
     v-show="!creating && !editing"
     @click="create()"
@@ -103,31 +143,91 @@ const headers = ref([
     <VIcon icon="mdi-plus" />
   </VBtn>
 
-  <!-- Data table to display users -->
-  <VDataTable
+  <!-- Data table for users -->
+  <VDataTableServer
     v-if="!editing && !creating"
-    items-per-page="10"
+    v-model:items-per-page="userStore.pageSize"
     :headers="headers"
-    :items="data"
+    :items="userStore.users"
+    :items-length="userStore.total"
+    :loading="loading"
+    :search="search"
     item-value="name"
+    @update:options="loadItems"
     class="elevation-1"
   >
-    <!-- Slot for isActive column -->
+    <!-- Header template for search filters -->
+    <template v-slot:thead>
+      <tr>
+        <td>
+          <v-text-field
+            v-model="name"
+            class="ma-2"
+            density="compact"
+            placeholder="Search username..."
+            hide-details
+          ></v-text-field>
+        </td>
+        <td>
+          <v-text-field
+            v-model="email"
+            class="ma-2"
+            density="compact"
+            placeholder="Search email..."
+            hide-details
+          ></v-text-field>
+        </td>
+        <td>
+          <v-select
+            v-model="selectedRoles"
+            class="ma-2"
+            density="compact"
+            :items="userStore.roles"
+            item-title="name"
+            item-value="_id"
+            multiple
+            placeholder="Select roles"
+            hide-details
+          ></v-select>
+        </td>
+        <td>
+          <v-select
+            v-model="isActive"
+            class="ma-2"
+            density="compact"
+            :items="[
+              { text: 'Active', value: true },
+              { text: 'Inactive', value: false },
+            ]"
+            item-title="text"
+            item-value="value"
+            placeholder="Select status"
+            hide-details
+          ></v-select>
+        </td>
+        <td></td>
+        <td>
+          <VBtn @click="clearFilters">Clear</VBtn>
+        </td>
+      </tr>
+    </template>
+
+    <!-- Template for displaying the active status -->
     <template v-slot:item.isActive="{ value }">
       <VBtn
-        :color="value === true ? 'success' : 'error'"
+        :color="value ? 'success' : 'error'"
         disabled
       >
-        {{ value ? 'Active' : 'Not Active' }}
+        {{ value ? 'Active' : 'Disabled' }}
       </VBtn>
     </template>
 
-    <!-- Slot for roles column -->
+    <!-- Template for displaying roles -->
     <template v-slot:item.roles="{ value }">
       {{ value.map(role => role.name).join(', ') }}
     </template>
 
-    <!-- Slot for action column -->
+    <!-- Template for action buttons (edit and delete) -->
     <template v-slot:item.action="{ item }">
       <VBtn
         @click="edit(item)"
@@ -136,16 +236,15 @@ const headers = ref([
         <VIcon icon="mdi-pencil" />
       </VBtn>
 
-      <!-- Delete user component -->
       <Delete
         :user="user"
         @click="user = item"
       />
     </template>
 
-    <!-- Slot for createdTime column -->
+    <!-- Template for displaying the created time -->
     <template v-slot:item.createdTime="{ value }">
-      <span v-if="value">{{ value.substring(0, 16).replace('T', ', 	') }}</span>
+      <span v-if="value">{{ value.substring(0, 16).replace('T', ', ') }}</span>
     </template>
-  </VDataTable>
+  </VDataTableServer>
 </template>

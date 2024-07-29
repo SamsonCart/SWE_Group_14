@@ -53,18 +53,18 @@ const login = () => {
 };
 
 // On component mount, handle account activation if necessary
-onMounted(async () => {
-  await nextTick();
-  const { type, email, authCode } = useRoute().query;
+// onMounted(async () => {
+//   await nextTick();
+//   const { type, email, authCode } = useRoute().query;
 
-  if (type === 'activate') {
-    userStore.activate({ email, authCode }).then((res) => {
-      if (res) {
-        useRouter().push('/dashboard');
-      }
-    });
-  }
-});
+//   if (type === 'activate') {
+//     userStore.activate({ email, authCode }).then((res) => {
+//       if (res) {
+//         useRouter().push('/dashboard');
+//       }
+//     });
+//   }
+// });
 </script>
 
 <template>

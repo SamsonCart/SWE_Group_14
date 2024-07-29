@@ -26,7 +26,7 @@ async function seedBusinesses(businessUserCount) {
       const locationData = locationList[index % locationList.length];
       const business = new Business({
         owner: user._id,
-        businessName: businessData.businessName,
+        name: businessData.name,
         description: businessData.description,
         address: {
           street: locationData.street,
@@ -38,7 +38,7 @@ async function seedBusinesses(businessUserCount) {
             longitude: locationData.coordinates.longitude
           }
         },
-        phoneNumber: businessData.phoneNumber,
+        phonenumber: businessData.phonenumber,
         email: businessData.email,
         images: []
       });

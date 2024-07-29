@@ -47,7 +47,16 @@ exports.getBookings = async (req, res) => {
           as: 'customer'
         }
       },
-      { $unwind: '$customer' }
+      { $unwind: '$customer' },
+      {
+        $lookup: {
+          from: 'businesses',
+          localField: 'service.businessId',
+          foreignField: '_id',
+          as: 'business'
+        }
+      },
+      { $unwind: '$business' }
     ];
 
     if (businessId) {
@@ -62,9 +71,29 @@ exports.getBookings = async (req, res) => {
         date: 1,
         startTime: 1,
         endTime: 1,
+        price: 1,
         status: 1,
-        service: { id: '$service._id', name: '$service.title' },
-        customer: { id: '$customer._id', email: '$customer.email' }
+        customerName: 1,
+        customerEmail: 1,
+        customerPhonenumber: 1,
+        service: {
+          id: '$service._id',
+          name: '$service.title',
+          description: '$service.description'
+        },
+        customer: {
+          id: '$customer._id',
+          firstname: '$customer.firstname',
+          lastname: '$customer.lastname',
+          phonenumber: '$customer.phonenumber',
+          email: '$customer.email'
+        },
+        business: {
+          id: '$business._id',
+          name: '$business.name',
+          email: '$business.email',
+          phonenumber: '$business.phonenumber'
+        }
       }
     });
 
@@ -109,7 +138,9 @@ exports.deleteBooking = async (req, res) => {
     const deletedBooking = await Booking.findByIdAndDelete(req.params.id);
     if (!deletedBooking)
       return res.status(404).json({ error: 'Booking not found' });
-    return res.status(200).json({ isSuccess: true, message: 'Booking deleted' });
+    return res
+      .status(200)
+      .json({ isSuccess: true, message: 'Booking deleted' });
   } catch (error) {
     return res.status(500).json({ error: error.message }); // Handle errors
   }

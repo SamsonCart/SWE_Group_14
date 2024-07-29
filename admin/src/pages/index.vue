@@ -1,6 +1,6 @@
 <script setup>
-import AnalyticsAward from '@/views/dashboards/analytics/AnalyticsAward.vue'
-import AnalyticsTransactions from '@/views/dashboards/analytics/AnalyticsTransactions.vue'
+import AnalyticsAward from '@/components/dashboards/analytics/AnalyticsAward.vue'
+import AnalyticsTransactions from '@/components/dashboards/analytics/AnalyticsTransactions.vue'
 
 </script>
 

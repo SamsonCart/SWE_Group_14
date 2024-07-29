@@ -17,14 +17,15 @@ const User = mongoose.model(
       type: String,
       required: true
     },
-    firstname: String,
-    lastname: String,
     roles: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Role'
       }
     ],
+    firstname: String,
+    lastname: String,
+    phonenumber: String,
     address: {
       street: String,
       city: String,

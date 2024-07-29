@@ -21,7 +21,9 @@ export const useBusinessStore = defineStore('business', {
       try {
         const userStore = useUserStore();
         const owner = userStore.getUser.id;
-        const response = await request('get', '/business', { owner });
+        console.log('owner :>> ', owner);
+        const response = await request('get', 'business', { owner });
+
         if (response?.data) {
           this.business = response.data[0];
         }
@@ -34,7 +36,7 @@ export const useBusinessStore = defineStore('business', {
     async createBusiness(businessData) {
       const notificationStore = useNotificationStore();
       try {
-        const response = await request('post', '/business', businessData);
+        const response = await request('post', 'business', businessData);
         if (response?.data) {
           this.business = response.data;
           notificationStore.showSuccess('Business created successfully');
@@ -50,7 +52,7 @@ export const useBusinessStore = defineStore('business', {
       try {
         const response = await request(
           'put',
-          `/business/${businessId}`,
+          `business/${businessId}`,
           businessData
         );
         if (response?.data) {
@@ -164,12 +166,22 @@ export const useBusinessStore = defineStore('business', {
           bookingData
         );
         if (response?.data) {
-          const index = this.bookings.findIndex(
-            (booking) => booking._id === bookingId
-          );
-          if (index !== -1) {
-            this.bookings.splice(index, 1, response.data);
-          }
+          this.bookings = this.bookings.map((booking) => {
+            if (response.data._id === bookingId) {
+              return {
+                ...booking,
+                date: response.data.date,
+                customerId: response.data.customerId,
+                customerName: response.data.customerName,
+                customerEmail: response.data.customerEmail,
+                customerEmail: response.data.customerPhonenumber,
+                startTime: response.data.startTime,
+                endTime: response.data.endTime,
+                status: response.data.status
+              };
+            }
+            return booking;
+          });
           notificationStore.showSuccess('Booking updated successfully');
         }
       } catch (error) {
@@ -184,7 +196,7 @@ export const useBusinessStore = defineStore('business', {
         const response = await request('delete', `/booking/${bookingId}`);
         if (response?.data) {
           this.bookings = this.bookings.filter(
-            (booking) => booking._id !== bookingId
+            (booking) => response.data._id !== bookingId
           );
           notificationStore.showSuccess('Booking deleted successfully');
         }
@@ -192,6 +204,6 @@ export const useBusinessStore = defineStore('business', {
         notificationStore.showError('Error deleting booking');
         console.error('Error deleting booking:', error);
       }
-    },
+    }
   }
 });

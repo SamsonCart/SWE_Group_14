@@ -1,5 +1,38 @@
 <template>
   <v-container>
+    <!-- Section for recent bookings -->
+    <v-row>
+      <v-col cols="12" md="6">
+        <v-card>
+          <v-card-title>My Recent Bookings</v-card-title>
+          <v-card-text>
+            <!-- List of recent bookings if available -->
+            <v-list v-if="bookings.length">
+              <v-list-item
+                v-for="booking in bookings"
+                :key="booking.id"
+                :to="`/bookings`"
+              >
+                <v-list-item-content>
+                  <v-list-item-subtitle class="d-flex justify-space-between">
+                    {{ new Date(booking.date).toDateString() }}
+                    <v-chip :color="statusColor(booking.status)">
+                      {{ booking.status }}
+                    </v-chip>
+                  </v-list-item-subtitle>
+                  <v-list-item-subtitle>
+                    Service: {{ booking.service.name }}
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+            <!-- Alert message if no recent bookings -->
+            <v-alert v-else type="info"> No recent bookings. </v-alert>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+    
     <!-- Section for searching local businesses -->
     <v-row>
       <v-col cols="12">
@@ -35,23 +68,24 @@
             </v-form>
             <!-- Map component displaying the search area and businesses -->
             <div>
-              <l-map
+              <LMap
                 style="height: 500px; width: 100%"
                 :zoom="10"
                 :center="mapCenterCoordinates"
+                :use-global-leaflet="false"
               >
-                <l-tile-layer
+                <LTileLayer
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                ></l-tile-layer>
+                />
                 <!-- Circle indicating the search radius in meters -->
-                <l-circle
+                <LCircle
                   :lat-lng="mapCenterCoordinates"
                   :radius="searchRadius * 1609.34"
                 >
                   >
-                </l-circle>
+                </LCircle>
                 <!-- Markers for each valid business -->
-                <l-marker
+                <LMarker
                   v-for="business in validBusinesses"
                   :key="business._id"
                   :lat-lng="[
@@ -59,16 +93,16 @@
                     business.address.coordinates.longitude
                   ]"
                 >
-                  <l-popup>
-                    <b>{{ business.businessName }}</b
+                  <LPopup>
+                    <b>{{ business.name }}</b
                     ><br />
                     {{ business.address.street }}<br />
                     <router-link :to="`/business/${business._id}`"
                       >View Details</router-link
                     >
-                  </l-popup>
-                </l-marker>
-              </l-map>
+                  </LPopup>
+                </LMarker>
+              </LMap>
             </div>
           </v-card-text>
         </v-card>
@@ -101,47 +135,12 @@
         </v-card>
       </v-col>
     </v-row>
-
-    <!-- Section for recent bookings -->
-    <v-row>
-      <v-col cols="12" md="6">
-        <v-card>
-          <v-card-title>My Recent Bookings</v-card-title>
-          <v-card-text>
-            <!-- List of recent bookings if available -->
-            <v-list v-if="bookings.length">
-              <v-list-item
-                v-for="booking in bookings"
-                :key="booking.id"
-                :to="`/bookings`"
-              >
-                <v-list-item-content>
-                  <v-list-item-subtitle class="d-flex justify-space-between">
-                    {{ new Date(booking.date).toDateString() }}
-                    <v-chip :color="statusColor(booking.status)">
-                      {{ booking.status }}
-                    </v-chip>
-                  </v-list-item-subtitle>
-                  <v-list-item-subtitle>
-                    Service: {{ booking.service.name }}
-                  </v-list-item-subtitle>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list>
-            <!-- Alert message if no recent bookings -->
-            <v-alert v-else type="info"> No recent bookings. </v-alert>
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
   </v-container>
 </template>
 
 <script setup>
 import { useUserStore } from '@/store'; // Import user store for accessing user data
 import BusinessCard from '@/components/customer/BusinessCard'; // Import BusinessCard component for displaying business details
-import { ref, computed, onMounted } from 'vue'; // Import Vue composition API functions
-import { useRouter } from 'vue-router'; // Import Vue Router for navigation
 
 const searchRadius = ref(20); // State variable for the search radius
 const businesses = ref([]); // State variable for storing fetched businesses
@@ -216,7 +215,7 @@ const fetchBusinesses = async () => {
 // Function to filter businesses based on distance from the user's location
 const filterBusinessByDistance = async () => {
   try {
-    const customerId = user.value.id;
+    const customerId = userStore.getUser.id;
     const distance = searchRadius.value;
     const response = await $fetch(`${baseUrl}/business/near`, {
       method: 'GET',

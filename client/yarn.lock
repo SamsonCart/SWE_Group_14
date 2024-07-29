@@ -1134,12 +1134,12 @@
     vite-plugin-checker "^0.7.0"
     vue-bundle-renderer "^2.1.0"
 
-"@nuxtjs/leaflet@^1.0.14":
-  version "1.0.14"
-  resolved "https://registry.yarnpkg.com/@nuxtjs/leaflet/-/leaflet-1.0.14.tgz#2c0c18cc2fe1e97ee01b7cbaa6f440341a9f9737"
-  integrity sha512-wfyboAcwmTqhJ6R9bTLHdufDF0CLJ46vIGhMocoiunhqh0bYPYbsLoS8PWq14m5pT0DTTPgQqyNE8MohgfnqaQ==
+"@nuxtjs/leaflet@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@nuxtjs/leaflet/-/leaflet-1.1.0.tgz#c457fa7b820639343093336366cf9cccd535f50b"
+  integrity sha512-VNgtWazAm0eqzlMzMQ9jZ6dsrBcPyYwS9oABEX1F/IBNN91sbXRdO98UHBCmhcvXNZSQzHWDsV01TVBax40Kyw==
   dependencies:
-    "@types/leaflet" "^1.9.3"
+    "@types/leaflet" "^1.9.12"
     "@vue-leaflet/vue-leaflet" "^0.10.1"
     leaflet "^1.9.4"
 
@@ -1700,7 +1700,7 @@
   dependencies:
     "@types/node" "*"
 
-"@types/leaflet@^1.9.3":
+"@types/leaflet@^1.9.12":
   version "1.9.12"
   resolved "https://registry.yarnpkg.com/@types/leaflet/-/leaflet-1.9.12.tgz#a6626a0b3fba36fd34723d6e95b22e8024781ad6"
   integrity sha512-BK7XS+NyRI291HIo0HCfE18Lp8oA30H1gpi1tf0mF3TgiCEzanQjOqNZ4x126SXzzi2oNSZhZ5axJp1k0iM6jg==
@@ -4538,7 +4538,7 @@ lodash.uniq@^4.5.0:
 
 lodash@^4.17.11, lodash@^4.17.15, lodash@^4.17.21:
   version "4.17.21"
-  resolved "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
 
 long@^5.0.0:

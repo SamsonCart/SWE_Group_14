@@ -4,7 +4,6 @@ This project aims to build a comprehensive booking system for a service marketpl
 
 Google Drive documentation can be viewed here: https://drive.google.com/drive/folders/1Dupu0u9eok5X5bfg0LITFOGVpfv8i3kn
 
-
 ###  ☝️ .env file in the `server` folder
 
 You should create a .env file in the server folder.
@@ -113,6 +112,7 @@ client/
 │       ├── dashboard.vue
 │       ├── inquiries.vue
 │       ├── profile.vue
+│       ├── reviews.vue
 │       └── services.vue
 │   ├── bookings.vue
 │   ├── dashboard.vue

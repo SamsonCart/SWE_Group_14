@@ -45,7 +45,7 @@ onMounted(() => {
     v-if="creating"
     v-model="valid"
     lazy-validation
-    style="margin-bottom: 20px;"
+    style="margin-bottom: 20px"
     @submit.prevent="() => {}"
   >
     <VRow>

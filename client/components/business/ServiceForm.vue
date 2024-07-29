@@ -8,18 +8,20 @@
       </v-card-title>
       <v-card-text>
         <!-- Form to submit service details -->
-        <v-form @submit.prevent="submitForm">
+        <v-form ref="form" @submit.prevent="submitForm" v-model="isFormValid">
           <!-- Title input field -->
           <v-text-field
             v-model="service.title"
             label="Title"
             required
+            :rules="[(v) => !!v || 'Title is required']"
           ></v-text-field>
           <!-- Description input field -->
           <v-textarea
             v-model="service.description"
             label="Description"
             required
+            :rules="[(v) => !!v || 'Description is required']"
           ></v-textarea>
           <!-- Price input field -->
           <v-text-field
@@ -27,6 +29,7 @@
             label="Price"
             type="number"
             required
+            :rules="[(v) => !!v || 'Price is required']"
           ></v-text-field>
 
           <!-- Divider for separation -->
@@ -49,7 +52,9 @@
                       <!-- Day of the Week select field -->
                       <v-select
                         v-model="entry.dayOfWeek"
-                        :items="[0, 1, 2, 3, 4, 5, 6]"
+                        :items="daysOfWeek"
+                        item-title="text"
+                        item-value="value"
                         label="Day of the Week"
                         required
                       ></v-select>
@@ -102,9 +107,9 @@
           <!-- Card actions with Save/Create and Cancel buttons -->
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="primary" type="submit">{{
-              isEditMode ? 'Save' : 'Create'
-            }}</v-btn>
+            <v-btn color="primary" type="submit" :disabled="!isFormValid">
+              {{ isEditMode ? 'Save' : 'Create' }}
+            </v-btn>
             <v-btn color="secondary" @click="closeForm">Cancel</v-btn>
           </v-card-actions>
         </v-form>
@@ -114,9 +119,6 @@
 </template>
 
 <script setup>
-// Import necessary functions from Vue
-import { ref, watch, defineProps, defineEmits } from 'vue';
-
 // Define props that the component accepts
 const props = defineProps({
   modelValue: {
@@ -144,6 +146,9 @@ const emit = defineEmits(['update:modelValue', 'submit']);
 // Reactive reference for dialog open state
 const isDialogOpen = ref(props.modelValue);
 
+// Reactive reference for form validation
+const isFormValid = ref(false);
+
 // Watch for changes in modelValue prop to update isDialogOpen
 watch(
   () => props.modelValue,
@@ -170,8 +175,10 @@ const closeForm = () => {
 
 // Function to submit the form and emit the submit event
 const submitForm = () => {
-  emit('submit', props.service);
-  closeForm();
+  if (isFormValid.value) {
+    emit('submit', props.service);
+    closeForm();
+  }
 };
 
 // Function to add a new availability entry
@@ -181,7 +188,7 @@ const addAvailability = () => {
       dayOfWeek: 0,
       startTime: '09:00',
       endTime: '18:00',
-      sessionDuration: 40
+      sessionDuration: 60
     });
   }
 };

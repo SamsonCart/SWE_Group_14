@@ -1,482 +1,603 @@
 [
   {
-    "businessName": "Plumber Pros",
+    "name": "Plumber Pros",
     "description": "Professional plumbing services for all your needs.",
     "email": "contact@plumberpros.com",
-    "phoneNumber": "(323) 555-0101"
+    "phonenumber": "(323) 555-0101"
   },
   {
-    "businessName": "Makeup Masters",
+    "name": "Makeup Masters",
     "description": "Expert makeup artists for all occasions.",
     "email": "info@makeupmasters.com",
-    "phoneNumber": "(310) 555-0202"
+    "phonenumber": "(310) 555-0202"
   },
   {
-    "businessName": "AC Repair Experts",
+    "name": "AC Repair Experts",
     "description": "Reliable air conditioning repair and maintenance services.",
     "email": "service@acrepairs.com",
-    "phoneNumber": "(818) 555-0303"
+    "phonenumber": "(818) 555-0303"
   },
   {
-    "businessName": "Electrician Elite",
+    "name": "Electrician Elite",
     "description": "Top-notch electrical services for residential and commercial properties.",
     "email": "support@electricianelite.com",
-    "phoneNumber": "(213) 555-0404"
+    "phonenumber": "(213) 555-0404"
   },
   {
-    "businessName": "Gardening Gurus",
+    "name": "Gardening Gurus",
     "description": "Professional gardening and landscaping services.",
     "email": "hello@gardeninggurus.com",
-    "phoneNumber": "(424) 555-0505"
+    "phonenumber": "(424) 555-0505"
   },
   {
-    "businessName": "Clean Sweep",
+    "name": "Clean Sweep",
     "description": "Expert cleaning services for homes and offices.",
     "email": "booking@cleansweep.com",
-    "phoneNumber": "(626) 555-0606"
+    "phonenumber": "(626) 555-0606"
   },
   {
-    "businessName": "Roof Repair Rangers",
+    "name": "Roof Repair Rangers",
     "description": "Quality roofing repair and installation services.",
     "email": "info@roofrepairrangers.com",
-    "phoneNumber": "(310) 555-0707"
+    "phonenumber": "(310) 555-0707"
   },
   {
-    "businessName": "Locksmith Legends",
+    "name": "Locksmith Legends",
     "description": "Trusted locksmith services for emergencies and installations.",
     "email": "contact@locksmithlegends.com",
-    "phoneNumber": "(323) 555-0808"
+    "phonenumber": "(323) 555-0808"
   },
   {
-    "businessName": "Pest Control Pros",
+    "name": "Pest Control Pros",
     "description": "Effective pest control solutions for homes and businesses.",
     "email": "service@pestcontrolpros.com",
-    "phoneNumber": "(213) 555-0909"
+    "phonenumber": "(213) 555-0909"
   },
   {
-    "businessName": "Painter Perfection",
+    "name": "Painter Perfection",
     "description": "Professional painting services for interior and exterior projects.",
     "email": "support@painterperfection.com",
-    "phoneNumber": "(424) 555-1001"
+    "phonenumber": "(424) 555-1001"
   },
   {
-    "businessName": "Handyman Heroes",
+    "name": "Handyman Heroes",
     "description": "Reliable handyman services for all your repair needs.",
     "email": "hello@handymanheroes.com",
-    "phoneNumber": "(626) 555-1102"
+    "phonenumber": "(626) 555-1102"
   },
   {
-    "businessName": "Carpet Cleaning Crew",
+    "name": "Carpet Cleaning Crew",
     "description": "Expert carpet cleaning services for residential and commercial properties.",
     "email": "booking@carpetcleaningcrew.com",
-    "phoneNumber": "(310) 555-1203"
+    "phonenumber": "(310) 555-1203"
   },
   {
-    "businessName": "HVAC Harmony",
+    "name": "HVAC Harmony",
     "description": "Top-quality HVAC installation and repair services.",
     "email": "info@hvacharmony.com",
-    "phoneNumber": "(818) 555-1304"
+    "phonenumber": "(818) 555-1304"
   },
   {
-    "businessName": "Window Washing Wonders",
+    "name": "Window Washing Wonders",
     "description": "Professional window cleaning services for sparkling results.",
     "email": "contact@windowwashingwonders.com",
-    "phoneNumber": "(213) 555-1405"
+    "phonenumber": "(213) 555-1405"
   },
   {
-    "businessName": "Tree Trimming Team",
+    "name": "Tree Trimming Team",
     "description": "Expert tree trimming and removal services.",
     "email": "service@treetrimmingteam.com",
-    "phoneNumber": "(424) 555-1506"
+    "phonenumber": "(424) 555-1506"
   },
   {
-    "businessName": "Pool Cleaning Pros",
+    "name": "Pool Cleaning Pros",
     "description": "Reliable pool cleaning and maintenance services.",
     "email": "support@poolcleaningpros.com",
-    "phoneNumber": "(626) 555-1607"
+    "phonenumber": "(626) 555-1607"
   },
   {
-    "businessName": "Security System Solutions",
+    "name": "Security System Solutions",
     "description": "Advanced security system installation and monitoring.",
     "email": "hello@securitysolutions.com",
-    "phoneNumber": "(310) 555-1708"
+    "phonenumber": "(310) 555-1708"
   },
   {
-    "businessName": "Garage Door Gurus",
+    "name": "Garage Door Gurus",
     "description": "Professional garage door repair and installation services.",
     "email": "booking@garagedoorgurus.com",
-    "phoneNumber": "(323) 555-1809"
+    "phonenumber": "(323) 555-1809"
   },
   {
-    "businessName": "Flooring Fanatics",
+    "name": "Flooring Fanatics",
     "description": "Expert flooring installation and repair services.",
     "email": "info@flooringfanatics.com",
-    "phoneNumber": "(818) 555-1901"
+    "phonenumber": "(818) 555-1901"
   },
   {
-    "businessName": "Upholstery Unlimited",
+    "name": "Upholstery Unlimited",
     "description": "Professional upholstery cleaning and repair services.",
     "email": "contact@upholsteryunlimited.com",
-    "phoneNumber": "(213) 555-2002"
+    "phonenumber": "(213) 555-2002"
   },
   {
-    "businessName": "Junk Removal Pros",
+    "name": "Junk Removal Pros",
     "description": "Efficient junk removal services for homes and businesses.",
     "email": "service@junkremovalpros.com",
-    "phoneNumber": "(424) 555-2103"
+    "phonenumber": "(424) 555-2103"
   },
   {
-    "businessName": "Moving Masters",
+    "name": "Moving Masters",
     "description": "Reliable moving services for local and long-distance moves.",
     "email": "support@movingmasters.com",
-    "phoneNumber": "(626) 555-2204"
+    "phonenumber": "(626) 555-2204"
   },
   {
-    "businessName": "Home Inspection Heroes",
+    "name": "Home Inspection Heroes",
     "description": "Comprehensive home inspection services.",
     "email": "hello@homeinspectionheroes.com",
-    "phoneNumber": "(310) 555-2305"
+    "phonenumber": "(310) 555-2305"
   },
   {
-    "businessName": "Solar Solutions",
+    "name": "Solar Solutions",
     "description": "Expert solar panel installation and maintenance services.",
     "email": "booking@solarsolutions.com",
-    "phoneNumber": "(323) 555-2406"
+    "phonenumber": "(323) 555-2406"
   },
   {
-    "businessName": "Landscaping Legends",
+    "name": "Landscaping Legends",
     "description": "Professional landscaping design and maintenance services.",
     "email": "info@landscapinglegends.com",
-    "phoneNumber": "(818) 555-2507"
+    "phonenumber": "(818) 555-2507"
   },
   {
-    "businessName": "Appliance Repair Allies",
+    "name": "Appliance Repair Allies",
     "description": "Reliable appliance repair services for all major brands.",
     "email": "contact@appliancerepairallies.com",
-    "phoneNumber": "(213) 555-2608"
+    "phonenumber": "(213) 555-2608"
   },
   {
-    "businessName": "Interior Design Innovators",
+    "name": "Interior Design Innovators",
     "description": "Creative interior design services for homes and businesses.",
     "email": "service@interiordesigninnovators.com",
-    "phoneNumber": "(424) 555-2709"
+    "phonenumber": "(424) 555-2709"
   },
   {
-    "businessName": "Lawn Care Leaders",
+    "name": "Lawn Care Leaders",
     "description": "Expert lawn care services for a beautiful yard.",
     "email": "support@lawncareleaders.com",
-    "phoneNumber": "(626) 555-2801"
+    "phonenumber": "(626) 555-2801"
   },
   {
-    "businessName": "Gutter Cleaning Gurus",
+    "name": "Gutter Cleaning Gurus",
     "description": "Professional gutter cleaning and maintenance services.",
     "email": "hello@guttercleaninggurus.com",
-    "phoneNumber": "(310) 555-2902"
+    "phonenumber": "(310) 555-2902"
   },
   {
-    "businessName": "Tile and Grout Experts",
+    "name": "Tile and Grout Experts",
     "description": "Expert tile and grout cleaning and repair services.",
     "email": "booking@tileandgroutexperts.com",
-    "phoneNumber": "(323) 555-3003"
+    "phonenumber": "(323) 555-3003"
   },
   {
-    "businessName": "Pest Management Masters",
+    "name": "Pest Management Masters",
     "description": "Comprehensive pest management and extermination services.",
     "email": "info@pestmanagementmasters.com",
-    "phoneNumber": "(818) 555-3104"
+    "phonenumber": "(818) 555-3104"
   },
   {
-    "businessName": "Deck and Patio Pros",
+    "name": "Deck and Patio Pros",
     "description": "Professional deck and patio construction and repair services.",
     "email": "contact@deckandpatiopros.com",
-    "phoneNumber": "(213) 555-3205"
+    "phonenumber": "(213) 555-3205"
   },
   {
-    "businessName": "Basement Waterproofing Wizards",
+    "name": "Basement Waterproofing Wizards",
     "description": "Reliable basement waterproofing and repair services.",
     "email": "service@basementwaterproofingwizards.com",
-    "phoneNumber": "(424) 555-3306"
+    "phonenumber": "(424) 555-3306"
   },
   {
-    "businessName": "Home Automation Heroes",
+    "name": "Home Automation Heroes",
     "description": "Advanced home automation and smart home solutions.",
     "email": "support@homeautomationheroes.com",
-    "phoneNumber": "(626) 555-3407"
+    "phonenumber": "(626) 555-3407"
   },
   {
-    "businessName": "Fence Installation Experts",
+    "name": "Fence Installation Experts",
     "description": "Professional fence installation and repair services.",
     "email": "hello@fenceinstallationexperts.com",
-    "phoneNumber": "(310) 555-3508"
+    "phonenumber": "(310) 555-3508"
   },
   {
-    "businessName": "Mold Remediation Masters",
+    "name": "Mold Remediation Masters",
     "description": "Expert mold remediation and inspection services.",
     "email": "booking@moldremediationmasters.com",
-    "phoneNumber": "(323) 555-3609"
+    "phonenumber": "(323) 555-3609"
   },
   {
-    "businessName": "Garage Organization Gurus",
+    "name": "Garage Organization Gurus",
     "description": "Professional garage organization and storage solutions.",
     "email": "info@garageorganizationgurus.com",
-    "phoneNumber": "(818) 555-3701"
+    "phonenumber": "(818) 555-3701"
   },
   {
-    "businessName": "Window Treatment Wizards",
+    "name": "Window Treatment Wizards",
     "description": "Expert window treatment and blind installation services.",
     "email": "contact@windowtreatmentwizards.com",
-    "phoneNumber": "(213) 555-3802"
+    "phonenumber": "(213) 555-3802"
   },
   {
-    "businessName": "Drywall Repair Pros",
+    "name": "Drywall Repair Pros",
     "description": "Reliable drywall repair and installation services.",
     "email": "service@drywallrepairpros.com",
-    "phoneNumber": "(424) 555-3903"
+    "phonenumber": "(424) 555-3903"
   },
   {
-    "businessName": "Septic Tank Specialists",
+    "name": "Septic Tank Specialists",
     "description": "Professional septic tank cleaning and maintenance services.",
     "email": "support@septictankspecialists.com",
-    "phoneNumber": "(626) 555-4004"
+    "phonenumber": "(626) 555-4004"
   },
   {
-    "businessName": "Insulation Installation Experts",
+    "name": "Insulation Installation Experts",
     "description": "Expert insulation installation and removal services.",
     "email": "hello@insulationexperts.com",
-    "phoneNumber": "(310) 555-4105"
+    "phonenumber": "(310) 555-4105"
   },
   {
-    "businessName": "Power Washing Pros",
+    "name": "Power Washing Pros",
     "description": "Professional power washing services for homes and businesses.",
     "email": "booking@powerwashingpros.com",
-    "phoneNumber": "(323) 555-4206"
+    "phonenumber": "(323) 555-4206"
   },
   {
-    "businessName": "Siding Installation Specialists",
+    "name": "Siding Installation Specialists",
     "description": "Reliable siding installation and repair services.",
     "email": "info@sidinginstallationspecialists.com",
-    "phoneNumber": "(818) 555-4307"
+    "phonenumber": "(818) 555-4307"
   },
   {
-    "businessName": "Emergency Plumbers",
+    "name": "Emergency Plumbers",
     "description": "24/7 emergency plumbing services.",
     "email": "contact@emergencyplumbers.com",
-    "phoneNumber": "(213) 555-4408"
+    "phonenumber": "(213) 555-4408"
   },
   {
-    "businessName": "Water Heater Wizards",
+    "name": "Water Heater Wizards",
     "description": "Expert water heater installation and repair services.",
     "email": "service@waterheaterwizards.com",
-    "phoneNumber": "(424) 555-4509"
+    "phonenumber": "(424) 555-4509"
   },
   {
-    "businessName": "Solar Panel Pros",
+    "name": "Solar Panel Pros",
     "description": "Professional solar panel installation and maintenance.",
     "email": "support@solarpanelpros.com",
-    "phoneNumber": "(626) 555-4601"
+    "phonenumber": "(626) 555-4601"
   },
   {
-    "businessName": "Foundation Repair Experts",
+    "name": "Foundation Repair Experts",
     "description": "Reliable foundation repair and inspection services.",
     "email": "hello@foundationrepairexperts.com",
-    "phoneNumber": "(310) 555-4702"
+    "phonenumber": "(310) 555-4702"
   },
   {
-    "businessName": "Attic Insulation Specialists",
+    "name": "Attic Insulation Specialists",
     "description": "Expert attic insulation and ventilation services.",
     "email": "booking@atticinsulationspecialists.com",
-    "phoneNumber": "(323) 555-4803"
+    "phonenumber": "(323) 555-4803"
   },
   {
-    "businessName": "Concrete Contractors",
+    "name": "Concrete Contractors",
     "description": "Professional concrete installation and repair services.",
     "email": "info@concretecontractors.com",
-    "phoneNumber": "(818) 555-4904"
+    "phonenumber": "(818) 555-4904"
   },
   {
-    "businessName": "Swimming Pool Specialists",
+    "name": "Swimming Pool Specialists",
     "description": "Expert swimming pool installation and maintenance services.",
     "email": "contact@swimmingpoolspecialists.com",
-    "phoneNumber": "(213) 555-5005"
+    "phonenumber": "(213) 555-5005"
   },
   {
-    "businessName": "Rain Gutter Experts",
+    "name": "Rain Gutter Experts",
     "description": "Reliable rain gutter installation and maintenance services.",
     "email": "service@raingutterexperts.com",
-    "phoneNumber": "(424) 555-5106"
+    "phonenumber": "(424) 555-5106"
   },
   {
-    "businessName": "Exterior Painting Pros",
+    "name": "Exterior Painting Pros",
     "description": "Professional exterior painting services for homes and businesses.",
     "email": "support@exteriorpaintingpros.com",
-    "phoneNumber": "(626) 555-5207"
+    "phonenumber": "(626) 555-5207"
   },
   {
-    "businessName": "Chimney Cleaning Champions",
+    "name": "Chimney Cleaning Champions",
     "description": "Expert chimney cleaning and repair services.",
     "email": "hello@chimneycleaningchampions.com",
-    "phoneNumber": "(310) 555-5308"
+    "phonenumber": "(310) 555-5308"
   },
   {
-    "businessName": "Water Damage Restoration",
+    "name": "Water Damage Restoration",
     "description": "Reliable water damage restoration and cleanup services.",
     "email": "booking@waterdamagerestoration.com",
-    "phoneNumber": "(323) 555-5409"
+    "phonenumber": "(323) 555-5409"
   },
   {
-    "businessName": "Heating and Cooling Experts",
+    "name": "Heating and Cooling Experts",
     "description": "Professional heating and cooling installation and repair services.",
     "email": "info@heatingandcoolingexperts.com",
-    "phoneNumber": "(818) 555-5501"
+    "phonenumber": "(818) 555-5501"
   },
   {
-    "businessName": "Flooring Installation Pros",
+    "name": "Flooring Installation Pros",
     "description": "Expert flooring installation and repair services.",
     "email": "contact@flooringinstallationpros.com",
-    "phoneNumber": "(213) 555-5602"
+    "phonenumber": "(213) 555-5602"
   },
   {
-    "businessName": "Custom Cabinet Makers",
+    "name": "Custom Cabinet Makers",
     "description": "Professional custom cabinet design and installation services.",
     "email": "service@customcabinetmakers.com",
-    "phoneNumber": "(424) 555-5703"
+    "phonenumber": "(424) 555-5703"
   },
   {
-    "businessName": "Handyman Helpers",
+    "name": "Handyman Helpers",
     "description": "Reliable handyman services for all your repair needs.",
     "email": "support@handymanhelpers.com",
-    "phoneNumber": "(626) 555-5804"
+    "phonenumber": "(626) 555-5804"
   },
   {
-    "businessName": "Energy Efficiency Experts",
+    "name": "Energy Efficiency Experts",
     "description": "Professional energy efficiency assessments and improvements.",
     "email": "hello@energyefficiencyexperts.com",
-    "phoneNumber": "(310) 555-5905"
+    "phonenumber": "(310) 555-5905"
   },
   {
-    "businessName": "General Contractors",
+    "name": "General Contractors",
     "description": "Expert general contracting services for residential and commercial projects.",
     "email": "booking@generalcontractors.com",
-    "phoneNumber": "(323) 555-6006"
+    "phonenumber": "(323) 555-6006"
   },
   {
-    "businessName": "Roofing Specialists",
+    "name": "Roofing Specialists",
     "description": "Reliable roofing repair and installation services.",
     "email": "info@roofingspecialists.com",
-    "phoneNumber": "(818) 555-6107"
+    "phonenumber": "(818) 555-6107"
   },
   {
-    "businessName": "Painting Professionals",
+    "name": "Painting Professionals",
     "description": "Professional painting services for homes and businesses.",
     "email": "contact@paintingprofessionals.com",
-    "phoneNumber": "(213) 555-6208"
+    "phonenumber": "(213) 555-6208"
   },
   {
-    "businessName": "Plumbing Experts",
+    "name": "Plumbing Experts",
     "description": "Expert plumbing services for residential and commercial properties.",
     "email": "service@plumbingexperts.com",
-    "phoneNumber": "(424) 555-6309"
+    "phonenumber": "(424) 555-6309"
   },
   {
-    "businessName": "Locksmith Services",
+    "name": "Locksmith Services",
     "description": "Trusted locksmith services for emergencies and installations.",
     "email": "support@locksmithservices.com",
-    "phoneNumber": "(626) 555-6401"
+    "phonenumber": "(626) 555-6401"
   },
   {
-    "businessName": "Cleaning Services",
+    "name": "Cleaning Services",
     "description": "Professional cleaning services for homes and offices.",
     "email": "hello@cleaningservices.com",
-    "phoneNumber": "(310) 555-6502"
+    "phonenumber": "(310) 555-6502"
   },
   {
-    "businessName": "Pest Control Services",
+    "name": "Pest Control Services",
     "description": "Effective pest control solutions for homes and businesses.",
     "email": "booking@pestcontrolservices.com",
-    "phoneNumber": "(323) 555-6603"
+    "phonenumber": "(323) 555-6603"
   },
   {
-    "businessName": "Handyman Services",
+    "name": "Handyman Services",
     "description": "Reliable handyman services for all your repair needs.",
     "email": "info@handymanservices.com",
-    "phoneNumber": "(818) 555-6704"
+    "phonenumber": "(818) 555-6704"
   },
   {
-    "businessName": "Moving Services",
+    "name": "Moving Services",
     "description": "Reliable moving services for local and long-distance moves.",
     "email": "contact@movingservices.com",
-    "phoneNumber": "(213) 555-6805"
+    "phonenumber": "(213) 555-6805"
   },
   {
-    "businessName": "Landscaping Services",
+    "name": "Landscaping Services",
     "description": "Professional landscaping design and maintenance services.",
     "email": "service@landscapingservices.com",
-    "phoneNumber": "(424) 555-6906"
+    "phonenumber": "(424) 555-6906"
   },
   {
-    "businessName": "Security Services",
+    "name": "Security Services",
     "description": "Advanced security system installation and monitoring.",
     "email": "support@securityservices.com",
-    "phoneNumber": "(626) 555-7007"
+    "phonenumber": "(626) 555-7007"
   },
   {
-    "businessName": "Window Washing Services",
+    "name": "Window Washing Services",
     "description": "Professional window cleaning services for sparkling results.",
     "email": "hello@windowwashingservices.com",
-    "phoneNumber": "(310) 555-7108"
+    "phonenumber": "(310) 555-7108"
   },
   {
-    "businessName": "Pool Cleaning Services",
+    "name": "Pool Cleaning Services",
     "description": "Reliable pool cleaning and maintenance services.",
     "email": "booking@poolcleaningservices.com",
-    "phoneNumber": "(323) 555-7209"
+    "phonenumber": "(323) 555-7209"
   },
   {
-    "businessName": "Home Inspection Services",
+    "name": "Home Inspection Services",
     "description": "Comprehensive home inspection services.",
     "email": "info@homeinspectionservices.com",
-    "phoneNumber": "(818) 555-7301"
+    "phonenumber": "(818) 555-7301"
   },
   {
-    "businessName": "Solar Installation Services",
+    "name": "Solar Installation Services",
     "description": "Expert solar panel installation and maintenance services.",
     "email": "contact@solarsolutions.com",
-    "phoneNumber": "(213) 555-7402"
+    "phonenumber": "(213) 555-7402"
   },
   {
-    "businessName": "Tree Trimming Services",
+    "name": "Tree Trimming Services",
     "description": "Expert tree trimming and removal services.",
     "email": "service@treetrimmingservices.com",
-    "phoneNumber": "(424) 555-7503"
+    "phonenumber": "(424) 555-7503"
   },
   {
-    "businessName": "Appliance Repair Services",
+    "name": "Appliance Repair Services",
     "description": "Reliable appliance repair services for all major brands.",
     "email": "support@appliancerepairservices.com",
-    "phoneNumber": "(626) 555-7604"
+    "phonenumber": "(626) 555-7604"
   },
   {
-    "businessName": "Carpet Cleaning Services",
+    "name": "Carpet Cleaning Services",
     "description": "Expert carpet cleaning services for residential and commercial properties.",
     "email": "hello@carpetcleaningservices.com",
-    "phoneNumber": "(310) 555-7705"
+    "phonenumber": "(310) 555-7705"
   },
   {
-    "businessName": "Tile and Grout Services",
+    "name": "Tile and Grout Services",
     "description": "Expert tile and grout cleaning and repair services.",
     "email": "booking@tileandgroutservices.com",
-    "phoneNumber": "(323) 555-7806"
+    "phonenumber": "(323) 555-7806"
   },
   {
-    "businessName": "Basement Waterproofing Services",
+    "name": "Basement Waterproofing Services",
     "description": "Reliable basement waterproofing and repair services.",
     "email": "info@basementwaterproofingservices.com",
-    "phoneNumber": "(818) 555-7907"
+    "phonenumber": "(818) 555-7907"
   },
   {
-    "businessName": "Garage Door Services",
+    "name": "Garage Door Services",
     "description": "Professional garage door repair and installation services.",
     "email": "contact@garagedoorservices.com",
-    "phoneNumber": "(213) 555-8008"
+    "phonenumber": "(213) 555-8008"
+  },
+
+  {
+    "name": "Plumber Pros",
+    "description": "Professional plumbing services for all your needs.",
+    "email": "contact@plumberpros.com",
+    "phonenumber": "(323) 555-0101"
+  },
+  {
+    "name": "Makeup Masters",
+    "description": "Expert makeup artists for all occasions.",
+    "email": "info@makeupmasters.com",
+    "phonenumber": "(310) 555-0202"
+  },
+  {
+    "name": "AC Repair Experts",
+    "description": "Reliable air conditioning repair and maintenance services.",
+    "email": "service@acrepairs.com",
+    "phonenumber": "(818) 555-0303"
+  },
+  {
+    "name": "Electrician Elite",
+    "description": "Top-notch electrical services for residential and commercial properties.",
+    "email": "support@electricianelite.com",
+    "phonenumber": "(213) 555-0404"
+  },
+  {
+    "name": "Gardening Gurus",
+    "description": "Professional gardening and landscaping services.",
+    "email": "hello@gardeninggurus.com",
+    "phonenumber": "(424) 555-0505"
+  },
+  {
+    "name": "Clean Sweep",
+    "description": "Expert cleaning services for homes and offices.",
+    "email": "booking@cleansweep.com",
+    "phonenumber": "(626) 555-0606"
+  },
+  {
+    "name": "Roof Repair Rangers",
+    "description": "Quality roofing repair and installation services.",
+    "email": "info@roofrepairrangers.com",
+    "phonenumber": "(310) 555-0707"
+  },
+  {
+    "name": "Locksmith Legends",
+    "description": "Trusted locksmith services for emergencies and installations.",
+    "email": "contact@locksmithlegends.com",
+    "phonenumber": "(323) 555-0808"
+  },
+  {
+    "name": "Pest Control Pros",
+    "description": "Effective pest control solutions for homes and businesses.",
+    "email": "service@pestcontrolpros.com",
+    "phonenumber": "(213) 555-0909"
+  },
+  {
+    "name": "Painter Perfection",
+    "description": "Professional painting services for interior and exterior projects.",
+    "email": "support@painterperfection.com",
+    "phonenumber": "(424) 555-1001"
+  },
+  {
+    "name": "Handyman Heroes",
+    "description": "Reliable handyman services for all your repair needs.",
+    "email": "hello@handymanheroes.com",
+    "phonenumber": "(626) 555-1102"
+  },
+  {
+    "name": "Carpet Cleaning Crew",
+    "description": "Expert carpet cleaning services for residential and commercial properties.",
+    "email": "booking@carpetcleaningcrew.com",
+    "phonenumber": "(310) 555-1203"
+  },
+  {
+    "name": "HVAC Harmony",
+    "description": "Top-quality HVAC installation and repair services.",
+    "email": "info@hvacharmony.com",
+    "phonenumber": "(818) 555-1304"
+  },
+  {
+    "name": "Window Washing Wonders",
+    "description": "Professional window cleaning services for sparkling results.",
+    "email": "contact@windowwashingwonders.com",
+    "phonenumber": "(213) 555-1405"
+  },
+  {
+    "name": "Tree Trimming Team",
+    "description": "Expert tree trimming and removal services.",
+    "email": "service@treetrimmingteam.com",
+    "phonenumber": "(424) 555-1506"
+  },
+  {
+    "name": "Pool Cleaning Pros",
+    "description": "Reliable pool cleaning and maintenance services.",
+    "email": "support@poolcleaningpros.com",
+    "phonenumber": "(626) 555-1607"
+  },
+  {
+    "name": "Security System Solutions",
+    "description": "Advanced security system installation and monitoring.",
+    "email": "hello@securitysolutions.com",
+    "phonenumber": "(310) 555-1708"
+  },
+  {
+    "name": "Garage Door Gurus",
+    "description": "Professional garage door repair and installation services.",
+    "email": "booking@garagedoorgurus.com",
+    "phonenumber": "(323) 555-1809"
+  },
+  {
+    "name": "Flooring Fanatics",
+    "description": "Expert flooring installation and repair services.",
+    "email": "info@flooringfanatics.com",
+    "phonenumber": "(818) 555-1901"
+  },
+  {
+    "name": "Outdoor Kitchen Builders",
+    "description": "Professional outdoor kitchen design and construction services.",
+    "email": "service@outdoorkitchenbuilders.com",
+    "phonenumber": "(424) 555-9303"
   }
 ]

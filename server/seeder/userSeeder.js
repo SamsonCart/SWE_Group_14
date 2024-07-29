@@ -72,6 +72,7 @@ async function createUserIfNotExists(username, email, password, roles) {
       password: bcrypt.hashSync(password, 4),
       firstname: faker.person.firstName(),
       lastname: faker.person.lastName(),
+      phonenumber: faker.phone.number(),
       address: {
         street: locationData.street,
         city: 'Los Angeles',

@@ -27,7 +27,11 @@ async function seedBookings(bookingCount) {
       const booking = new Booking({
         serviceId: service._id,
         customerId: customer._id,
+        customerName: `${customer.firstname} ${customer.lastname}`,
+        customerEmail: customer.email,
+        customerPhonenumber: customer.phonenumber,
         date,
+        price: service.price,
         startTime: `${startHour}:00`,
         endTime: `${endHour}:00`,
         status: 'confirmed'

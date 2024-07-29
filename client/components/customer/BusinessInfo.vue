@@ -7,7 +7,7 @@
           <v-card class="mb-4">
             <v-card-title>
               <v-btn text @click="goToBusinessDetail(business._id)">
-                {{ business.businessName }}
+                {{ business.name }}
               </v-btn>
             </v-card-title>
             <v-card-subtitle>{{ business.description }}</v-card-subtitle>
@@ -19,7 +19,7 @@
                     <v-list-item-subtitle>
                       <div class="contact-info">
                         <v-icon left>mdi-phone</v-icon>
-                        {{ business.phoneNumber }}
+                        {{ business.phonenumber }}
                         <v-icon left>mdi-email</v-icon> {{ business.email }}
                       </div>
                     </v-list-item-subtitle>
@@ -62,8 +62,6 @@
         </v-container>
       </v-col>
     </v-row>
-    <v-row>
-    </v-row>
   </v-container>
 </template>
 
@@ -80,4 +78,5 @@ const props = defineProps({
   business: Object,
   services: Array,
 });
+
 </script>

@@ -3,6 +3,7 @@ const seedUsers = require('./userSeeder');
 const seedBusinesses = require('./businessSeeder');
 const seedServices = require('./serviceSeeder');
 const seedBookings = require('./bookingSeeder');
+
 require('dotenv').config();
 
 // Function to establish a connection to the MongoDB database
@@ -23,7 +24,7 @@ async function seedDatabase() {
     const customerCount = 1000;
     const bookingCount = 200;
 
-    // Seed users, businesses, services, and bookings
+    // Seed users, businesses, services, bookings
     await seedUsers(customerCount, businessUserCount);
     await seedBusinesses(businessUserCount);
     await seedServices(maxServicesPerBusiness);
