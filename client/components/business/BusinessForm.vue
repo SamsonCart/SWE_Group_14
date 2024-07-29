@@ -1,12 +1,8 @@
-<!-- 
-Form component for business information input
-External library: Vuetify (https://vuetifyjs.com/)
--->
 <template>
   <v-form @submit.prevent="handleSubmit">
     <!-- Text fields for business information -->
     <v-text-field
-      v-model="form.businessName"
+      v-model="form.name"
       label="Business Name"
       required
     ></v-text-field>
@@ -19,7 +15,7 @@ External library: Vuetify (https://vuetifyjs.com/)
       label="Zip Code"
     ></v-text-field>
     <v-text-field
-      v-model="form.phoneNumber"
+      v-model="form.phonenumber"
       label="Phone Number"
     ></v-text-field>
     <v-text-field v-model="form.email" label="Email" required></v-text-field>
@@ -42,7 +38,10 @@ External library: Vuetify (https://vuetifyjs.com/)
       </div>
     </div>
     <!-- Submit button for the form -->
-    <v-btn type="submit" :disabled="!isChanged" color="primary">Save</v-btn>
+    <v-btn type="submit" :disabled="!isChanged || loading" color="primary">
+      <span v-if="loading">Saving...</span>
+      <span v-else>Save</span>
+    </v-btn>
   </v-form>
 </template>
 
@@ -66,8 +65,7 @@ const notificationStore = useNotificationStore();
 
 // Initial form data structure
 const initialForm = reactive({
-  owner: null,
-  businessName: '',
+  name: '',
   description: '',
   address: {
     street: '',
@@ -75,7 +73,7 @@ const initialForm = reactive({
     state: '',
     zipCode: ''
   },
-  phoneNumber: '',
+  phonenumber: '',
   email: '',
   images: []
 });
@@ -84,6 +82,7 @@ const form = reactive({ ...initialForm }); // Reactive form data
 const tempFiles = ref([]); // Temporary files for upload
 const images = ref([]); // Uploaded images
 const isChanged = ref(false); // Flag to indicate form changes
+const loading = ref(false); // Loading state
 
 const user = computed(() => userStore.getUser); // Get current user from store
 
@@ -135,6 +134,7 @@ const fileSizeRule = (files) => {
 
 // Handle file upload
 const handleFileUpload = async () => {
+  loading.value = true;
   const formData = new FormData();
   tempFiles.value.forEach((file) => {
     formData.append('images', file);
@@ -155,6 +155,7 @@ const handleFileUpload = async () => {
   if (error.value) {
     console.error(error.value);
   }
+  loading.value = false;
 };
 
 // Remove image from preview
@@ -188,17 +189,19 @@ const getCoordinates = async (address) => {
 };
 
 const handleSubmit = async () => {
-    const coordinates = await getCoordinates(form.address);
+  loading.value = true;
+  const coordinates = await getCoordinates(form.address);
 
   if (!coordinates) {
     notificationStore.showError(
       'Unable to find coordinates for the provided address.'
     );
+    loading.value = false;
     return;
   }
 
   const businessData = {
-    businessName: form.businessName,
+    name: form.name,
     description: form.description,
     address: {
       street: form.address.street,
@@ -207,18 +210,18 @@ const handleSubmit = async () => {
       zipCode: form.address.zipCode,
       coordinates
     },
-    phoneNumber: form.phoneNumber,
+    phonenumber: form.phonenumber,
     email: form.email,
-    owner: form.owner,
+    owner: userStore.getUser.id,
     images: images.value
   };
 
   if (props.business) {
     await businessStore.updateBusiness(props.business._id, businessData);
-    } else {
-    form.owner = user.id;
+  } else {
     await businessStore.createBusiness(businessData);
   }
+  loading.value = false;
 };
 
 // Deep watch for changes in form data to set isChanged to true

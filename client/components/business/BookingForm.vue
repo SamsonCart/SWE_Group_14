@@ -1,7 +1,3 @@
-<!-- 
-Dialog component for creating and editing bookings
-External library: Vuetify (https://vuetifyjs.com/)
--->
 <template>
   <v-dialog v-model="dialog" max-width="600px">
     <v-card>
@@ -12,25 +8,45 @@ External library: Vuetify (https://vuetifyjs.com/)
       </v-card-title>
       <v-card-text>
         <v-form ref="form" v-model="formValid">
-          <!-- Disabled field for displaying Service ID -->
+          <!-- Disabled field for displaying Service Name -->
           <v-text-field
             disabled
-            v-model="booking.service.id"
-            label="Service ID"
-            :rules="[(v) => !!v || 'Service ID is required']"
+            v-model="booking.service.name"
+            label="Service"
+            :rules="[(v) => !!v || 'Service is required']"
           ></v-text-field>
-          <!-- Disabled field for displaying Customer ID -->
+          <!-- Field for displaying Customer Name -->
           <v-text-field
-            disabled
-            v-model="booking.customer.id"
-            label="Customer ID"
-            :rules="[(v) => !!v || 'Customer ID is required']"
+            v-model="booking.customerName"
+            label="Customer Name"
+            :rules="[(v) => !!v || 'Customer Name is required']"
           ></v-text-field>
-          <!-- Field for inputting date of the booking -->
+          <!-- Field for displaying Customer Email -->
           <v-text-field
-            v-model="booking.date"
-            label="Date"
-            :rules="[(v) => !!v || 'Date is required']"
+            v-model="booking.customerEmail"
+            label="Customer Email"
+            :rules="[(v) => !!v || 'Customer Email is required']"
+          ></v-text-field>
+          <!-- Field for displaying Customer Phone -->
+          <v-text-field
+            v-model="booking.customerPhonenumber"
+            label="Customer Phone"
+            :rules="[(v) => !!v || 'Customer Phone is required']"
+          ></v-text-field>
+          <!-- Field for inputting price of the booking -->
+          <v-text-field
+            v-model="booking.price"
+            label="Price"
+            :rules="[(v) => !!v || 'Price is required']"
+          ></v-text-field>
+          <!-- Field for inputting date of the booking using plain text -->
+          <v-text-field
+            v-model="formattedDate"
+            label="Date (yyyy-mm-dd)"
+            :rules="[
+              (v) => !!v || 'Date is required',
+              (v) => /^\d{4}-\d{2}-\d{2}$/.test(v) || 'Invalid date format'
+            ]"
           ></v-text-field>
           <!-- Field for inputting start time of the booking -->
           <v-text-field
@@ -65,7 +81,8 @@ External library: Vuetify (https://vuetifyjs.com/)
 </template>
 
 <script setup>
-// Importing necessary modules from Vue
+import { defineProps, defineEmits } from 'vue';
+
 const props = defineProps({
   modelValue: Boolean, // Boolean prop to control dialog visibility
   booking: Object, // Object prop to hold booking details
@@ -78,6 +95,7 @@ const dialog = ref(false);
 const form = ref(null);
 const formValid = ref(false);
 const booking = ref({ ...props.booking });
+const formattedDate = ref('');
 
 // Watch for changes in modelValue prop to update dialog visibility and booking data
 watch(
@@ -86,6 +104,19 @@ watch(
     dialog.value = newVal;
     if (newVal) {
       booking.value = { ...props.booking };
+      formattedDate.value = booking.value.date
+        ? new Date(booking.value.date).toISOString().substr(0, 10)
+        : '';
+    }
+  }
+);
+
+// Watch for changes in formattedDate to update booking date
+watch(
+  () => formattedDate.value,
+  (newVal) => {
+    if (newVal) {
+      booking.value.date = new Date(newVal).toISOString();
     }
   }
 );

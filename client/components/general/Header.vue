@@ -34,10 +34,10 @@ const logout = async () => {
     <!-- Conditional Navigation Links -->
     <!-- Links shown if the user is authenticated -->
     <v-btn text v-if="isAuthenticated" :to="{ path: '/dashboard' }" link
-      >Home</v-btn
-    >
+      >Home
+    </v-btn>
     <v-btn text v-if="isAuthenticated" :to="{ path: '/business' }" link
-      >Business</v-btn
+      >Businesses</v-btn
     >
     <v-btn text v-if="isAuthenticated" :to="{ path: '/service' }" link
       >Service</v-btn

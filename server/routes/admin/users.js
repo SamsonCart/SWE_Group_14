@@ -7,19 +7,25 @@ const User = require('../../models/user');
 
 // Import controllers for handling user-related actions
 const controller = require('../../controllers/admin/users');
-const { getGeneric } = require('../../controllers/generic');
 
 // Import middleware functions
 const {
   checkDuplicateUsernameOrEmail
 } = require('../../middlewares/user/verifySignUp'); // Middleware for checking unique username or email
-const dbQuery = require('../../middlewares/utils/dbQuery'); // Middleware for database queries with population
 const authJwt = require('../../middlewares/user/authJwt'); // Middleware for JWT authentication and authorization
 
-// Route to get all users, with roles populated and password excluded
-router.route('/').get(
-  dbQuery(User, [{ path: 'roles', select: 'name' }], ['password']), // Populate 'roles' field and exclude 'password'
-  getGeneric // Handle GET request to retrieve users
+// Route to get the list of roles, requires authentication and admin role
+router.get(
+  '/roles',
+  [authJwt.verifyToken, authJwt.isAdmin], // Ensure user is authenticated and has admin role
+  controller.getRoles
+);
+
+// Route to get the list of users, requires authentication and admin role
+router.get(
+  '/',
+  [authJwt.verifyToken, authJwt.isAdmin], // Ensure user is authenticated and has admin role
+  controller.getUsers
 );
 
 // Route to create a new user, requires authentication and admin role
@@ -29,9 +35,6 @@ router.post(
   [checkDuplicateUsernameOrEmail], // Ensure no duplicate username or email
   controller.createUser // Handle POST request to create a new user
 );
-
-// Route to get all roles
-router.route('/roles').get(dbQuery(Role), getGeneric); // Handle GET request to retrieve roles
 
 // Routes for specific user operations by ID
 router

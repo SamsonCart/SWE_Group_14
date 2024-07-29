@@ -107,7 +107,7 @@ exports.updateProfile = async (req, res) => {
     res.status(200).json({
       isSuccess: true,
       data: {
-        _id: updatedUser._id,
+        id: updatedUser._id,
         email: updatedUser.email,
         username: updatedUser.username,
         firstname: updatedUser.firstname,

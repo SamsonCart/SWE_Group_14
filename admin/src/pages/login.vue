@@ -16,7 +16,7 @@ import logo from '@/assets/logo.svg?raw'
  * Importing stores for authentication and messaging.
  */
 import { request } from '@/utils'
-import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
+import AuthProvider from '@/components/pages/authentication/AuthProvider.vue'
 import { useTheme } from 'vuetify'
 import { useAuthStore, useMessageStore } from '@/store'
 import router from '@/router'

@@ -9,10 +9,9 @@ const Business = mongoose.model(
       ref: 'User',
       required: true
     },
-    businessName: {
+    name: {
       type: String,
-      required: true,
-      // unique: true
+      required: true
     },
     description: String,
     address: {
@@ -25,7 +24,7 @@ const Business = mongoose.model(
         longitude: Number
       }
     },
-    phoneNumber: String,
+    phonenumber: String,
     email: String,
     images: [String],
     createdAt: {

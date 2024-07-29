@@ -22,7 +22,7 @@ const profileUpdateSchema = Joi.object({
 // Business Create Schema
 const businessCreateSchema = Joi.object({
   owner: Joi.string().required(),
-  businessName: Joi.string().required(),
+  name: Joi.string().required(),
   description: Joi.string().optional(),
   address: Joi.object({
     street: Joi.string().optional(),
@@ -34,7 +34,7 @@ const businessCreateSchema = Joi.object({
       longitude: Joi.number().optional()
     }).optional()
   }).optional(),
-  phoneNumber: Joi.string().optional(),
+  phonenumber: Joi.string().optional(),
   email: Joi.string().email().optional(),
   images: Joi.array().items(Joi.string()).optional()
 });
@@ -42,7 +42,7 @@ const businessCreateSchema = Joi.object({
 // Business Update Schema for PUT
 const businessPutSchema = Joi.object({
   owner: Joi.string().required(),
-  businessName: Joi.string().required(),
+  name: Joi.string().required(),
   description: Joi.string().optional(),
   address: Joi.object({
     street: Joi.string().optional(),
@@ -54,7 +54,7 @@ const businessPutSchema = Joi.object({
       longitude: Joi.number().optional()
     }).optional()
   }).optional(),
-  phoneNumber: Joi.string().optional(),
+  phonenumber: Joi.string().optional(),
   email: Joi.string().email().optional(),
   images: Joi.array().items(Joi.string()).optional()
 });
@@ -62,7 +62,7 @@ const businessPutSchema = Joi.object({
 // Business Update Schema for PATCH
 const businessPatchSchema = Joi.object({
   owner: Joi.string().optional(),
-  businessName: Joi.string().optional(),
+  name: Joi.string().optional(),
   description: Joi.string().optional(),
   address: Joi.object({
     street: Joi.string().optional(),
@@ -74,7 +74,7 @@ const businessPatchSchema = Joi.object({
       longitude: Joi.number().optional()
     }).optional()
   }).optional(),
-  phoneNumber: Joi.string().optional(),
+  phonenumber: Joi.string().optional(),
   email: Joi.string().email().optional(),
   images: Joi.array().items(Joi.string()).optional()
 });
@@ -110,6 +110,10 @@ const servicePatchSchema = Joi.object({
 const bookingCreateSchema = Joi.object({
   serviceId: Joi.string().required(),
   customerId: Joi.string().required(),
+  customerName: Joi.string().optional(), // Added customerName
+  customerEmail: Joi.string().email().optional(), // Added customerEmail
+  customerPhonenumber: Joi.string().optional(), // Added customerPhonenumber
+  price: Joi.number().required(), // Ensure price is a number
   date: Joi.date().required(),
   startTime: Joi.string().required(),
   endTime: Joi.string().required(),
@@ -122,6 +126,10 @@ const bookingCreateSchema = Joi.object({
 const bookingUpdateSchema = Joi.object({
   serviceId: Joi.string().optional(),
   customerId: Joi.string().optional(),
+  customerName: Joi.string().optional(), // Added customerName
+  customerEmail: Joi.string().email().optional(), // Added customerEmail
+  customerPhonenumber: Joi.string().optional(), // Added customerPhonenumber
+  price: Joi.number().optional(), // Ensure price is a number
   date: Joi.date().optional(),
   startTime: Joi.string().optional(),
   endTime: Joi.string().optional(),

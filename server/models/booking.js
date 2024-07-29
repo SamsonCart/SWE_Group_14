@@ -11,6 +11,9 @@ const BookingSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
+  customerName: String,
+  customerEmail: String,
+  customerPhonenumber: String,
   date: {
     type: Date,
     required: true
@@ -20,6 +23,10 @@ const BookingSchema = new mongoose.Schema({
     required: true
   },
   endTime: {
+    type: String,
+    required: true
+  },
+  price: {
     type: String,
     required: true
   },

@@ -4,7 +4,7 @@
     <v-card>
       <v-card-title>
         <v-btn text @click="goToBusinessDetail(business._id)">
-          {{ business.businessName }}
+          {{ business.name }}
         </v-btn>
       </v-card-title>
       <v-card-subtitle>{{ business.description }}</v-card-subtitle>
@@ -15,7 +15,7 @@
               <v-list-item-title>Contact</v-list-item-title>
               <v-list-item-subtitle>
                 <div>
-                  Phone: {{ business.phoneNumber }} Email: {{ business.email }}
+                  Phone: {{ business.phonenumber }} Email: {{ business.email }}
                 </div>
               </v-list-item-subtitle>
             </v-list-item-content>

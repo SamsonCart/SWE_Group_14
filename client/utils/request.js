@@ -29,16 +29,19 @@ async function request(type, pureUrl, params = {}, time = null) {
   }
 
   try {
-    const { data, error } = await useFetch(url, options);
+    console.log('Requesting:', url, options);
+    const response = await fetch(url, options);
+    const data = await response.json();
+    console.log('Response:', data);
 
-    const message = data.value?.message || '';
+    const message = data.message || '';
 
-    if (!data.value?.isSuccess) {
+    if (!data.isSuccess) {
       useMessageStore().setError({ error: message, time });
       throw new Error(message);
     } else {
       useMessageStore().setIsSuccess({ message, time });
-      return data.value;
+      return data;
     }
   } catch (err) {
     useMessageStore().setError({ error: err.message, time });

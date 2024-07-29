@@ -8,7 +8,7 @@ const ServiceSchema = new Schema({
   businessId: { type: Schema.Types.ObjectId, ref: 'Business', required: true },
   availability: [
     {
-      dayOfWeek: { type: Number, required: true }, // 0 for Sunday, 1 for Monday, etc.
+      dayOfWeek: { type: Number, required: true }, // day of week, 0 for Sunday, 1 for Monday, etc.
       startTime: { type: String, required: true }, // Format: 'HH:mm'
       endTime: { type: String, required: true }, // Format: 'HH:mm'
       sessionDuration: { type: Number, required: true } // Duration in minutes

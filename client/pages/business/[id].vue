@@ -42,7 +42,8 @@ const fetchBusinessServices = async (id) => {
   }
 };
 
-// Lifecycle hook to fetch business details, and services when the component is mounted
+
+// Lifecycle hook to fetch business details, services when the component is mounted
 onMounted(() => {
   const { id } = route.params; // Get the business ID from the route parameters
   fetchBusinessDetails(id); // Fetch business details

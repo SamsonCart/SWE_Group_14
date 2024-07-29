@@ -25,7 +25,7 @@ const request = async (type, pureUrl, params = {}, time = null) => {
   }
 
   const baseUrl = import.meta.env.VITE_API_ENDPOINT
-  const url = baseUrl + pureUrl
+  const url = baseUrl + '/' + pureUrl
   const token = localStorage.getItem('token')
   let contentType = 'application/json'
 

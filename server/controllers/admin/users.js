@@ -12,6 +12,69 @@ const validateEmail = (email) => {
   return re.test(String(email).toLowerCase());
 };
 
+exports.getRoles = async (req, res) => {
+  try {
+    const roles = await Role.find().select('id name');
+    res.status(200).json({
+      isSuccess: true,
+      data: roles
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+exports.getUsers = async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const sortBy = req.query.sortBy || 'username';
+  const filter = req.query.filter || {};
+
+  // Initialize filter object
+  const filterObj = {};
+
+  // Check if username filter exists
+  if (filter.username) {
+    filterObj.username = { $regex: filter.username, $options: 'i' }; // Case-insensitive search
+  }
+
+  // Check if email filter exists
+  if (filter.email) {
+    filterObj.email = { $regex: filter.email, $options: 'i' }; // Case-insensitive search
+  }
+
+  // Check if roles filter exists
+  if (filter.roles) {
+    filterObj.roles = { $in: filter.roles }; // Filter by roles
+  }
+
+  // Check if isActive filter exists
+  if (filter.isActive !== undefined) {
+    filterObj.isActive = filter.isActive;
+  }
+
+  try {
+    const users = await User.find(filterObj)
+      .sort(sortBy)
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .select('-password')
+      .populate('roles')
+      .exec();
+
+    const count = await User.countDocuments(filterObj);
+    res.status(200).json({
+      isSuccess: true,
+      data: {
+        items: users,
+        total: count
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 // Get user details by ID
 // Responds with user data including _id, createdTime, email, isActive, roles, and username
 exports.getUser = async (req, res) => {
@@ -68,7 +131,7 @@ exports.createUser = async (req, res) => {
       isSuccess: false,
       message: error.message
     });
-  }    
+  }
 };
 
 // Update user details
