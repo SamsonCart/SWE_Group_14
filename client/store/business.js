@@ -15,6 +15,11 @@ export const useBusinessStore = defineStore('business', {
     getBookings: (state) => state.bookings
   },
   actions: {
+    reset() {
+      this.business = null;
+      this.services = [];
+      this.bookings = [];
+    },
     // Fetches the business associated with the current user
     async getUserBusiness() {
       const notificationStore = useNotificationStore();
@@ -26,6 +31,8 @@ export const useBusinessStore = defineStore('business', {
 
         if (response?.data) {
           this.business = response.data[0];
+        } else {
+          this.business = null;
         }
       } catch (error) {
         notificationStore.showError('Error fetching business details');
@@ -148,7 +155,7 @@ export const useBusinessStore = defineStore('business', {
       try {
         const response = await request('post', `/booking`, bookingData);
         if (response?.data) {
-          this.bookings.push(response.data);
+          // this.bookings.push(response.data);
           notificationStore.showSuccess('Booking created successfully');
         }
       } catch (error) {

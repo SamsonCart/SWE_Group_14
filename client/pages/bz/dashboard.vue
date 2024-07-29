@@ -11,10 +11,8 @@ const businessStore = useBusinessStore(); // Initializing the business store
 
 // Fetch the logged-in user's business data on component mount
 onMounted(async () => {
-  if (!businessStore.business?._id) {
-    // Check if the business data is already loaded
-    await businessStore.getUserBusiness(); // Fetch the user's business data if not loaded
-  }
+  businessStore.reset();
+  await businessStore.getUserBusiness(); // Fetch the user's business data if not loaded
 });
 </script>
 

@@ -52,9 +52,13 @@ exports.signup = async (req, res) => {
           res.status(200).send(
             new response.success({
               id: user._id,
-              email,
-              roles: user.roles,
+              email: user.email,
               username: user.username,
+              roles: user.roles,
+              firstname: user?.firstname,
+              lastname: user?.lastname,
+              phonenumber: user?.phonenumber,
+              address: user?.address,
               accessToken: token
             })
           );
@@ -115,10 +119,11 @@ exports.signin = (req, res) => {
         new response.success({
           id: user._id,
           email: user.email,
-          roles: user.roles,
           username: user.username,
+          roles: user.roles,
           firstname: user?.firstname,
           lastname: user?.lastname,
+          phonenumber: user?.phonenumber,
           address: user?.address,
           accessToken: token
         })
@@ -148,10 +153,11 @@ exports.jwtSignin = async (req, res) => {
         new response.success({
           id: user._id,
           email: user.email,
-          roles: user.roles,
           username: user.username,
+          roles: user.roles,
           firstname: user?.firstname,
           lastname: user?.lastname,
+          phonenumber: user?.phonenumber,
           address: user?.address,
           accessToken: token
         })

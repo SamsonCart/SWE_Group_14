@@ -6,6 +6,7 @@ const profileUpdateSchema = Joi.object({
   email: Joi.string().email().required(),
   firstname: Joi.string().allow('').optional(),
   lastname: Joi.string().allow('').optional(),
+  phonenumber: Joi.string().allow('').optional(),
   roles: Joi.array().optional(),
   address: Joi.object({
     street: Joi.string().optional(),

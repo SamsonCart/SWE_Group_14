@@ -3,8 +3,6 @@
 import { useUserStore } from '@/store/user';
 import { useMessageStore } from '@/store/message';
 import { regexEmail } from '@/utils/regex';
-import { nextTick } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
 
 // Initialize stores
 const userStore = useUserStore();
@@ -18,38 +16,35 @@ const isSubmitting = ref(false);
 const formData = ref({ email: 'business@example.com', password: 'password' });
 
 // Function to handle login
-const login = () => {
+const login = async () => {
   isSubmitting.value = true;
 
-  // Validate form data
-  for (const [key, value] of Object.entries(formData.value)) {
-    let error;
+  try {
+    // Validate form data
+    for (const [key, value] of Object.entries(formData.value)) {
+      let error;
 
-    if (!value) {
-      error = `${key} is a mandatory field!`;
-    } else if (key === 'email' && !regexEmail(value)) {
-      error = 'You must enter a valid email address';
+      if (!value) {
+        error = `${key} is a mandatory field!`;
+      } else if (key === 'email' && !regexEmail(value)) {
+        error = 'You must enter a valid email address';
+      }
+
+      if (error) {
+        messageStore.setError({ error });
+        setTimeout(() => {
+          isSubmitting.value = false;
+        }, 2000); // Prevent serial clicks
+        return;
+      }
     }
-
-    if (error) {
-      messageStore.setError({ error });
-
-      setTimeout(() => {
-        isSubmitting.value = false;
-      }, 2000); // Prevent serial clicks
-
-      return;
-    }
+    // Attempt login
+    await userStore.login({ ...formData.value });
+    isSubmitting.value = false;
+  } catch (error) {
+    messageStore.setError({ error });
+    isSubmitting.value = false;
   }
-
-  // Attempt login
-  userStore.login({ ...formData.value }).then((res) => {
-    if (res) {
-      // Handle successful login (e.g., redirect to dashboard)
-    } else {
-      isSubmitting.value = false;
-    }
-  });
 };
 
 // On component mount, handle account activation if necessary

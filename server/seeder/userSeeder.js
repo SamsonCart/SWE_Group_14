@@ -62,8 +62,6 @@ async function seedUsers(customerCount, businessCount) {
 async function createUserIfNotExists(username, email, password, roles) {
   const userCount = await User.countDocuments({ username });
   if (userCount === 0) {
-    const businessData =
-      businessList[faker.number.int({ min: 0, max: businessList.length - 1 })];
     const locationData =
       locationList[faker.number.int({ min: 0, max: locationList.length - 1 })];
     const newUser = new User({

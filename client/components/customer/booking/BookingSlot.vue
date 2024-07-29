@@ -104,7 +104,7 @@ const fetchBookedSessions = async () => {
     // Fetch all the booked seesions for the selected day!
     const response = await $fetch(`${baseUrl}/booking`, {
       method: 'get',
-      query: { serviceId: props.service._id, customerId: props.customerId }
+      query: { serviceId: props.service._id }
     });
     if (response?.data) {
       bookings.value = response.data.map((item) => ({

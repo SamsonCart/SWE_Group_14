@@ -70,8 +70,6 @@ const baseUrl = import.meta.env.VITE_API_ENDPOINT;
 
 // Reactive references
 const activeTab = ref(null);
-// const activeTab = ref('Choose Slot');
-// const tabs = ['Choose Slot', 'Fill in Contacts', 'Booking Confirmation'];
 const customerId = userStore.getUser.id;
 
 const bookingDetails = ref({
@@ -88,7 +86,6 @@ const bookingDetails = ref({
 });
 
 const handleSlotSelected = (session) => {
-  console.log('handleSlotSelected :>> ', session);
   bookingDetails.value = {
     ...bookingDetails.value,
     date: session.date,

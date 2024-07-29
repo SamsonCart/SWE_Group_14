@@ -112,8 +112,9 @@ exports.updateProfile = async (req, res) => {
         username: updatedUser.username,
         firstname: updatedUser.firstname,
         lastname: updatedUser.lastname,
+        phonenumber: updatedUser.phonenumber,
         address: updatedUser.address,
-        roles // User roles
+        roles
       },
       message: 'User has been successfully updated!' // Success message for profile update
     });
