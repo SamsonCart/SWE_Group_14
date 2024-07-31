@@ -9,20 +9,20 @@ Google Drive documentation can be viewed here: https://drive.google.com/drive/fo
 You should create a .env file in the server folder.
 
 ```
-NODE_ENV = development
-DB_URL = YourMongoDBURL
-API_PREFIX = /api/v1.0.0/
-AUTH_SECRET = YourSecretStringForAPILike-----KvKiA2mMjxGO25Diiibz
-API_PORT = 3000
+#SERVER ENV
+# Environment mode, typically 'development' or 'production'
+NODE_ENV=development
+# URL of the MongoDB database
+DB_URL = "mongodb+srv://wcpark:gvFtRYr7IQ57gYju@cluster0.lor9kqm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+# Prefix for all API endpoints
+API_PREFIX=/api/v1.0.0/
+# Secret key used for authentication (ensure this is a strong, random string)
+AUTH_SECRET=YourSecretStringForAPI
+# Port number the API server will run on
+API_PORT=4444
+# URL of the client application
+CLIENT_URL=http://localhost:3001
 
-CLIENT_URL = http://localhost:3001/
-
-NODEMAILER_HOST = YourMailServer
-NODEMAILER_PORT = 465
-NODEMAILER_SECURE = true
-NODEMAILER_SENDERNAME = YourName
-NODEMAILER_USER = YourMailAddress
-NODEMAILER_PASS = YourPassword
 ```
 
 ### .env file in the `admin` folder
@@ -30,8 +30,11 @@ NODEMAILER_PASS = YourPassword
 You should create a .env file in the admin folder.
 
 ```
-VITE_API_ENDPOINT=http://localhost:3000/api/v1.0.0/
-VITE_API_DOMAIN=http://localhost:3000/
+# Endpoint for the API server used by the admin dashboard
+VITE_API_ENDPOINT=http://localhost:4444/api/v1.0.0
+# Domain of the API server used by the admin dashboard
+VITE_API_DOMAIN=http://localhost:4444
+
 ```
 
 ### .env file in the `client` folder
@@ -39,8 +42,11 @@ VITE_API_DOMAIN=http://localhost:3000/
 You should create a .env file in the `client` folder.
 
 ```
-VITE_API_ENDPOINT=http://localhost:3000/api/v1.0.0/
-VITE_API_ENDPOINTHOST=http://localhost:3000/
+# Endpoint for the API server used by the client dashboard
+VITE_API_ENDPOINT=http://localhost:4444/api/v1.0.0
+# Host domain for the API server used by the client dashboard
+VITE_API_ENDPOINTHOST=http://localhost:4444
+
 ```
 
 ### How to run the project
