@@ -40,15 +40,16 @@ export const useUserStore = defineStore('user', {
     async login(payload) {
       const notificationStore = useNotificationStore();
       try {
-        const { data } = await request('post', 'auth/signin', payload); // Sends login request
-        if (data) {
-          this.setUser(data, data.accessToken); // Sets user and token on successful login
+        const response = await request('post', 'auth/signin', payload); // Sends login request
+        if (!response.isSuccess) throw Error(response.message);
+        if (response.data) {
+          this.setUser(response.data, response.data.accessToken); // Sets user and token on successful login
           await this.redirectUser(); // Redirects user based on role
           notificationStore.showSuccess('Logged in successfully');
           return true;
         }
       } catch (error) {
-        notificationStore.showError('Error logging in');
+        notificationStore.showError(error.message);
         console.error('Error logging in:', error);
       }
       return false;

@@ -71,6 +71,7 @@ const updateProfile = async () => {
     roles: toRaw(userStore.user.roles), // Extracting roles as raw data
     firstname: formData.value.firstname,
     lastname: formData.value.lastname,
+    phonenumber: formData.value.phonenumber,
     address: {
       state: formData.value.state,
       city: formData.value.city,

@@ -14,10 +14,9 @@ const businessStore = useBusinessStore(); // Initialize the business store
 
 // Fetch business and services data when the component is mounted
 onMounted(async () => {
-  if (!businessStore.business._id) {
-    await businessStore.getUserBusiness(); // Fetch user business if not already loaded
+  if (businessStore.business?._id) {
+    await businessStore.getBusinessServices(); // Fetch business services
   }
-  await businessStore.getBusinessServices(); // Fetch business services
 });
 
 const editDialog = ref(false); // Reactive variable to control the visibility of the edit dialog

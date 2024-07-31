@@ -134,12 +134,9 @@ const selectedBooking = ref(null); // Reactive variable to store the selected bo
 const isEditMode = ref(false); // Reactive variable to determine if the form is in edit mode
 
 onMounted(async () => {
-  if (!businessStore.business?._id) {
-    // Check if the business data is already loaded
-    await businessStore.getUserBusiness(); // Fetch the user's business data if not loaded
-    // Fetch bookings
+  if (businessStore.business?._id) {
+    await businessStore.getServiceBookings();
   }
-  await businessStore.getServiceBookings();
 });
 
 // Handle the editing of an existing booking

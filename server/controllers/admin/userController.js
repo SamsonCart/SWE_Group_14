@@ -1,5 +1,9 @@
 const Role = require('../../models/role'); // Model for user roles
 const User = require('../../models/user'); // Model for user data
+const Business = require('../../models/business');
+const Service = require('../../models/service');
+const Booking = require('../../models/booking');
+
 const bcrypt = require('bcryptjs'); // Library for hashing passwords
 const mongoose = require('mongoose'); // MongoDB object modeling tool
 const { controllers: { users: STRINGS } = {} } = require('../../MAGIC_STRINGS'); // Magic strings for user-related messages
@@ -220,14 +224,41 @@ exports.updateUser = async (req, res) => {
 };
 
 // Delete a user by ID
-// Removes the user from the database
+// Removes the user from the database and related business, services and bookings.
 exports.deleteUser = async (req, res) => {
   try {
-    await User.deleteOne({ _id: req.params.id });
+    const userId = req.params.id;
+    const user = await User.findById(userId).populate('roles');
+
+    if (!user) {
+      return res.status(404).json({
+        isSuccess: false,
+        message: 'User not found'
+      });
+    }
+    const roles = user.roles.map((role) => role.name);
+    if (roles.includes('business')) {
+      // Delete the user's businesses
+      const businesses = await Business.find({ owner: userId });
+      for (let business of businesses) {
+        await Service.deleteMany({ businessId: business._id });
+        await Business.deleteOne({ _id: business._id });
+      }
+
+      // Delete related bookings
+      await Booking.deleteMany({ customerId: userId });
+    } else if (roles.includes('customer')) {
+      // Delete the user's bookings
+      await Booking.deleteMany({ customerId: userId });
+    }
+
+    // Delete the user
+    await User.deleteOne({ _id: userId });
+
     res.status(200).json({
       isSuccess: true,
-      data: { _id: req.params.id },
-      message: STRINGS.userDeleted
+      data: { _id: userId },
+      message: 'User deleted successfully'
     });
   } catch (error) {
     res.status(500).json({
