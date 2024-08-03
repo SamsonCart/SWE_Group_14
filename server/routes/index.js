@@ -12,6 +12,8 @@ const dashboardRoutes = require('./dashboard');
 const businessRoutes = require('./business');
 const serviceRoutes = require('./service');
 const bookingRoutes = require('./booking'); // Routes for booking management
+const reviewRoutes = require('./review'); // Routes for review management
+const inquiryRoutes = require('./inquiry');
 
 // Register route handlers with base paths
 router.use('/admin', adminRoutes);
@@ -21,6 +23,8 @@ router.use('/dashboard', dashboardRoutes);
 router.use('/business', businessRoutes);
 router.use('/service', serviceRoutes);
 router.use('/booking', bookingRoutes);
+router.use('/review', reviewRoutes); // Add review routes
+router.use('/inquiry', inquiryRoutes);
 
 // Route for handling file uploads
 router.post('/upload', upload.array('images', MAX_FILES), (req, res) => {

@@ -17,13 +17,21 @@ exports.createService = async (req, res) => {
   }
 };
 
-// Get all services with optional filtering by businessId
+// Get all services with optional filtering by businessId and name
 exports.getServices = async (req, res) => {
   try {
-    const { businessId } = req.query;
+    const { businessId, query } = req.query;
 
     // Construct filter object based on query parameters
     const filter = businessId ? { businessId } : {};
+
+    // Add search by service title and description if query is provided
+    if (query) {
+      filter.$or = [
+        { title: { $regex: query, $options: 'i' } }, // Case-insensitive regex search for title
+        { description: { $regex: query, $options: 'i' } } // Case-insensitive regex search for description
+      ];
+    }
 
     // Find services matching the filter and populate the availableSlots field
     const services = await Service.find(filter).populate('availableSlots');

@@ -1,65 +1,109 @@
-# SWE_Group_14
+# Pushpin Booking System
 
-This project aims to build a comprehensive booking system for a service marketplace, connecting customers with local service providers. The key features include account creation for customers and businesses, service searches, profile views, reviews, booking appointments, managing availability, and responding to customer reviews. The system ensures only available time slots can be booked and personalizes the information based on the user's role. The project is structured into client-side and server-side directories, each organized to maintain a clean and manageable codebase.
+This project is a comprehensive booking system for a service marketplace, connecting customers with local service providers. It features account creation, service searches, profile views, reviews, appointment booking, availability management, and review responses.
 
-Google Drive documentation can be viewed here: https://drive.google.com/drive/folders/1Dupu0u9eok5X5bfg0LITFOGVpfv8i3kn
+## Project Structure
 
-### .env file in the `server` folder
+The project is divided into three main components:
 
-You should create a .env file in the server folder.
+1. Server (Node.js/Express)
+2. Admin (Vue 3)
+3. Client (Nuxt 3)
 
-```
-#SERVER ENV
-# Environment mode, typically 'development' or 'production'
-NODE_ENV=development
-# URL of the MongoDB database
-DB_URL = "mongodb+srv://wcpark:gvFtRYr7IQ57gYju@cluster0.lor9kqm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-# Prefix for all API endpoints
-API_PREFIX=/api/v1.0.0/
-# Secret key used for authentication (ensure this is a strong, random string)
-AUTH_SECRET=YourSecretStringForAPI
-# Port number the API server will run on
-API_PORT=4444
-# URL of the client application
-CLIENT_URL=http://localhost:3001
+## Setup
+
+### Server
+
+1. Navigate to the `server` directory
+2. Create a `.env` file with the following content:
 
 ```
-
-### .env file in the `admin` folder
-
-You should create a .env file in the admin folder.
-
-```
-# Endpoint for the API server used by the admin dashboard
-VITE_API_ENDPOINT=http://localhost:4444/api/v1.0.0
-# Domain of the API server used by the admin dashboard
-VITE_API_DOMAIN=http://localhost:4444
-
+NODE_ENV = development
+DB_URL = YourMongoDBURL
+API_PREFIX = /api/v1.0.0/
+AUTH_SECRET = YourSecretStringForAPILike-----KvKiA2mMjxGO25Diiibz
+API_PORT = 3000
+CLIENT_URL = http://localhost:3001/
 ```
 
-### .env file in the `client` folder
-
-You should create a .env file in the `client` folder.
+3. Install dependencies and run:
 
 ```
-# Endpoint for the API server used by the client dashboard
-VITE_API_ENDPOINT=http://localhost:4444/api/v1.0.0
-# Host domain for the API server used by the client dashboard
-VITE_API_ENDPOINTHOST=http://localhost:4444
-
-```
-
-### How to run the project
-
-```
-cd server
 yarn
 yarn dev
+```
 
-cd admin
+### Admin Panel
+
+1. Navigate to the `admin` directory
+2. Create a `.env` file with the following content:
+
+```
+VITE_API_ENDPOINT=http://localhost:3000/api/v1.0.0/
+VITE_API_DOMAIN=http://localhost:3000/
+```
+
+3. Install dependencies and run:
+
+```
 yarn
 yarn dev
+```
 
-cd client
+### Client
+
+1. Navigate to the `client` directory
+2. Create a `.env` file with the following content:
+
+```
+VITE_API_ENDPOINT=http://localhost:3000/api/v1.0.0/
+VITE_API_ENDPOINTHOST=http://localhost:3000/
+```
+
+3. Install dependencies and run:
+
+```
 yarn
 yarn dev
+```
+
+## References
+
+### Template
+
+1. MEVN Boilerplate was used as a starter template with permission from Dr. Rani. The library can be found at https://github.com/mustafacagri/mevn-boilerplate?tab=readme-ov-file.
+
+### Server
+
+1. MongoDB Cloud Atlas was used for database management with permission from Dr. Rani. The library can be found at https://www.mongodb.com/.
+2. Express was used for the web application framework. The library can be found at https://expressjs.com/.
+3. Mongoose was used for object data modeling. The library can be found at https://mongoosejs.com/.
+4. Bcryptjs was used for password hashing. The library can be found at https://www.npmjs.com/package/bcryptjs.
+5. Jsonwebtoken was used for JWT implementation. The library can be found at https://www.npmjs.com/package/jsonwebtoken.
+6. Cors was used for enabling Cross-Origin Resource Sharing. The library can be found at https://www.npmjs.com/package/cors.
+7. Dotenv was used for loading environment variables. The library can be found at https://www.npmjs.com/package/dotenv.
+8. Joi was used for data validation. The library can be found at https://joi.dev/.
+9. Multer was used for handling multipart/form-data. The library can be found at https://www.npmjs.com/package/multer.
+10. Winston was used for logging. The library can be found at https://github.com/winstonjs/winston.
+
+### Admin
+
+1. Vue 3 was used as the frontend framework. The library can be found at https://vuejs.org/.
+2. Vite was used as the build tool. The library can be found at https://vitejs.dev/.
+3. Vuetify was used for UI components. The library can be found at https://vuetifyjs.com/.
+4. Pinia was used for state management. The library can be found at https://pinia.vuejs.org/.
+5. Axios was used for HTTP requests. The library can be found at https://axios-http.com/.
+6. Vue Router was used for routing. The library can be found at https://router.vuejs.org/.
+
+### Client
+
+1. Nuxt 3 was used as the frontend framework. The library can be found at https://nuxt.com/.
+2. Vuetify was used for UI components. The library can be found at https://vuetifyjs.com/.
+3. Pinia was used for state management. The library can be found at https://pinia.vuejs.org/.
+4. Leaflet was used for interactive maps. The library can be found at https://leafletjs.com/.
+5. Vee-validate was used for form validation. The library can be found at https://vee-validate.logaretm.com/.
+6. Yup was used for object schema validation. The library can be found at https://github.com/jquense/yup.
+7. Font Awesome was used for icons. The library can be found at https://fontawesome.com/.
+8. Material Design Icons were used for additional icons. The library can be found at https://materialdesignicons.com/.
+9. Sass was used for CSS preprocessing. The library can be found at https://sass-lang.com/.
+10. Lodash was used for utility functions. The library can be found at https://lodash.com/.

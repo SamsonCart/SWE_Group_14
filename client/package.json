@@ -23,7 +23,7 @@
     "@nuxtjs/leaflet": "^1.1.0",
     "@pinia/nuxt": "^0.4.11",
     "leaflet": "^1.9.4",
-    "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
     "pinia": "^2.1.6",
     "sass-loader": "^13.2.0",
     "vee-validate": "^4.13.2",

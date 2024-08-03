@@ -3,6 +3,8 @@ const seedUsers = require('./userSeeder');
 const seedBusinesses = require('./businessSeeder');
 const seedServices = require('./serviceSeeder');
 const seedBookings = require('./bookingSeeder');
+const seedReviews = require('./reviewSeeder');
+const seedInquiries = require('./inquirySeeder');
 
 require('dotenv').config();
 
@@ -19,16 +21,20 @@ async function connectDB() {
 async function seedDatabase() {
   try {
     // Define the number of entities to seed
-    const businessUserCount = 1;
+    const businessUserCount = 10;
     const maxServicesPerBusiness = 3;
-    const customerCount = 2;
-    const bookingCount = 5;
+    const customerCount = 100;
+    const bookingCount = 100;
+    const reviewCount = 200;
+    const inqruiyCount = 200;
 
-    // Seed users, businesses, services, bookings
+    // Seed users, businesses, services, bookings, reviews and inquiries
     await seedUsers(customerCount, businessUserCount);
     await seedBusinesses(businessUserCount);
     await seedServices(maxServicesPerBusiness);
     await seedBookings(bookingCount);
+    await seedReviews(reviewCount);
+    await seedInquiries(inqruiyCount);
 
     console.log('Database seeding completed');
   } catch (error) {

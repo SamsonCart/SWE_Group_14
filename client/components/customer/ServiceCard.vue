@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto my-4">
+  <v-card class="w-100">
     <v-card-title>
       <span>{{ service.title }}</span>
     </v-card-title>

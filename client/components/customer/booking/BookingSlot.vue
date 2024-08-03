@@ -18,13 +18,13 @@
             )"
             :key="session.id"
           >
-            <v-list-item-content>
+            <v-list-item-content class="mb-4">
               <v-list-item-title
                 :class="{ 'text-decoration-line-through': session.booked }"
                 >{{ session.startTime }}</v-list-item-title
               >
               <v-list-item-subtitle
-                >Duration: {{ session.hours }} hours</v-list-item-subtitle
+                >Duration: {{ session.hours }} hour</v-list-item-subtitle
               >
             </v-list-item-content>
             <v-list-item-action>

@@ -1,8 +1,13 @@
 <template>
   <v-card>
-    <v-card-title class="d-flex justify-space-between">
-      <span class="text-h5 px-5 py-5 text-center">Book a Service</span>
-      <v-btn icon @click="closeModal">
+    <v-card-title class="position-relative">
+      <h4 class="text-h5 px-5 py-5 text-center">Book a Service</h4>
+      <v-btn
+        icon
+        class="position-absolute"
+        style="right: 20px; top: 20px"
+        @click="closeModal"
+      >
         <v-icon>mdi-close</v-icon>
       </v-btn>
     </v-card-title>
