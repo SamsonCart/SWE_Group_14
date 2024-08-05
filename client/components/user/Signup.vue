@@ -3,153 +3,132 @@
 import { useUserStore } from '@/store/user';
 import { useMessageStore } from '@/store/message';
 import { regexEmail } from '@/utils/regex';
-
-// Define props to emit events
-const emit = defineEmits(['updateComponent']);
+import { useRouter } from 'vue-router';
 
 // Initialize stores
 const userStore = useUserStore();
-const { signup: signupAction } = userStore;
 const messageStore = useMessageStore();
+const router = useRouter();
 
 // Define reactive variables for the component's state
 const isSubmitting = ref(false);
 const initialFormData = {
-  email: 'business@example.com',
+  email: 'customer@example.com',
   username: 'customer',
   password: 'password',
   repassword: 'password'
 };
 const formData = ref({ ...initialFormData });
+const formErrors = ref({
+  email: '',
+  username: '',
+  password: '',
+  repassword: ''
+});
+const formTouched = ref(false); // To track if form has been submitted
 
 // Function to handle signup
-const signup = () => {
+const signup = async () => {
+  formTouched.value = true;
   isSubmitting.value = true;
 
   // Validate form data
+  let valid = true;
   for (const [key, value] of Object.entries(formData.value)) {
-    let error;
+    let error = '';
 
     if (!value) {
       error = `${key} is a mandatory field!`;
+      valid = false;
     } else if (key === 'email' && !regexEmail(value)) {
       error = 'You must enter a valid email address';
+      valid = false;
+    } else if (key === 'repassword' && value !== formData.value.password) {
+      error = 'Passwords do not match';
+      valid = false;
     }
 
-    if (error) {
-      messageStore.setError({ error });
-
-      setTimeout(() => {
-        isSubmitting.value = false;
-      }, 2000); // Prevent serial clicks
-
-      return;
-    }
+    formErrors.value[key] = error;
   }
 
-  // Attempt signup
-  userStore.signup({ ...formData.value }).then((res) => {
-    if (res) {
-      formData.value = { ...initialFormData }; // Reset form
-    }
-  });
-
-  setTimeout(() => {
+  if (!valid) {
     isSubmitting.value = false;
-  }, 2000); // Prevent serial clicks
+    return;
+  }
+
+  try {
+    // Attempt signup
+    await userStore.signup({ ...formData.value });
+    formData.value = { ...initialFormData }; // Reset form
+    router.push('/signin');
+  } catch (error) {
+    messageStore.setError({ error });
+  } finally {
+    isSubmitting.value = false;
+  }
 };
 </script>
 
 <template>
-  <!-- Display error or success messages -->
-  <utilsGetErrorSuccess />
-
-  <div id="signinup" class="card">
-    <div class="card-body">
-      <!-- Username Input Field -->
-      <div class="form-group row mb-2">
-        <label for="username" class="col-sm-4 col-form-label">Username</label>
-        <div class="col-sm-8">
-          <input
-            type="text"
-            autocomplete="false"
-            class="form-control"
-            id="username"
-            placeholder="Username"
+  <v-container>
+    <utils-get-error-success />
+    <v-card>
+      <v-card-title>Sign Up</v-card-title>
+      <v-card-text>
+        <v-form @submit.prevent="signup">
+          <v-text-field
             v-model="formData.username"
+            label="Username"
+            autocomplete="off"
+            outlined
+            dense
+            :error-messages="formTouched && formErrors.username"
           />
-        </div>
-      </div>
-
-      <!-- Email Input Field -->
-      <div class="form-group row mb-2">
-        <label for="email" class="col-sm-4 col-form-label">Email</label>
-        <div class="col-sm-8">
-          <input
-            type="email"
-            autocomplete="false"
-            class="form-control"
-            id="email"
-            placeholder="Email"
+          <v-text-field
             v-model="formData.email"
+            label="Email"
+            type="email"
+            autocomplete="off"
+            outlined
+            dense
+            :error-messages="formTouched && formErrors.email"
           />
-        </div>
-      </div>
-
-      <!-- Password Input Field -->
-      <div class="form-group row mb-2">
-        <label for="password" class="col-sm-4 col-form-label">Password</label>
-        <div class="col-sm-8">
-          <div id="passwordColumn">
-            <input
-              type="password"
-              class="form-control"
-              id="password"
-              placeholder="Password"
-              v-model="formData.password"
-            />
-          </div>
-        </div>
-      </div>
-
-      <!-- Re-Password Input Field -->
-      <div class="form-group row mb-2">
-        <label for="repassword" class="col-sm-4 col-form-label"
-          >Re-Password</label
-        >
-        <div class="col-sm-8">
-          <div id="passwordColumn">
-            <input
-              type="password"
-              class="form-control"
-              id="repassword"
-              placeholder="Re-Password"
-              v-model="formData.repassword"
-            />
-          </div>
-        </div>
-      </div>
-
-      <!-- Submit Button -->
-      <div class="form-group row">
-        <div class="col-sm-12 d-flex justify-content-end">
-          <button
-            @click="signup()"
+          <v-text-field
+            v-model="formData.password"
+            type="password"
+            label="Password"
+            outlined
+            dense
+            :error-messages="formTouched && formErrors.password"
+          />
+          <v-text-field
+            v-model="formData.repassword"
+            type="password"
+            label="Re-Password"
+            outlined
+            dense
+            :error-messages="formTouched && formErrors.repassword"
+          />
+          <v-btn
+            @click="signup"
+            :loading="isSubmitting"
             :disabled="isSubmitting"
-            class="btn btn-primary"
+            color="primary"
+            block
           >
             Sign Up
-          </button>
-        </div>
-      </div>
-      <hr />
-      <!-- Link to Signin Page -->
-      <div class="text-center">
-        Already have an account?
-        <router-link class="row-pointer" to="/signin"
-          >Sign in instead</router-link
-        >
-      </div>
-    </div>
-  </div>
+          </v-btn>
+        </v-form>
+      </v-card-text>
+      <v-divider />
+      <v-card-actions class="justify-center">
+        <span>Already have an account?</span>
+        <v-btn text to="/signin">Sign in instead</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-container>
 </template>
+
+<style scoped>
+/* Add any custom styles here */
+</style>

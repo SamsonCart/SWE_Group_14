@@ -33,21 +33,46 @@ const logout = async () => {
 
     <!-- Conditional Navigation Links -->
     <!-- Links shown if the user is authenticated -->
-    <v-btn text v-if="isAuthenticated" :to="{ path: '/dashboard' }" link
-      >Home
-    </v-btn>
-    <v-btn text v-if="isAuthenticated" :to="{ path: '/business' }" link
+    <v-btn
+      text
+      class="nav-link"
+      v-if="isAuthenticated"
+      :to="{ path: '/dashboard' }"
+      link
+      >Home</v-btn
+    >
+    <v-btn
+      text
+      class="nav-link"
+      v-if="isAuthenticated"
+      :to="{ path: '/business' }"
+      link
       >Businesses</v-btn
     >
-    <v-btn text v-if="isAuthenticated" :to="{ path: '/service' }" link
+    <v-btn
+      text
+      class="nav-link"
+      v-if="isAuthenticated"
+      :to="{ path: '/service' }"
+      link
       >Service</v-btn
     >
 
     <!-- Links shown if the user is not authenticated -->
-    <v-btn text v-if="!isAuthenticated" :to="{ path: '/signin' }" link
+    <v-btn
+      text
+      class="nav-link"
+      v-if="!isAuthenticated"
+      :to="{ path: '/signin' }"
+      link
       >Sign in</v-btn
     >
-    <v-btn text v-if="!isAuthenticated" :to="{ path: '/signup' }" link
+    <v-btn
+      text
+      class="nav-link"
+      v-if="!isAuthenticated"
+      :to="{ path: '/signup' }"
+      link
       >Sign up</v-btn
     >
 
@@ -83,5 +108,29 @@ const logout = async () => {
 /* Styles for buttons to add some margin */
 .v-btn {
   margin-left: 10px;
+}
+
+/* Styles for navigation links */
+.nav-link {
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-link::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: currentColor; /* Use the current text color */
+  transform: scaleX(0);
+  transform-origin: bottom right;
+  transition: transform 0.25s ease-out;
+}
+
+.nav-link:hover::before {
+  transform: scaleX(1);
+  transform-origin: bottom left;
 }
 </style>

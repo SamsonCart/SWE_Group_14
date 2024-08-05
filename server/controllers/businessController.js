@@ -47,13 +47,20 @@ exports.createBusiness = async (req, res) => {
 
 /**
  * Get a list of all businesses or businesses by owner.
- * @param {Object} req - The request object, containing optional query parameters.
- * @param {Object} res - The response object used to send responses to the client.
  */
 exports.getBusinesses = async (req, res) => {
   try {
-    const { owner } = req.query; // Extract owner from query parameters
-    let match = owner ? { owner } : {}; // Match query condition
+    const { owner, query } = req.query; // Extract owner and query from query parameters
+    let match = owner ? { owner } : {};
+
+    // Add search by business name and description if query is provided
+    if (query) {
+      match.$or = [
+        { name: { $regex: query, $options: 'i' } }, // Case-insensitive regex search for name
+        { description: { $regex: query, $options: 'i' } } // Case-insensitive regex search for description
+      ];
+    }
+
     const businesses = await Business.find(match); // Find businesses matching the condition
     res.status(200).send({ isSuccess: true, data: businesses }); // Send success response
   } catch (error) {
@@ -63,8 +70,6 @@ exports.getBusinesses = async (req, res) => {
 
 /**
  * Get a business by its ID.
- * @param {Object} req - The request object, containing the business ID.
- * @param {Object} res - The response object used to send responses to the client.
  */
 exports.getBusinessById = async (req, res) => {
   try {
