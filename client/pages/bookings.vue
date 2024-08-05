@@ -1,72 +1,55 @@
 <template>
   <v-container>
     <!-- Section for displaying user bookings -->
-    <v-row>
-      <v-col cols="12">
-        <v-card>
-          <v-card-title>My Bookings</v-card-title>
+    <h4 class="text-h4 text-center mb-5">My Bookings</h4>
+    <v-row v-if="bookings.length">
+      <v-col lg="6" sm="12" v-for="booking in bookings" :key="booking.id">
+        <v-card outlined>
+          <v-card-title>
+            {{ booking.service.name }}
+            <v-spacer></v-spacer>
+            <v-chip :color="statusColor(booking.status)" small>{{
+              booking.status
+            }}</v-chip>
+          </v-card-title>
+          <v-card-subtitle>
+            {{ new Date(booking.date).toDateString() }} -
+            {{ booking.startTime }} ~ {{ booking.endTime }}
+          </v-card-subtitle>
           <v-card-text>
-            <!-- List of bookings if available -->
-            <v-row
-              v-if="bookings.length"
-              v-for="booking in bookings"
-              :key="booking.id"
-              cols="12"
-              sm="6"
-            >
+            <v-row>
+              <v-col> <strong>Price:</strong> {{ booking.price }} </v-col>
+            </v-row>
+            <v-divider></v-divider>
+            <v-row>
               <v-col>
-                <v-card outlined>
-                  <v-card-title>
-                    {{ booking.service.name }}
-                    <v-spacer></v-spacer>
-                    <v-chip :color="statusColor(booking.status)" small>{{
-                      booking.status
-                    }}</v-chip>
-                  </v-card-title>
-                  <v-card-subtitle>
-                    {{ new Date(booking.date).toDateString() }} -
-                    {{ booking.startTime }} ~ {{ booking.endTime }}
-                  </v-card-subtitle>
-                  <v-card-text>
-                    <v-row>
-                      <v-col>
-                        <strong>Price:</strong> {{ booking.price }}
-                      </v-col>
-                    </v-row>
-                    <v-divider></v-divider>
-                    <v-row>
-                      <v-col>
-                        <strong>Business:</strong>
-                        <br />
-                        {{ booking.business.name }}
-                        <br />
-                        {{ booking.business.email }}
-                        <br />
-                        {{ booking.business.phonenumber }}
-                      </v-col>
-                    </v-row>
-                    <v-divider></v-divider>
-                    <v-row>
-                      <v-col>
-                        <strong>Customer:</strong>
-                        <br />
-                        {{ booking.customerEmail }}
-                        <br />
-                        {{ booking.customerName }}
-                        <br />
-                        {{ booking.customerPhonenumber }}
-                      </v-col>
-                    </v-row>
-                  </v-card-text>
-                </v-card>
+                <strong>Business:</strong>
+                <br />
+                {{ booking.business.name }}
+                <br />
+                {{ booking.business.email }}
+                <br />
+                {{ booking.business.phonenumber }}
               </v-col>
             </v-row>
-            <!-- Alert message if no bookings are found -->
-            <v-alert v-else type="info"> No bookings found. </v-alert>
+            <v-divider></v-divider>
+            <v-row>
+              <v-col>
+                <strong>Customer:</strong>
+                <br />
+                {{ booking.customerEmail }}
+                <br />
+                {{ booking.customerName }}
+                <br />
+                {{ booking.customerPhonenumber }}
+              </v-col>
+            </v-row>
           </v-card-text>
         </v-card>
       </v-col>
     </v-row>
+    <!-- Alert message if no bookings are found -->
+    <v-alert v-else type="info"> No bookings found. </v-alert>
   </v-container>
 </template>
 

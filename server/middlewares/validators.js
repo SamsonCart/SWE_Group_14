@@ -137,6 +137,38 @@ const bookingUpdateSchema = Joi.object({
   status: Joi.string().valid('pending', 'confirmed', 'cancelled').optional()
 });
 
+// Review Create Schema
+const reviewCreateSchema = Joi.object({
+  business: Joi.string().required(),
+  customer: Joi.string().required(),
+  rating: Joi.number().min(1).max(5).required(),
+  comment: Joi.string().required()
+});
+
+// Review Update Schema
+const reviewUpdateSchema = Joi.object({
+  business: Joi.string().optional(),
+  customer: Joi.string().optional(),
+  rating: Joi.number().min(1).max(5).optional(),
+  comment: Joi.string().optional(),
+  response: Joi.string().optional()
+});
+
+const inquiryCreateSchema = Joi.object({
+  customer: Joi.string().required(),
+  business: Joi.string().required(),
+  content: Joi.string().required()
+});
+
+const inquiryUpdateSchema = Joi.object({
+  customer: Joi.string().optional(),
+  business: Joi.string().optional(),
+  content: Joi.string().optional(),
+  response: Joi.object({
+    content: Joi.string().optional()
+  }).optional()
+});
+
 // Middleware for validation
 const validate = (schema) => (req, res, next) => {
   let data = req.body;
@@ -164,5 +196,9 @@ module.exports = {
   validateServicePut: validate(servicePutSchema),
   validateServicePatch: validate(servicePatchSchema),
   validateBookingCreate: validate(bookingCreateSchema),
-  validateBookingUpdate: validate(bookingUpdateSchema)
+  validateBookingUpdate: validate(bookingUpdateSchema),
+  validateReviewCreate: validate(reviewCreateSchema),
+  validateReviewUpdate: validate(reviewUpdateSchema),
+  validateInquiryCreate: validate(inquiryCreateSchema),
+  validateInquiryUpdate: validate(inquiryUpdateSchema)
 };

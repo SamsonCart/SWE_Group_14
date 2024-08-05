@@ -4,7 +4,9 @@
     <v-row>
       <v-col cols="12" md="6">
         <v-card>
-          <v-card-title>My Recent Bookings</v-card-title>
+          <v-card-title>
+            <v-card-title class="text-h5">My Recent Bookings</v-card-title>
+          </v-card-title>
           <v-card-text>
             <!-- List of recent bookings if available -->
             <v-list v-if="bookings.length">
@@ -32,34 +34,34 @@
         </v-card>
       </v-col>
     </v-row>
-    
+
     <!-- Section for searching local businesses -->
     <v-row>
       <v-col cols="12">
         <v-card>
-          <v-card-title>Find Local Business</v-card-title>
+          <v-card-title class="text-h4 text-center"
+            >Find Local Business</v-card-title
+          >
           <v-card-text>
             <!-- Form for inputting search radius and submitting search -->
             <v-form @submit.prevent="onSubmit">
-              <v-row>
-                <v-col cols="8">
-                  <v-text-field
-                    v-model="searchRadius"
-                    label="Search Radius (miles)"
-                    type="number"
-                    max="20"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="4">
-                  <v-btn
-                    type="submit"
-                    color="primary"
-                    :disabled="!userCoordinates"
-                  >
-                    Search
-                  </v-btn>
-                </v-col>
-              </v-row>
+              <div class="d-flex gap-2 justify-start align-center">
+                <v-text-field
+                  width="200"
+                  v-model="searchRadius"
+                  label="Search Radius (miles)"
+                  type="number"
+                  max="20"
+                ></v-text-field>
+                <v-btn
+                  type="submit"
+                  color="primary"
+                  :disabled="!userCoordinates"
+                  class="mr-auto"
+                >
+                  Search
+                </v-btn>
+              </div>
               <!-- Alert message if user coordinates are not set -->
               <v-alert v-if="!userCoordinates" type="warning" class="mt-3">
                 You can search if you set your location in your profile page.
@@ -113,14 +115,17 @@
     <v-row>
       <v-col cols="12">
         <v-card>
-          <v-card-title>Local Businesses</v-card-title>
+          <v-card-title class="text-h4 text-center"
+            >Local Business</v-card-title
+          >
           <v-card-text>
             <!-- Display businesses if available -->
             <v-row v-if="businesses.length">
               <v-col
-                class="p"
-                cols="12"
+                lg="3"
                 md="4"
+                sm="12"
+                class="d-flex"
                 v-for="business in businesses"
                 :key="business._id"
               >

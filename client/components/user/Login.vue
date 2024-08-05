@@ -1,5 +1,6 @@
 <script setup>
 // Import necessary modules and utilities
+import { ref } from 'vue';
 import { useUserStore } from '@/store/user';
 import { useMessageStore } from '@/store/message';
 import { regexEmail } from '@/utils/regex';
@@ -8,128 +9,97 @@ import { regexEmail } from '@/utils/regex';
 const userStore = useUserStore();
 const messageStore = useMessageStore();
 
-const emit = defineEmits(['updateComponent']); // Define emit for event handling
-
 // Define reactive variables for the component's state
 const visibleEye = ref(true);
 const isSubmitting = ref(false);
-const formData = ref({ email: 'business@example.com', password: 'password' });
+const formData = ref({ email: 'customer@example.com', password: 'password' });
+const formErrors = ref({ email: '', password: '' });
+const formTouched = ref(false); // To track if form has been submitted
 
 // Function to handle login
 const login = async () => {
+  formTouched.value = true;
   isSubmitting.value = true;
 
-  try {
-    // Validate form data
-    for (const [key, value] of Object.entries(formData.value)) {
-      let error;
+  // Validate form data
+  let valid = true;
+  for (const [key, value] of Object.entries(formData.value)) {
+    let error = '';
 
-      if (!value) {
-        error = `${key} is a mandatory field!`;
-      } else if (key === 'email' && !regexEmail(value)) {
-        error = 'You must enter a valid email address';
-      }
-
-      if (error) {
-        messageStore.setError({ error });
-        setTimeout(() => {
-          isSubmitting.value = false;
-        }, 2000); // Prevent serial clicks
-        return;
-      }
+    if (!value) {
+      error = `${key} is a mandatory field!`;
+      valid = false;
+    } else if (key === 'email' && !regexEmail(value)) {
+      error = 'You must enter a valid email address';
+      valid = false;
     }
+
+    formErrors.value[key] = error;
+  }
+
+  if (!valid) {
+    isSubmitting.value = false;
+    return;
+  }
+
+  try {
     // Attempt login
     await userStore.login({ ...formData.value });
-    isSubmitting.value = false;
   } catch (error) {
     messageStore.setError({ error });
+  } finally {
     isSubmitting.value = false;
   }
 };
-
-// On component mount, handle account activation if necessary
-// onMounted(async () => {
-//   await nextTick();
-//   const { type, email, authCode } = useRoute().query;
-
-//   if (type === 'activate') {
-//     userStore.activate({ email, authCode }).then((res) => {
-//       if (res) {
-//         useRouter().push('/dashboard');
-//       }
-//     });
-//   }
-// });
 </script>
 
 <template>
-  <!-- Display error or success messages -->
-  <utilsGetErrorSuccess />
-
-  <div id="signinup" class="card">
-    <div class="card-body">
-      <!-- Email Input Field -->
-      <div class="form-group row mb-2">
-        <label for="email" class="col-sm-4 col-form-label">Email</label>
-        <div class="col-sm-8">
-          <input
-            type="email"
-            autocomplete="false"
-            class="form-control"
-            id="email"
-            placeholder="Email"
+  <v-container>
+    <utils-get-error-success />
+    <v-card>
+      <v-card-title>Sign In</v-card-title>
+      <v-card-text>
+        <v-form @submit.prevent="login">
+          <v-text-field
             v-model="formData.email"
+            label="Email"
+            type="email"
+            autocomplete="off"
+            outlined
+            dense
+            :error-messages="formTouched && formErrors.email"
           />
-        </div>
-      </div>
-
-      <!-- Password Input Field -->
-      <div class="form-group row mb-2">
-        <label for="password" class="col-sm-4 col-form-label">Password</label>
-        <div class="col-sm-8">
-          <div id="passwordColumn">
-            <input
-              :type="visibleEye ? 'password' : 'text'"
-              class="form-control"
-              id="password"
-              placeholder="Password"
-              v-model="formData.password"
-            />
-          </div>
-        </div>
-      </div>
-
-      <!-- Remember Me Checkbox -->
-      <div class="form-group row mb-2">
-        <div class="col-sm-4"></div>
-        <div class="col-sm-8">
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="remember" />
-            <label class="form-check-label" for="remember"> Remember me</label>
-          </div>
-        </div>
-      </div>
-
-      <!-- Sign In Button -->
-      <div class="form-group row">
-        <div class="col-sm-12 d-flex justify-content-end">
-          <button
-            @click="login()"
+          <v-text-field
+            v-model="formData.password"
+            :type="visibleEye ? 'password' : 'text'"
+            label="Password"
+            outlined
+            dense
+            append-icon="mdi-eye"
+            @click:append="visibleEye = !visibleEye"
+            :error-messages="formTouched && formErrors.password"
+          />
+          <v-checkbox label="Remember me" />
+          <v-btn
+            @click="login"
+            :loading="isSubmitting"
             :disabled="isSubmitting"
-            class="btn btn-primary"
+            color="primary"
+            block
           >
             Sign In
-          </button>
-        </div>
-      </div>
-      <hr />
-      <!-- Link to Signup Page -->
-      <div class="text-center">
-        New on our platform?
-        <router-link class="row-pointer" to="/signup"
-          >Create an account</router-link
-        >
-      </div>
-    </div>
-  </div>
+          </v-btn>
+        </v-form>
+      </v-card-text>
+      <v-divider />
+      <v-card-actions class="justify-center">
+        <span>New on our platform?</span>
+        <v-btn text to="/signup">Create an account</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-container>
 </template>
+
+<style scoped>
+/* Add any custom styles here */
+</style>

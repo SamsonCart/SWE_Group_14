@@ -12,6 +12,8 @@ const notificationStore = useNotificationStore();
         <v-list-item to="/bz/dashboard" link> Dashboard </v-list-item>
         <v-list-item to="/bz/services" link> Services </v-list-item>
         <v-list-item to="/bz/bookings" link> Bookings </v-list-item>
+        <v-list-item to="/bz/reviews" link> Reviews </v-list-item>
+        <v-list-item to="/bz/inquiries" link> Inquiries </v-list-item>
       </v-list>
     </v-navigation-drawer>
     <v-main class="w-100">

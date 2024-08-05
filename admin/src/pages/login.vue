@@ -110,7 +110,7 @@ const isPasswordVisible = ref(false)
             <div v-html="logo" />
           </div>
         </template>
-        <VCardTitle class="font-weight-semibold text-2xl text-uppercase"> BOOKING </VCardTitle>
+        <VCardTitle class="font-weight-semibold text-2xl text-uppercase"> PushPin Admin </VCardTitle>
       </VCardItem>
 
       <!-- Sign-in prompt -->
